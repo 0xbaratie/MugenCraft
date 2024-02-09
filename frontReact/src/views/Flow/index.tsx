@@ -3,7 +3,6 @@ import ReactFlow, { addEdge, useNodesState, useEdgesState, Controls, Background,
 import 'reactflow/dist/style.css';
 import './Flow.scss';
 import { generateNodeId } from '../../utils/helper';
-// import NodeTypes from './NodeTypes';
 import { NodeModel, nodeTypes } from '../../data/Nodes';
 import { Nodes } from '../../data/Nodes';
 import { message } from 'antd';
@@ -69,6 +68,7 @@ const Flow = () => {
       setNodes(
         updatedNodes.map((node) => {
           if (node.id === overlappingNode.id) {
+            // TODO: Convert to a new component or allow creation of a new component
             return { ...node, data: { ...node.data, label: 'Mud', emoji: '💩' } };
           }
           return node;
