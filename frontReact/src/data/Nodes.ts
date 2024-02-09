@@ -1,5 +1,4 @@
 import { NodeModel } from '../models/NodeModel';
-// import NodeType from '../types/NodeType';
 
 export enum NodeType {
   Apple = 'apple',

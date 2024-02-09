@@ -1,7 +1,6 @@
 import Nodes, { NodeType } from '../../data/Nodes';
 import './Sidebar.scss';
 import { Input } from 'antd';
-const { Search } = Input;
 
 function Sidebar() {
   const onDragStart = (event: React.DragEvent<HTMLDivElement>, nodeType: NodeType) => {
