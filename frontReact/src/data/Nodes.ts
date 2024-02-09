@@ -1,5 +1,5 @@
 import { NodeTypes } from 'react-flow-renderer';
-import StandardNode from '../views/Flow/NodeTypes';
+import StandardNode from '../views/Nodes/StandardNode';
 
 export interface NodeModel {
   emoji: string;
@@ -11,9 +11,14 @@ const Nodes: { [key: string]: NodeModel } = {};
 
 const nodeTypes: NodeTypes = {};
 
+// TODO: Will be fixed format
+function addNodeType(key: string, component: any = StandardNode): void {
+  nodeTypes[key] = component as any;
+}
+
 function addNode(key: string, emoji: string, label: string): void {
   Nodes[key] = { key, emoji, label };
-  nodeTypes[key] = StandardNode as any;
+  addNodeType(key, StandardNode);
 }
 
 function getNode(key: string): NodeModel | undefined {
@@ -27,4 +32,4 @@ addNode('grape', '🍇', 'Grape');
 addNode('orange', '🍊', 'Orange');
 addNode('banana', '🍌', 'Banana');
 
-export { Nodes, addNode, getNode };
+export { Nodes, addNode, getNode, nodeTypes };
