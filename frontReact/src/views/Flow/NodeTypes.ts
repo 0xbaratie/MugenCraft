@@ -7,7 +7,7 @@ const nodeTypes: NodeTypes = {
   [NodeType.Pineapple]: StandardNode as any,
   [NodeType.Grape]: StandardNode as any,
   [NodeType.Orange]: StandardNode as any,
-  [NodeType.Graph]: StandardNode as any,
+  [NodeType.Banana]: StandardNode as any,
 };
 
 export default nodeTypes;

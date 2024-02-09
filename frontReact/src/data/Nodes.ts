@@ -7,7 +7,7 @@ export enum NodeType {
   Pineapple = 'pineapple',
   Grape = 'grape ',
   Orange = 'orange',
-  Graph = 'banana',
+  Banana = 'banana',
 }
 
 const Nodes: { [key in NodeType]: NodeModel } = {
@@ -35,11 +35,11 @@ const Nodes: { [key in NodeType]: NodeModel } = {
     category: NodeCategoryType.Special,
     key: NodeType.Orange,
   },
-  [NodeType.Graph]: {
+  [NodeType.Banana]: {
     emoji: '🍌',
     label: 'Banana',
     category: NodeCategoryType.Standard,
-    key: NodeType.Graph,
+    key: NodeType.Banana,
   },
 };
 
