@@ -10,8 +10,8 @@ const DynamicFlow = () => {
     <NodeProvider>
       <div className="dnd-flow">
         <ReactFlowProvider>
-          <Sidebar />
           <Flow />
+          <Sidebar />
         </ReactFlowProvider>
       </div>
     </NodeProvider>
