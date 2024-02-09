@@ -17,6 +17,7 @@ function Sidebar() {
           {Object.values(Nodes).map((n, i) => {
             return (
               <div key={'node' + i} className="node-item" onDragStart={(event) => onDragStart(event, n.key)} draggable>
+                <span className="node-label">{n.emoji}</span>
                 <span className="node-label">{n.label}</span>
               </div>
             );

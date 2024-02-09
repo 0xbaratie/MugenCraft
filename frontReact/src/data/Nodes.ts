@@ -3,36 +3,41 @@ import { NodeCategoryType } from './NodeCategories';
 // import NodeType from '../types/NodeType';
 
 export enum NodeType {
-  PythonRunner = 'python-runner',
-  NodeJsRunner = 'nodejs-runner',
-  DataMapper = 'data-mapper',
-  Analyzer = 'analyzer',
-  Graph = 'graph',
+  Apple = 'apple',
+  Pineapple = 'pineapple',
+  Grape = 'grape ',
+  Orange = 'orange',
+  Graph = 'banana',
 }
 
 const Nodes: { [key in NodeType]: NodeModel } = {
-  [NodeType.PythonRunner]: {
-    label: '🍎 Apple',
+  [NodeType.Apple]: {
+    emoji: '🍎',
+    label: 'Apple',
     category: NodeCategoryType.CodeRunner,
-    key: NodeType.PythonRunner,
+    key: NodeType.Apple,
   },
-  [NodeType.NodeJsRunner]: {
-    label: '🍍 Pineapple',
+  [NodeType.Pineapple]: {
+    emoji: '🍍',
+    label: 'Pineapple',
     category: NodeCategoryType.CodeRunner,
-    key: NodeType.NodeJsRunner,
+    key: NodeType.Pineapple,
   },
-  [NodeType.DataMapper]: {
-    label: '🍇 Grape',
+  [NodeType.Grape]: {
+    emoji: '🍇',
+    label: 'Grape',
     category: NodeCategoryType.Mapper,
-    key: NodeType.DataMapper,
+    key: NodeType.Grape,
   },
-  [NodeType.Analyzer]: {
-    label: '🍊 Orange',
+  [NodeType.Orange]: {
+    emoji: '🍊',
+    label: 'Orange',
     category: NodeCategoryType.Special,
-    key: NodeType.Analyzer,
+    key: NodeType.Orange,
   },
   [NodeType.Graph]: {
-    label: '🍌 Banana',
+    emoji: '🍌',
+    label: 'Banana',
     category: NodeCategoryType.Standard,
     key: NodeType.Graph,
   },

@@ -3,10 +3,10 @@ import StandardNode from '../Nodes/StandardNode';
 import { NodeTypes } from 'react-flow-renderer';
 
 const nodeTypes: NodeTypes = {
-  [NodeType.PythonRunner]: StandardNode as any,
-  [NodeType.NodeJsRunner]: StandardNode as any,
-  [NodeType.DataMapper]: StandardNode as any,
-  [NodeType.Analyzer]: StandardNode as any,
+  [NodeType.Apple]: StandardNode as any,
+  [NodeType.Pineapple]: StandardNode as any,
+  [NodeType.Grape]: StandardNode as any,
+  [NodeType.Orange]: StandardNode as any,
   [NodeType.Graph]: StandardNode as any,
 };
 
