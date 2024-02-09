@@ -7,8 +7,8 @@ function StandardNode(props: Node<NodeModel>) {
   return (
     <div className="dnd-node standard-node">
       <div className="standard-node-body">
-        <span>{props.data.emoji}</span>
-        <span>{props.data.label}</span>
+        <span className="standard-node-body-label">{props.data.emoji}</span>
+        <span className="standard-node-body-label">{props.data.label}</span>
       </div>
     </div>
   );
