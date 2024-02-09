@@ -4,8 +4,8 @@ import 'reactflow/dist/style.css';
 import './Flow.scss';
 import { generateNodeId } from '../../utils/helper';
 import NodeTypes from './NodeTypes';
-import { NodeModel } from '../../models/NodeModel';
-import Nodes, { NodeType } from '../../data/Nodes';
+import { NodeModel } from '../../data/Nodes';
+import { Nodes } from '../../data/Nodes';
 import { message } from 'antd';
 
 const Flow = () => {
@@ -25,7 +25,7 @@ const Flow = () => {
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-      const type = event.dataTransfer.getData('application/reactflow') as NodeType;
+      const type = event.dataTransfer.getData('application/reactflow') as any; //TODO: Fixed format
 
       if (typeof type === 'undefined' || !type) {
         message.warning('Node type not found!');

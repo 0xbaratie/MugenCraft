@@ -1,6 +1,6 @@
 import { Handle, Position } from 'react-flow-renderer';
 import { Node } from 'reactflow';
-import { NodeModel } from '../../../models/NodeModel';
+import { NodeModel } from '../../../data/Nodes';
 import './StandardNode.scss';
 
 function StandardNode(props: Node<NodeModel>) {

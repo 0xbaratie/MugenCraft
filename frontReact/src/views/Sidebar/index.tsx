@@ -1,9 +1,10 @@
-import Nodes, { NodeType } from '../../data/Nodes';
+import { Nodes } from '../../data/Nodes';
 import './Sidebar.scss';
 import { Input } from 'antd';
 
 function Sidebar() {
-  const onDragStart = (event: React.DragEvent<HTMLDivElement>, nodeType: NodeType) => {
+  // TODO: Fixed format
+  const onDragStart = (event: React.DragEvent<HTMLDivElement>, nodeType: any) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
   };
