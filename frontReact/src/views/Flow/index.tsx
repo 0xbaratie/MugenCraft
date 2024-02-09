@@ -81,7 +81,7 @@ const Flow = () => {
           if (node.id === overlappingNode.id) {
             // TODO: Change dynamically
             const updatedNodeData = { ...node.data, key: 'mud', label: 'Mud', emoji: '💩' };
-            addNode(updatedNodeData.key, updatedNodeData.emoji, updatedNodeData.label); // Mudのキーを 'mud' に設定
+            addNode(updatedNodeData.key, updatedNodeData.emoji, updatedNodeData.label);
             return { ...node, data: updatedNodeData };
           }
           return node;
