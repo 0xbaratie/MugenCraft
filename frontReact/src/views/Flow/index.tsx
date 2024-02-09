@@ -69,7 +69,7 @@ const Flow = () => {
       setNodes(
         updatedNodes.map((node) => {
           if (node.id === overlappingNode.id) {
-            return { ...node, data: { ...node.data, label: '💩 Mud' } };
+            return { ...node, data: { ...node.data, label: 'Mud', emoji: '💩' } };
           }
           return node;
         }),

@@ -1,4 +1,3 @@
-import NodeCategories from '../../data/NodeCategories';
 import Nodes, { NodeType } from '../../data/Nodes';
 import './Sidebar.scss';
 import { Input } from 'antd';
