@@ -1,7 +1,7 @@
 // Sidebar.tsx
 import React from 'react';
 import './Sidebar.scss';
-import { useNodeContext } from '../Nodes/NodeContext'; // NodeContext のパスを適切に調整してください
+import { useNodeContext } from '../Nodes/NodeContext';
 
 const Sidebar: React.FC = () => {
   const { nodes } = useNodeContext();
