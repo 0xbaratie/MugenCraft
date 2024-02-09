@@ -1,5 +1,6 @@
 import { NodeTypes } from 'react-flow-renderer';
 import StandardNode from '../views/Nodes/StandardNode';
+import { useAddNode } from '../views/Nodes/NodeContext';
 
 export interface NodeModel {
   emoji: string;
