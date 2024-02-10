@@ -12,6 +12,20 @@ interface NodeProviderProps {
   children: ReactNode;
 }
 
+interface NodeData {
+  key: string;
+  emoji: string;
+  label: string;
+}
+
+const nodeInitData: NodeData[] = [
+  { key: 'apple', emoji: '🍎', label: 'Apple' },
+  { key: 'pineapple', emoji: '🍍', label: 'Pineapple' },
+  { key: 'grape', emoji: '🍇', label: 'Grape' },
+  { key: 'orange', emoji: '🍊', label: 'Orange' },
+  { key: 'banana', emoji: '🍌', label: 'Banana' },
+];
+
 export const NodeProvider: React.FC<NodeProviderProps> = ({ children }) => {
   const [nodes, setNodes] = useState<{ [key: string]: NodeModel }>({});
 
@@ -26,11 +40,9 @@ export const NodeProvider: React.FC<NodeProviderProps> = ({ children }) => {
 
   // TODO: Add initial node
   useEffect(() => {
-    addNodeView('apple', '🍎', 'Apple');
-    addNodeView('pineapple', '🍍', 'Pineapple');
-    addNodeView('grape', '🍇', 'Grape');
-    addNodeView('orange', '🍊', 'Orange');
-    addNodeView('banana', '🍌', 'Banana');
+    nodeInitData.forEach((node) => {
+      addNodeView(node.key, node.emoji, node.label);
+    });
   }, []);
 
   useEffect(() => {
