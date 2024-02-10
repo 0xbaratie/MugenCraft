@@ -18,6 +18,7 @@ interface NodeData {
   label: string;
 }
 
+// TODO: Add initial node
 const nodeInitData: NodeData[] = [
   { key: 'apple', emoji: '🍎', label: 'Apple' },
   { key: 'pineapple', emoji: '🍍', label: 'Pineapple' },
@@ -38,7 +39,6 @@ export const NodeProvider: React.FC<NodeProviderProps> = ({ children }) => {
     });
   };
 
-  // TODO: Add initial node
   useEffect(() => {
     nodeInitData.forEach((node) => {
       addNodeView(node.key, node.emoji, node.label);
