@@ -1,9 +1,9 @@
 import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
-import { NodeModel } from '../../../data/Nodes';
+import { Nodes, NodeModel, addNode } from '../../../data/Nodes';
 
 interface NodeContextType {
   nodes: { [key: string]: NodeModel };
-  addNode: (key: string, emoji: string, label: string) => void;
+  addNodeView: (key: string, emoji: string, label: string) => void;
 }
 
 const NodeContext = createContext<NodeContextType | undefined>(undefined);
@@ -15,28 +15,29 @@ interface NodeProviderProps {
 export const NodeProvider: React.FC<NodeProviderProps> = ({ children }) => {
   const [nodes, setNodes] = useState<{ [key: string]: NodeModel }>({});
 
-  const addNode = (key: string, emoji: string, label: string) => {
+  const addNodeView = (key: string, emoji: string, label: string): void => {
     const newNode: NodeModel = { key, emoji, label };
-    setNodes((prevNodes) => ({
-      ...prevNodes,
-      [key]: newNode,
-    }));
+    addNode(key, emoji, label);
+    setNodes((prevNodes) => {
+      const updatedNodes = { ...prevNodes, [key]: newNode };
+      return updatedNodes;
+    });
   };
 
   // TODO: Add initial node
   useEffect(() => {
-    addNode('apple', '🍎', 'Apple');
-    addNode('pineapple', '🍍', 'Pineapple');
-    addNode('grape', '🍇', 'Grape');
-    addNode('orange', '🍊', 'Orange');
-    addNode('banana', '🍌', 'Banana');
+    addNodeView('apple', '🍎', 'Apple');
+    addNodeView('pineapple', '🍍', 'Pineapple');
+    addNodeView('grape', '🍇', 'Grape');
+    addNodeView('orange', '🍊', 'Orange');
+    addNodeView('banana', '🍌', 'Banana');
   }, []);
 
   useEffect(() => {
     console.log('@@@Nodes:', nodes);
   }, [nodes]);
 
-  return <NodeContext.Provider value={{ nodes, addNode }}>{children}</NodeContext.Provider>;
+  return <NodeContext.Provider value={{ nodes, addNodeView }}>{children}</NodeContext.Provider>;
 };
 
 export const useNodeContext = () => {
@@ -52,5 +53,5 @@ export const useAddNode = () => {
   if (context === undefined) {
     throw new Error('useAddNode must be used within a NodeProvider');
   }
-  return context.addNode;
+  return context.addNodeView;
 };
