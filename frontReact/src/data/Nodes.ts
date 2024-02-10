@@ -21,15 +21,4 @@ function addNode(key: string, emoji: string, label: string): void {
   addNodeType(key, StandardNode);
 }
 
-function getNode(key: string): NodeModel | undefined {
-  return Nodes[key];
-}
-
-// TODO: Initial objects
-addNode('apple', '🍎', 'Apple');
-addNode('pineapple', '🍍', 'Pineapple');
-addNode('grape', '🍇', 'Grape');
-addNode('orange', '🍊', 'Orange');
-addNode('banana', '🍌', 'Banana');
-
-export { Nodes, addNode, getNode, nodeTypes };
+export { Nodes, nodeTypes, addNodeType, addNode };

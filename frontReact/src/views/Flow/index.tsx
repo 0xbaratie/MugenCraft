@@ -5,13 +5,22 @@ import './Flow.scss';
 import { generateNodeId } from '../../utils/helper';
 import { NodeModel, nodeTypes } from '../../data/Nodes';
 import { Nodes } from '../../data/Nodes';
+import { useAddNode } from '../../views/Nodes/NodeContext';
 import { message } from 'antd';
 
 const Flow = () => {
+  const addNode = useAddNode();
   const reactFlowWrapper = useRef<any>(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+
+  const updateSidebar = (node: Node<NodeModel>) => {
+    const key = node.data.key;
+    if (!Nodes[key]) {
+      addNode(key, node.data.emoji, node.data.label);
+    }
+  };
 
   const onConnect = useCallback((params: Connection) => setEdges((eds) => addEdge(params, eds)), []);
 
@@ -24,7 +33,7 @@ const Flow = () => {
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-      const type = event.dataTransfer.getData('application/reactflow') as any; //TODO: Fixed format
+      const type = event.dataTransfer.getData('application/reactflow') as any;
 
       if (typeof type === 'undefined' || !type) {
         message.warning('Node type not found!');
@@ -48,6 +57,8 @@ const Flow = () => {
         const updatedNodes = currentNodes.concat(newNode);
         return updatedNodes;
       });
+
+      updateSidebar(newNode);
     },
     [reactFlowInstance],
   );
@@ -68,8 +79,10 @@ const Flow = () => {
       setNodes(
         updatedNodes.map((node) => {
           if (node.id === overlappingNode.id) {
-            // TODO: Convert to a new component or allow creation of a new component
-            return { ...node, data: { ...node.data, label: 'Mud', emoji: '💩' } };
+            // TODO: Change dynamically
+            const updatedNodeData = { ...node.data, key: 'mud', label: 'Mud', emoji: '💩' };
+            addNode(updatedNodeData.key, updatedNodeData.emoji, updatedNodeData.label);
+            return { ...node, data: updatedNodeData };
           }
           return node;
         }),
