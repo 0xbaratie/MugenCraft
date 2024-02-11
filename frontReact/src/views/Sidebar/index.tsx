@@ -2,6 +2,7 @@
 import React from 'react';
 import './Sidebar.scss';
 import { useNodeContext } from '../Nodes/NodeContext';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 const Sidebar: React.FC = () => {
   const { nodes } = useNodeContext();
@@ -23,6 +24,8 @@ const Sidebar: React.FC = () => {
           ))}
         </div>
       </div>
+      {/* TODO: UI fixed */}
+      {/* <ConnectButton /> */}
     </div>
   );
 };
