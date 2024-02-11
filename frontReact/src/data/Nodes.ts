@@ -21,4 +21,11 @@ function addNode(key: string, emoji: string, label: string): void {
   addNodeType(key, StandardNode);
 }
 
+// TODO: Need to leave due to library loading issues
+addNode('apple', '🍎', 'Apple');
+addNode('pineapple', '🍍', 'Pineapple');
+addNode('grape', '🍇', 'Grape');
+addNode('orange', '🍊', 'Orange');
+addNode('banana', '🍌', 'Banana');
+
 export { Nodes, nodeTypes, addNodeType, addNode };
