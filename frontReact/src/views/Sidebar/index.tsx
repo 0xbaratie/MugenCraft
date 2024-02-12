@@ -3,12 +3,15 @@ import './Sidebar.scss';
 import { useNodeContext } from '../Nodes/NodeContext';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
+const tapSound = new Audio('/se/tap.mp3');
+
 const Sidebar: React.FC = () => {
   const { nodes } = useNodeContext();
 
   const onDragStart = (event: React.DragEvent<HTMLDivElement>, nodeType: string) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
+    tapSound.play().catch((err) => console.error('Audio play failed:', err));
   };
 
   return (

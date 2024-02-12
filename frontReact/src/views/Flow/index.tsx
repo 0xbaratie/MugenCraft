@@ -14,14 +14,6 @@ const Flow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
-
-  const updateSidebar = (node: Node<NodeModel>) => {
-    const key = node.data.key;
-    if (!Nodes[key]) {
-      addNode(key, node.data.emoji, node.data.label);
-    }
-  };
-
   const onConnect = useCallback((params: Connection) => setEdges((eds) => addEdge(params, eds)), []);
 
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
@@ -57,8 +49,6 @@ const Flow = () => {
         const updatedNodes = currentNodes.concat(newNode);
         return updatedNodes;
       });
-
-      updateSidebar(newNode);
     },
     [reactFlowInstance],
   );
@@ -111,5 +101,4 @@ const Flow = () => {
     </div>
   );
 };
-
 export default Flow;

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
-import { Nodes, NodeModel, addNode } from '../../../data/Nodes';
+import { NodeModel, addNode } from '../../../data/Nodes';
 
 interface NodeContextType {
   nodes: { [key: string]: NodeModel };
@@ -42,11 +42,19 @@ export const NodeProvider: React.FC<NodeProviderProps> = ({ children }) => {
   }, []);
 
   const addNodeView = (key: string, emoji: string, label: string): void => {
+    const isNewNode = !nodes[key];
+    const newDiscoverSound = new Audio('/se/new-discover.mp3');
+
     const newNode: NodeModel = { key, emoji, label };
     addNode(key, emoji, label);
     setNodes((prevNodes) => {
       const updatedNodes = { ...prevNodes, [key]: newNode };
       localStorage.setItem('nodes', JSON.stringify(updatedNodes));
+      // Play SE for new nodes
+      if (isNewNode) {
+        newDiscoverSound.play().catch((error) => console.error('Audio play failed:', error));
+      }
+
       return updatedNodes;
     });
   };
