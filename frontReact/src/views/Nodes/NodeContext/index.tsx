@@ -30,24 +30,26 @@ const nodeInitData: NodeData[] = [
 export const NodeProvider: React.FC<NodeProviderProps> = ({ children }) => {
   const [nodes, setNodes] = useState<{ [key: string]: NodeModel }>({});
 
+  useEffect(() => {
+    const storedNodes = localStorage.getItem('nodes');
+    if (storedNodes) {
+      setNodes(JSON.parse(storedNodes));
+    } else {
+      nodeInitData.forEach((node) => {
+        addNodeView(node.key, node.emoji, node.label);
+      });
+    }
+  }, []);
+
   const addNodeView = (key: string, emoji: string, label: string): void => {
     const newNode: NodeModel = { key, emoji, label };
     addNode(key, emoji, label);
     setNodes((prevNodes) => {
       const updatedNodes = { ...prevNodes, [key]: newNode };
+      localStorage.setItem('nodes', JSON.stringify(updatedNodes));
       return updatedNodes;
     });
   };
-
-  useEffect(() => {
-    nodeInitData.forEach((node) => {
-      addNodeView(node.key, node.emoji, node.label);
-    });
-  }, []);
-
-  useEffect(() => {
-    console.log('@@@Nodes:', nodes);
-  }, [nodes]);
 
   return <NodeContext.Provider value={{ nodes, addNodeView }}>{children}</NodeContext.Provider>;
 };
