@@ -7,6 +7,7 @@ import { Chain, getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbo
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import '@rainbow-me/rainbowkit/styles.css';
+import { NodeTypesProvider } from './views/Nodes/NodeTypesContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 const blast: Chain = {
@@ -43,9 +44,11 @@ const wagmiConfig = createConfig({
 root.render(
   <React.StrictMode>
     <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains}>
-        <App />
-      </RainbowKitProvider>
+      <NodeTypesProvider>
+        <RainbowKitProvider chains={chains}>
+          <App />
+        </RainbowKitProvider>
+      </NodeTypesProvider>
     </WagmiConfig>
   </React.StrictMode>,
 );

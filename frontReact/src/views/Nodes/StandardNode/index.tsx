@@ -4,8 +4,9 @@ import { NodeModel } from '../../../data/Nodes';
 import './StandardNode.scss';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount, useContractRead, useNetwork } from 'wagmi';
+import { NodeProps } from 'react-flow-renderer';
 
-function StandardNode(props: Node<NodeModel>) {
+const StandardNode: React.FC<NodeProps<NodeModel>> = (props) => {
   const { isConnected } = useAccount();
   const { chain } = useNetwork();
   const [isHovered, setIsHovered] = useState(false);
@@ -34,6 +35,6 @@ function StandardNode(props: Node<NodeModel>) {
       )}
     </>
   );
-}
+};
 
 export default StandardNode;

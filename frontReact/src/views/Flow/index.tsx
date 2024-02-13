@@ -3,13 +3,15 @@ import ReactFlow, { addEdge, useNodesState, useEdgesState, Controls, Background,
 import 'reactflow/dist/style.css';
 import './Flow.scss';
 import { generateNodeId } from '../../utils/helper';
-import { NodeModel, nodeTypes } from '../../data/Nodes';
+import { NodeModel } from '../../data/Nodes';
 import { Nodes } from '../../data/Nodes';
 import { useAddNode } from '../../views/Nodes/NodeContext';
+import { useNodeTypes } from '../../views/Nodes/NodeTypesContext';
 import { message } from 'antd';
 
 const Flow = () => {
   const addNode = useAddNode();
+  const { nodeTypes } = useNodeTypes();
   const reactFlowWrapper = useRef<any>(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
