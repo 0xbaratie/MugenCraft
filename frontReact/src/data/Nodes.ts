@@ -1,41 +1,31 @@
-import { NodeModel } from '../models/NodeModel';
-import { NodeCategoryType } from './NodeCategories';
-// import NodeType from '../types/NodeType';
+import { NodeTypes } from 'react-flow-renderer';
+import StandardNode from '../views/Nodes/StandardNode';
 
-export enum NodeType {
-  PythonRunner = 'python-runner',
-  NodeJsRunner = 'nodejs-runner',
-  DataMapper = 'data-mapper',
-  Analyzer = 'analyzer',
-  Graph = 'graph',
+export interface NodeModel {
+  emoji: string;
+  label: string;
+  key: string;
 }
 
-const Nodes: { [key in NodeType]: NodeModel } = {
-  [NodeType.PythonRunner]: {
-    label: '🍎 Apple',
-    category: NodeCategoryType.CodeRunner,
-    key: NodeType.PythonRunner,
-  },
-  [NodeType.NodeJsRunner]: {
-    label: '🍍 Pineapple',
-    category: NodeCategoryType.CodeRunner,
-    key: NodeType.NodeJsRunner,
-  },
-  [NodeType.DataMapper]: {
-    label: '🍇 Grape',
-    category: NodeCategoryType.Mapper,
-    key: NodeType.DataMapper,
-  },
-  [NodeType.Analyzer]: {
-    label: '🍊 Orange',
-    category: NodeCategoryType.Special,
-    key: NodeType.Analyzer,
-  },
-  [NodeType.Graph]: {
-    label: '🍌 Banana',
-    category: NodeCategoryType.Standard,
-    key: NodeType.Graph,
-  },
-};
+const Nodes: { [key: string]: NodeModel } = {};
 
-export default Nodes;
+const nodeTypes: NodeTypes = {};
+
+// TODO: Will be fixed format
+function addNodeType(key: string, component: any = StandardNode): void {
+  nodeTypes[key] = component as any;
+}
+
+function addNode(key: string, emoji: string, label: string): void {
+  Nodes[key] = { key, emoji, label };
+  addNodeType(key, StandardNode);
+}
+
+// TODO: Need to leave due to library loading issues
+addNode('apple', '🍎', 'Apple');
+addNode('pineapple', '🍍', 'Pineapple');
+addNode('grape', '🍇', 'Grape');
+addNode('orange', '🍊', 'Orange');
+addNode('banana', '🍌', 'Banana');
+
+export { Nodes, nodeTypes, addNodeType, addNode };

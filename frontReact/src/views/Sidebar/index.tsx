@@ -1,30 +1,35 @@
-import NodeCategories from '../../data/NodeCategories';
-import Nodes, { NodeType } from '../../data/Nodes';
+import React from 'react';
 import './Sidebar.scss';
-import { Input } from 'antd';
-const { Search } = Input;
+import { useNodeContext } from '../Nodes/NodeContext';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
-function Sidebar() {
-  const onDragStart = (event: React.DragEvent<HTMLDivElement>, nodeType: NodeType) => {
+const tapSound = new Audio('/se/tap.mp3');
+
+const Sidebar: React.FC = () => {
+  const { nodes } = useNodeContext();
+
+  const onDragStart = (event: React.DragEvent<HTMLDivElement>, nodeType: string) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
+    tapSound.play().catch((err) => console.error('Audio play failed:', err));
   };
 
   return (
     <div className="dnd-flow-sidebar">
       <div className="sidebar-body">
         <div className="sidebar-nodes">
-          {Object.values(Nodes).map((n, i) => {
-            return (
-              <div key={'node' + i} className="node-item" onDragStart={(event) => onDragStart(event, n.key)} draggable>
-                <span className="node-label">{n.label}</span>
-              </div>
-            );
-          })}
+          {Object.entries(nodes).map(([key, node], i) => (
+            <div key={key} className="node-item" onDragStart={(event) => onDragStart(event, node.key)} draggable>
+              <span className="node-emoji">{node.emoji}</span>
+              <span className="node-label">{node.label}</span>
+            </div>
+          ))}
         </div>
       </div>
+      {/* TODO: UI fixed */}
+      {/* <ConnectButton /> */}
     </div>
   );
-}
+};
 
 export default Sidebar;

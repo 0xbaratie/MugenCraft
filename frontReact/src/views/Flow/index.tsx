@@ -3,17 +3,17 @@ import ReactFlow, { addEdge, useNodesState, useEdgesState, Controls, Background,
 import 'reactflow/dist/style.css';
 import './Flow.scss';
 import { generateNodeId } from '../../utils/helper';
-import NodeTypes from './NodeTypes';
-import { NodeModel } from '../../models/NodeModel';
-import Nodes, { NodeType } from '../../data/Nodes';
+import { NodeModel, nodeTypes } from '../../data/Nodes';
+import { Nodes } from '../../data/Nodes';
+import { useAddNode } from '../../views/Nodes/NodeContext';
 import { message } from 'antd';
 
 const Flow = () => {
+  const addNode = useAddNode();
   const reactFlowWrapper = useRef<any>(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
-
   const onConnect = useCallback((params: Connection) => setEdges((eds) => addEdge(params, eds)), []);
 
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
@@ -25,7 +25,7 @@ const Flow = () => {
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-      const type = event.dataTransfer.getData('application/reactflow') as NodeType;
+      const type = event.dataTransfer.getData('application/reactflow') as any;
 
       if (typeof type === 'undefined' || !type) {
         message.warning('Node type not found!');
@@ -69,7 +69,10 @@ const Flow = () => {
       setNodes(
         updatedNodes.map((node) => {
           if (node.id === overlappingNode.id) {
-            return { ...node, data: { ...node.data, label: '💩 Mud' } };
+            // TODO: Change dynamically
+            const updatedNodeData = { ...node.data, key: 'mud', label: 'Mud', emoji: '💩' };
+            addNode(updatedNodeData.key, updatedNodeData.emoji, updatedNodeData.label);
+            return { ...node, data: updatedNodeData };
           }
           return node;
         }),
@@ -80,7 +83,7 @@ const Flow = () => {
   return (
     <div className="reactflow-wrapper" ref={reactFlowWrapper}>
       <ReactFlow
-        nodeTypes={NodeTypes}
+        nodeTypes={nodeTypes}
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
@@ -98,5 +101,4 @@ const Flow = () => {
     </div>
   );
 };
-
 export default Flow;
