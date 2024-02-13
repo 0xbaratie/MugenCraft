@@ -3,7 +3,7 @@ import 'reactflow/dist/style.css';
 import './Main.scss';
 import Sidebar from '../Sidebar';
 import Flow from '../Flow';
-import { NodeProvider } from '../Nodes/NodeContext';
+import { NodeProvider } from '../components/Recipes/RecipeContext';
 
 const DynamicFlow = () => {
   return (

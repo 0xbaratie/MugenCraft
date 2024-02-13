@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.scss';
+
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Chain, getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import '@rainbow-me/rainbowkit/styles.css';
-import { NodeTypesProvider } from './views/Nodes/NodeTypesContext';
+import { RecipeTypesProvider } from './views/components/Recipes/RecipeTypesContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 const blast: Chain = {
@@ -44,11 +45,11 @@ const wagmiConfig = createConfig({
 root.render(
   <React.StrictMode>
     <WagmiConfig config={wagmiConfig}>
-      <NodeTypesProvider>
+      <RecipeTypesProvider>
         <RainbowKitProvider chains={chains}>
           <App />
         </RainbowKitProvider>
-      </NodeTypesProvider>
+      </RecipeTypesProvider>
     </WagmiConfig>
   </React.StrictMode>,
 );

@@ -3,17 +3,17 @@ import ReactFlow, { addEdge, useNodesState, useEdgesState, Controls, Background,
 import 'reactflow/dist/style.css';
 import './Flow.scss';
 import { generateNodeId } from '../../utils/helper';
-import { NodeModel } from '../../data/Nodes';
-import { Nodes } from '../../data/Nodes';
-import { useAddNode } from '../../views/Nodes/NodeContext';
-import { useNodeTypes } from '../../views/Nodes/NodeTypesContext';
+import { NodeModel } from '../../data/Recipes';
+import { Recipes } from '../../data/Recipes';
+import { useAddNode } from '../components/Recipes/RecipeContext';
+import { useNodeTypes } from '../components/Recipes/RecipeTypesContext';
 import { message } from 'antd';
 
 const Flow = () => {
-  const addNode = useAddNode();
+  const addRecipe = useAddNode();
   const { nodeTypes } = useNodeTypes();
   const reactFlowWrapper = useRef<any>(null);
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [nodes, setRecipes, onRecipesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
   const onConnect = useCallback((params: Connection) => setEdges((eds) => addEdge(params, eds)), []);
@@ -34,7 +34,7 @@ const Flow = () => {
         return;
       }
 
-      const nodeData = Nodes[type];
+      const nodeData = Recipes[type];
       const position = reactFlowInstance.project({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
@@ -47,9 +47,9 @@ const Flow = () => {
         data: nodeData,
       };
 
-      setNodes((currentNodes) => {
-        const updatedNodes = currentNodes.concat(newNode);
-        return updatedNodes;
+      setRecipes((currentRecipes) => {
+        const updatedRecipes = currentRecipes.concat(newNode);
+        return updatedRecipes;
       });
     },
     [reactFlowInstance],
@@ -64,16 +64,16 @@ const Flow = () => {
     );
 
     if (overlappingNode) {
-      message.warning({ content: 'Nodes are overlapping!', key: 'overlapWarning' });
+      message.warning({ content: 'Recipes are overlapping!', key: 'overlapWarning' });
 
-      const updatedNodes = nodes.filter((node) => node.id !== draggedNode.id);
+      const updatedRecipes = nodes.filter((node) => node.id !== draggedNode.id);
 
-      setNodes(
-        updatedNodes.map((node) => {
+      setRecipes(
+        updatedRecipes.map((node) => {
           if (node.id === overlappingNode.id) {
             // TODO: Change dynamically
             const updatedNodeData = { ...node.data, key: 'mud', label: 'Mud', emoji: '💩' };
-            addNode(updatedNodeData.key, updatedNodeData.emoji, updatedNodeData.label);
+            addRecipe(updatedNodeData.key, updatedNodeData.emoji, updatedNodeData.label);
             return { ...node, data: updatedNodeData };
           }
           return node;
@@ -88,7 +88,7 @@ const Flow = () => {
         nodeTypes={nodeTypes}
         nodes={nodes}
         edges={edges}
-        onNodesChange={onNodesChange}
+        onNodesChange={onRecipesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         onInit={setReactFlowInstance}

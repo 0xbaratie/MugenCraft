@@ -1,12 +1,12 @@
 import React from 'react';
 import './Sidebar.scss';
-import { useNodeContext } from '../Nodes/NodeContext';
+import { useRecipeContext } from '../components/Recipes/RecipeContext';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 const tapSound = new Audio('/se/tap.mp3');
 
 const Sidebar: React.FC = () => {
-  const { nodes } = useNodeContext();
+  const { nodes } = useRecipeContext();
 
   const onDragStart = (event: React.DragEvent<HTMLDivElement>, nodeType: string) => {
     event.dataTransfer.setData('application/reactflow', nodeType);

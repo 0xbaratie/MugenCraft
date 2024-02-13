@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Node } from 'reactflow';
-import { NodeModel } from '../../../data/Nodes';
-import './StandardNode.scss';
+import { NodeModel } from '../../../../data/Recipes';
+import './RecipeNode.scss';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount, useContractRead, useNetwork } from 'wagmi';
 import { NodeProps } from 'react-flow-renderer';
 
-const StandardNode: React.FC<NodeProps<NodeModel>> = (props) => {
+const RecipeNode: React.FC<NodeProps<NodeModel>> = (props) => {
   const { isConnected } = useAccount();
   const { chain } = useNetwork();
   const [isHovered, setIsHovered] = useState(false);
@@ -37,4 +37,4 @@ const StandardNode: React.FC<NodeProps<NodeModel>> = (props) => {
   );
 };
 
-export default StandardNode;
+export default RecipeNode;
