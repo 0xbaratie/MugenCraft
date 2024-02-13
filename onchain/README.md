@@ -25,7 +25,7 @@ Foundry typically uses git submodules to manage dependencies, but this template 
 This is how to install dependencies:
 
 1. Install the dependency using your preferred package manager, e.g. `bun install dependency-name`
-   - Use this syntax to install from GitHub: `bun install github:username/repo-name`
+    - Use this syntax to install from GitHub: `bun install github:username/repo-name`
 2. Add a remapping for the dependency in [remappings.txt](./remappings.txt), e.g.
    `dependency-name=node_modules/dependency-name`
 
@@ -79,6 +79,10 @@ $ forge script script/Deploy.s.sol --broadcast --fork-url http://localhost:8545
 $  forge script script/Deploy.s.sol:Deploy --rpc-url xxx --broadcast --verify --legacy --ffi
 ```
 
+```sh
+$ forge script script/MugenToken.s.sol --broadcast --fork-url <RPC_URL> --etherscan-api-key <ETHERSCAN_API_KEY>  --verify
+```
+
 ### Format
 
 Format the contracts:
@@ -126,10 +130,10 @@ $ bun run test:coverage:report
 
 ## forge
 
-- forge install OpenZeppelin/openzeppelin-contracts
-- forge install vectorized/solady
-- forge install OpenZeppelin/openzeppelin-foundry-upgrades
-- forge install OpenZeppelin/openzeppelin-contracts-upgradeable
+-   forge install OpenZeppelin/openzeppelin-contracts
+-   forge install vectorized/solady
+-   forge install OpenZeppelin/openzeppelin-foundry-upgrades
+-   forge install OpenZeppelin/openzeppelin-contracts-upgradeable
 
 ## License
 

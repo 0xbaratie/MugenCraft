@@ -20,6 +20,6 @@ contract MugenTokenTest is PRBTest, StdCheats {
     function test_uri() external {
         string memory uri = token.uri(0);
         console2.log(uri);
-        console2.log(string(Base64.decode(uri)));
+        // console2.log(string(Base64.decode(uri)));
     }
 }

@@ -7,28 +7,57 @@ import { Pausable } from "@openzeppelin/contracts/utils/Pausable.sol";
 import { Base64 } from "solady/utils/Base64.sol";
 import { NFTDescriptor } from "./utils/NFTDescriptor.sol";
 
+struct Metadata {
+    string name;
+    string imageText;
+}
+
 contract MugenToken is ERC1155Supply, AccessControl, Pausable {
+    /*//////////////////////////////////////////////////////////////
+                                STORAGE
+    //////////////////////////////////////////////////////////////*/
     bytes32 public constant MINTER_ROLE = bytes32(keccak256("MINTER_ROLE"));
 
-    string name0 = "name0";
-    string description0 = "description0";
-    string image0 = "name0";
+    mapping(uint256 => Metadata) public metadatas;
 
+    //TODO description
+    string description = "MugenCraft is onchain, infinte craftable NFTs, where you can craft your own NFTs.";
+
+    /*//////////////////////////////////////////////////////////////
+                              CONSTRUCTOR
+    //////////////////////////////////////////////////////////////*/
     constructor() ERC1155("") {
         _setRoleAdmin(DEFAULT_ADMIN_ROLE, DEFAULT_ADMIN_ROLE);
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, msg.sender);
     }
 
+    /*//////////////////////////////////////////////////////////////
+                            EXTERNAL UPDATE
+    //////////////////////////////////////////////////////////////*/
     function setMetaData(
-        string memory _name0,
-        string memory _description0,
-        string memory _image0
+        uint256 _id,
+        string memory _name,
+        string memory _imageText
     ) external whenNotPaused onlyRole(MINTER_ROLE) {
-        name0 = _name0;
-        description0 = _description0;
-        image0 = _image0;
+        metadatas[_id] = Metadata(_name, _imageText);
     }
+
+    function mint(uint256 _id) external whenNotPaused onlyRole(MINTER_ROLE) {
+        _mint(msg.sender, _id, 1, "");
+    }
+
+    function togglePause() external onlyRole(DEFAULT_ADMIN_ROLE) {
+        if (paused()) {
+            _unpause();
+        } else {
+            _pause();
+        }
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                             EXTERNAL VIEW
+    //////////////////////////////////////////////////////////////*/
 
     // prettier-ignore
     function generateImage(uint256 _id)
@@ -41,8 +70,9 @@ contract MugenToken is ERC1155Supply, AccessControl, Pausable {
                 string(
                     abi.encodePacked(
                         '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 320 320"><style></style>',
-                        '<rect x="150" y="30" width="10" height="10" fill="#f00"/><rect x="160" y="30" width="10" height="10" fill="#0f0"/>',
-                        '<text x="150" y="70" font-size="10" fill="#000">Hey!&#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;</text>',
+                        '<text x="150" y="70" font-size="10" fill="#000">',
+                        metadatas[_id].imageText,
+                        '</text>',
                         '</svg>'
                     )
                 )
@@ -50,18 +80,12 @@ contract MugenToken is ERC1155Supply, AccessControl, Pausable {
     }
 
     function uri(uint256 _id) public view override returns (string memory) {
-        (string memory _name, string memory _description, string memory _image) = (name0, description0, image0);
-
         NFTDescriptor.TokenURIParams memory params = NFTDescriptor.TokenURIParams({
-            name: _name,
-            description: _description,
-            image: generateImage(_id) //TODO
+            name: metadatas[_id].name,
+            description: description,
+            image: generateImage(_id)
         });
         return NFTDescriptor.constructTokenURI(params);
-    }
-
-    function mint(uint256 _id) external whenNotPaused onlyRole(MINTER_ROLE) {
-        _mint(msg.sender, _id, 1, "");
     }
 
     function supportsInterface(bytes4 interfaceId) public view virtual override(ERC1155, AccessControl) returns (bool) {
@@ -71,11 +95,11 @@ contract MugenToken is ERC1155Supply, AccessControl, Pausable {
             super.supportsInterface(interfaceId);
     }
 
-    function togglePause() external onlyRole(DEFAULT_ADMIN_ROLE) {
-        if (paused()) {
-            _unpause();
-        } else {
-            _pause();
-        }
-    }
+    /*//////////////////////////////////////////////////////////////
+                             INTERNAL VIEW
+    //////////////////////////////////////////////////////////////*/
+
+    /*//////////////////////////////////////////////////////////////
+                            INTERNAL UPDATE
+    //////////////////////////////////////////////////////////////*/
 }
