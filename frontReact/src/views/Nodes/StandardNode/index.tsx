@@ -24,7 +24,7 @@ function StandardNode(props: Node<NodeModel>) {
           <span className="font-bold">{props.data.label}</span>
         </div>
       </div>
-      {isHovered && (
+      {props.data.emoji !== '🌱' && isHovered && (
         <div
           className="hover-content absolute z-50 flex flex-col items-center border border-blue-gray-100 bg-white rounded-md min-w-[180px] top-0 left-full p-2"
           onMouseEnter={handleMouseEnter}
@@ -32,7 +32,11 @@ function StandardNode(props: Node<NodeModel>) {
         >
           {/* TODO: Change numbers dynamically */}
           <span className="font-bold">53 left</span>
-          {!isConnected || chain?.id !== 168587773 ? <ConnectButton /> : <button className="font-bold">Mint</button>}
+          {!isConnected || chain?.id !== 168587773 ? (
+            <ConnectButton />
+          ) : (
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1">Mint</button>
+          )}
         </div>
       )}
     </>
