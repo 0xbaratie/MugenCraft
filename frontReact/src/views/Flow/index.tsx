@@ -144,12 +144,25 @@ const Flow = () => {
         <Background />
       </ReactFlow>
       {isFooterVisible && (
-        <div className="fixed bottom-0 bg-white shadow-md p-4 flex justify-between items-center z-100">
-          <div>
-            {overlappingNodesInfo.node1.label && overlappingNodesInfo.node2.label
-              ? `${overlappingNodesInfo.node1.emoji}${overlappingNodesInfo.node1.label} + ${overlappingNodesInfo.node2.emoji}${overlappingNodesInfo.node2.label} = `
-              : ''}
+        <div className="fixed left-12 bottom-0 bg-white shadow-md p-4 flex justify-between items-center z-100">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center border border-blue-gray-100 bg-white rounded-md">
+              {overlappingNodesInfo.node1.label ? (
+                <div className="p-2">
+                  <span className="font-bold">{`${overlappingNodesInfo.node1.emoji}${overlappingNodesInfo.node1.label}`}</span>
+                </div>
+              ) : null}
+            </div>
+            <span className="flex items-center">+</span>
+            <div className="flex items-center border border-blue-gray-100 bg-white rounded-md">
+              {overlappingNodesInfo.node2.label ? (
+                <div className="p-2">
+                  <span className="font-bold">{`${overlappingNodesInfo.node2.emoji}${overlappingNodesInfo.node2.label}`}</span>
+                </div>
+              ) : null}
+            </div>
           </div>
+          <span className="flex items-center mx-2">=</span>
           <input
             type="text"
             name="emoji"
