@@ -20,11 +20,11 @@ interface NodeData {
 
 // TODO: Add initial node
 const nodeInitData: NodeData[] = [
-  { key: 'apple', emoji: '🍎', label: 'Apple' },
-  { key: 'pineapple', emoji: '🍍', label: 'Pineapple' },
-  { key: 'grape', emoji: '🍇', label: 'Grape' },
-  { key: 'orange', emoji: '🍊', label: 'Orange' },
-  { key: 'banana', emoji: '🍌', label: 'Banana' },
+  { key: 'stone', emoji: '🪨', label: 'Stone' },
+  { key: 'seed', emoji: '🌱', label: 'Seed' },
+  { key: 'soul', emoji: '💛', label: 'Soul' },
+  { key: 'earth', emoji: '🌏', label: 'Earth' },
+  { key: 'hammer', emoji: '🔨', label: 'Hammer' },
 ];
 
 export const NodeProvider: React.FC<NodeProviderProps> = ({ children }) => {
