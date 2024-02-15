@@ -21,19 +21,6 @@
     .sidebar-nodes {
       display: flex;
       flex-wrap: wrap;
-      .node-item {
-        border-radius: var(--radius-m);
-        border: 1px solid var(--c-blue-grey-100);
-        background-color: #ffffff;
-        padding: var(--size-s);
-        margin: var(--size-xs);
-        width: fit-content;
-        position: relative;
-        overflow: hidden;
-        .node-label {
-          font-weight: bold;
-        }
-      }
     }
   }
 
