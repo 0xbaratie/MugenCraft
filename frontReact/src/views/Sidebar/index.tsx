@@ -17,7 +17,7 @@ const Sidebar: React.FC = () => {
   return (
     <div className="dnd-flow-sidebar flex flex-col justify-between min-h-screen">
       <div className="flex items-center justify-between p-2 border-b border-gray-200">
-        <button className="px-4 py-2 bg-blue-500 text-white rounded-xl">Points</button>
+        <button className="px-4 py-2 bg-gray-400 text-white rounded-xl">Points</button>
         <ConnectButton />
       </div>
       <div className="sidebar-body flex-grow">
