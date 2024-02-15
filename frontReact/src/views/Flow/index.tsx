@@ -27,10 +27,9 @@ const Flow = () => {
     node1: { label: null, emoji: null },
     node2: { label: null, emoji: null },
   });
-  const [selectedEmoji, setSelectedEmoji] = useState<string>('');
 
   function onClick(emojiData: EmojiClickData, event: MouseEvent) {
-    setSelectedEmoji(emojiData.emoji);
+    setFooterInput((prev) => ({ ...prev, emoji: emojiData.emoji }));
     setShowEmojiPicker(false);
   }
 
@@ -178,7 +177,7 @@ const Flow = () => {
             onClick={toggleEmojiPicker} // Toggle visibility on click
             className="border border-gray-300 hover:bg-gray-300 text-white font-bold py-2 px-4 rounded"
           >
-            {selectedEmoji ? selectedEmoji : '🌏'}
+            {footerInput.emoji ? footerInput.emoji : '🌏'}
           </button>
 
           {showEmojiPicker && (
