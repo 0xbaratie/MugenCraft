@@ -7,6 +7,12 @@ import { NodeModel, nodeTypes } from '../../data/Nodes';
 import { Nodes } from '../../data/Nodes';
 import { useAddNode } from '../../views/Nodes/NodeContext';
 import { message } from 'antd';
+import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
+
+interface OverlappingNodesInfo {
+  node1: { label: string | null; emoji: string | null };
+  node2: { label: string | null; emoji: string | null };
+}
 
 const Flow = () => {
   const addNode = useAddNode();
@@ -14,7 +20,27 @@ const Flow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+  const [footerInput, setFooterInput] = useState({ label: '', emoji: '' });
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
   const onConnect = useCallback((params: Connection) => setEdges((eds) => addEdge(params, eds)), []);
+  const [overlappingNodesInfo, setOverlappingNodesInfo] = useState<OverlappingNodesInfo>({
+    node1: { label: null, emoji: null },
+    node2: { label: null, emoji: null },
+  });
+  interface SelectedNodesInfo {
+    draggedNode: Node<NodeModel> | null;
+    overlappingNode: Node<NodeModel> | null;
+  }
+
+  const [selectedNodesInfo, setSelectedNodesInfo] = useState<SelectedNodesInfo>({
+    draggedNode: null,
+    overlappingNode: null,
+  });
+
+  function onClick(emojiData: EmojiClickData, event: MouseEvent) {
+    setFooterInput((prev) => ({ ...prev, emoji: emojiData.emoji }));
+    setShowEmojiPicker(false);
+  }
 
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -54,6 +80,7 @@ const Flow = () => {
   );
 
   const onNodeDragStop = (event: React.MouseEvent, draggedNode: Node<NodeModel>) => {
+    // Detect whether it is covered here
     const overlappingNode = nodes.find(
       (node) =>
         node.id !== draggedNode.id &&
@@ -63,26 +90,70 @@ const Flow = () => {
 
     if (overlappingNode) {
       message.warning({ content: 'Nodes are overlapping!', key: 'overlapWarning' });
-
+      setSelectedNodesInfo({
+        draggedNode: draggedNode,
+        overlappingNode: overlappingNode,
+      });
       const updatedNodes = nodes.filter((node) => node.id !== draggedNode.id);
-
-      setNodes(
-        updatedNodes.map((node) => {
-          if (node.id === overlappingNode.id) {
-            // TODO: Change dynamically
-            const updatedNodeData = { ...node.data, key: 'mud', label: 'Mud', emoji: '💩' };
-            addNode(updatedNodeData.key, updatedNodeData.emoji, updatedNodeData.label);
-            return { ...node, data: updatedNodeData };
-          }
-          return node;
-        }),
-      );
+      setIsFooterVisible(true);
+      setOverlappingNodesInfo({
+        node1: { label: draggedNode.data.label, emoji: draggedNode.data.emoji },
+        node2: { label: overlappingNode.data.label, emoji: overlappingNode.data.emoji },
+      });
     }
   };
+
+  const handleInputChange = (e: any) => {
+    const { name, value } = e.target;
+    setFooterInput((prevInput) => ({ ...prevInput, [name]: value }));
+  };
+
+  const updateNodeFromFooter = () => {
+    const { label, emoji } = footerInput;
+    const { draggedNode, overlappingNode } = selectedNodesInfo;
+    if (label && emoji && draggedNode && overlappingNode) {
+      const updatedNodes = nodes
+        .filter((node) => node.id !== draggedNode.id)
+        .map((node) => {
+          if (node.id === overlappingNode.id) {
+            return {
+              ...node,
+              data: { ...node.data, label, emoji, key: label.toLowerCase() },
+            };
+          }
+          return node;
+        });
+      addNode(label.toLowerCase(), emoji, label);
+      setNodes(updatedNodes);
+      setIsFooterVisible(false);
+      setSelectedNodesInfo({ draggedNode: null, overlappingNode: null });
+    }
+  };
+  // Existing state and function definitions...
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const toggleEmojiPicker = () => setShowEmojiPicker(!showEmojiPicker);
+
+  useEffect(() => {
+    // Function to check if the overlap has been resolved between Recipe
+    const checkOverlaps = () => {
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          if (Math.abs(nodes[i].position.x - nodes[j].position.x) < 30 && Math.abs(nodes[i].position.y - nodes[j].position.y) < 30) {
+            return true;
+          }
+        }
+      }
+      return false;
+    };
+    if (!checkOverlaps()) {
+      setIsFooterVisible(false);
+    }
+  }, [nodes]);
 
   return (
     <div className="reactflow-wrapper" ref={reactFlowWrapper}>
       <ReactFlow
+        style={{ height: isFooterVisible ? 'calc(100% - 150px)' : '100%' }}
         nodeTypes={nodeTypes}
         nodes={nodes}
         edges={edges}
@@ -98,6 +169,52 @@ const Flow = () => {
         <Controls />
         <Background />
       </ReactFlow>
+      {isFooterVisible && (
+        <div className="fixed left-12 bottom-0 bg-white shadow-md p-4 flex justify-between items-center z-100">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center border border-blue-gray-100 bg-white rounded-md">
+              {overlappingNodesInfo.node1.label ? (
+                <div className="p-2">
+                  <span className="font-bold">{`${overlappingNodesInfo.node1.emoji}${overlappingNodesInfo.node1.label}`}</span>
+                </div>
+              ) : null}
+            </div>
+            <span className="flex items-center">+</span>
+            <div className="flex items-center border border-blue-gray-100 bg-white rounded-md">
+              {overlappingNodesInfo.node2.label ? (
+                <div className="p-2">
+                  <span className="font-bold">{`${overlappingNodesInfo.node2.emoji}${overlappingNodesInfo.node2.label}`}</span>
+                </div>
+              ) : null}
+            </div>
+          </div>
+          <span className="flex items-center mx-2">=</span>
+          <button
+            onClick={toggleEmojiPicker} // Toggle visibility on click
+            className="border border-gray-300 hover:bg-gray-300 text-white font-bold py-2 px-4 rounded"
+          >
+            {footerInput.emoji ? footerInput.emoji : '🌏'}
+          </button>
+
+          {showEmojiPicker && (
+            <div className="fixed left-12 bottom-0 bg-white shadow-md p-4 flex justify-between items-center z-100">
+              <EmojiPicker onEmojiClick={onClick} autoFocusSearch={false} />
+            </div>
+          )}
+          <input
+            type="text"
+            name="label"
+            placeholder="Label"
+            value={footerInput.label}
+            onChange={handleInputChange}
+            onMouseDown={(e) => e.stopPropagation()}
+            className="border border-gray-300 rounded-md p-2 m-1 flex-1"
+          />
+          <button onClick={updateNodeFromFooter} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1">
+            Define
+          </button>
+        </div>
+      )}
     </div>
   );
 };
