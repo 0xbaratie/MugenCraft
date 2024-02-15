@@ -12,6 +12,10 @@ function StandardNode(props: Node<NodeModel>) {
   const handleMouseEnter = () => setIsHovered(true);
   const handleMouseLeave = () => setIsHovered(false);
 
+  // TODO: Added condition of being able to Mint or not.
+  // TODO: Execute the function when minting.
+  // TODO: Implementation of Toast display after minting
+
   return (
     <>
       <div className="relative flex border border-blue-gray-100 bg-white rounded-md" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
