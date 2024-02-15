@@ -32,13 +32,13 @@ export const NodeProvider: React.FC<NodeProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const storedNodes = localStorage.getItem('nodes');
-    if (storedNodes) {
-      setNodes(JSON.parse(storedNodes));
-    } else {
-      nodeInitData.forEach((node) => {
-        addNodeView(node.key, node.emoji, node.label);
-      });
-    }
+    // if (storedNodes) {
+    //   setNodes(JSON.parse(storedNodes));
+    // } else {
+    nodeInitData.forEach((node) => {
+      addNodeView(node.key, node.emoji, node.label);
+    });
+    // }
   }, []);
 
   const addNodeView = (key: string, emoji: string, label: string): void => {

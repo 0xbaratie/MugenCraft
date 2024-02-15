@@ -88,7 +88,20 @@ const Flow = () => {
         Math.abs(node.position.y - draggedNode.position.y) < 30,
     );
 
-    if (overlappingNode) {
+    if (overlappingNode && draggedNode.data.label === overlappingNode.data.label) {
+      const updatedNodes = nodes.filter((node) => node.id !== draggedNode.id);
+      setNodes(
+        updatedNodes.map((node) => {
+          if (node.id === overlappingNode.id) {
+            // TODO: Change dynamically
+            const updatedNodeData = { ...node.data, key: 'tree', label: 'Tree', emoji: '🌲' };
+            addNode(updatedNodeData.key, updatedNodeData.emoji, updatedNodeData.label);
+            return { ...node, data: updatedNodeData };
+          }
+          return node;
+        }),
+      );
+    } else if (overlappingNode) {
       message.warning({ content: 'Nodes are overlapping!', key: 'overlapWarning' });
       setSelectedNodesInfo({
         draggedNode: draggedNode,

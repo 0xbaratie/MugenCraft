@@ -27,6 +27,12 @@ addNode('seed', '🌱', 'Seed');
 addNode('soul', '💛', 'Soul');
 addNode('earth', '🌏', 'Earth');
 addNode('hammer', '🔨', 'Hammer');
+
+// TODO: For Demo preset
 addNode('mud', '💩', 'Mud');
+addNode('tree', '🌲', 'Tree');
+addNode('appletree', '🍎', 'Appletree');
+addNode('potato', '🥔', 'Potato');
+addNode('dog', '🐶', 'Dog');
 
 export { Nodes, nodeTypes, addNodeType, addNode };
