@@ -100,17 +100,6 @@ const Flow = () => {
         node1: { label: draggedNode.data.label, emoji: draggedNode.data.emoji },
         node2: { label: overlappingNode.data.label, emoji: overlappingNode.data.emoji },
       });
-      // setNodes(
-      //   updatedNodes.map((node) => {
-      //     if (node.id === overlappingNode.id) {
-      //       // TODO: Change dynamically
-      //       const updatedNodeData = { ...node.data, key: 'mud', label: 'Mud', emoji: '💩' };
-      //       addNode(updatedNodeData.key, updatedNodeData.emoji, updatedNodeData.label);
-      //       return { ...node, data: updatedNodeData };
-      //     }
-      //     return node;
-      //   }),
-      // );
     }
   };
 
