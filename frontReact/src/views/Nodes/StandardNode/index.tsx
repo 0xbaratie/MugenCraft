@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Node } from 'reactflow';
 import { NodeModel } from '../../../data/Nodes';
-import './StandardNode.scss';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount, useContractRead, useNetwork } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 
 function StandardNode(props: Node<NodeModel>) {
   const { isConnected } = useAccount();
@@ -13,23 +12,23 @@ function StandardNode(props: Node<NodeModel>) {
   const handleMouseEnter = () => setIsHovered(true);
   const handleMouseLeave = () => setIsHovered(false);
 
-  // TODO: Added condition of being able to Mint or not.
-  // TODO: Execute the function when minting.
-  // TODO: Implementation of Toast display after minting
-
   return (
     <>
-      <div className="dnd-node standard-node" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-        <div className="standard-node-body">
-          <span className="standard-node-body-label">{props.data.emoji}</span>
-          <span className="standard-node-body-label">{props.data.label}</span>
+      <div className="relative flex border border-blue-gray-100 bg-white rounded-md" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <div className="relative overflow-hidden p-2">
+          <span className="font-bold">{props.data.emoji}</span>
+          <span className="font-bold">{props.data.label}</span>
         </div>
       </div>
       {isHovered && (
-        <div className="hover-content standard-node-body" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <div
+          className="hover-content absolute z-50 flex flex-col items-center border border-blue-gray-100 bg-white rounded-md min-w-[180px] top-0 left-full p-2"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
           {/* TODO: Change numbers dynamically */}
-          <span className="standard-node-body-label">53 left</span>
-          {!isConnected || chain?.id !== 168587773 ? <ConnectButton /> : <button className="standard-node-body-label">Mint</button>}
+          <span className="font-bold">53 left</span>
+          {!isConnected || chain?.id !== 168587773 ? <ConnectButton /> : <button className="font-bold">Mint</button>}
         </div>
       )}
     </>
