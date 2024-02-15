@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { SyntheticEvent, useState, useRef, useCallback, useEffect } from 'react';
 import ReactFlow, { addEdge, useNodesState, useEdgesState, Controls, Background, Node, Connection } from 'react-flow-renderer';
 import 'reactflow/dist/style.css';
 import './Flow.scss';
@@ -7,6 +7,7 @@ import { NodeModel, nodeTypes } from '../../data/Nodes';
 import { Nodes } from '../../data/Nodes';
 import { useAddNode } from '../../views/Nodes/NodeContext';
 import { message } from 'antd';
+import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 
 interface OverlappingNodesInfo {
   node1: { label: string | null; emoji: string | null };
@@ -26,6 +27,12 @@ const Flow = () => {
     node1: { label: null, emoji: null },
     node2: { label: null, emoji: null },
   });
+  const [selectedEmoji, setSelectedEmoji] = useState<string>('');
+
+  function onClick(emojiData: EmojiClickData, event: MouseEvent) {
+    setSelectedEmoji(emojiData.emoji);
+    setShowEmojiPicker(false);
+  }
 
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -107,6 +114,10 @@ const Flow = () => {
     }
   };
 
+  // Existing state and function definitions...
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false); // Step 1: Visibility state
+  const toggleEmojiPicker = () => setShowEmojiPicker(!showEmojiPicker);
+
   useEffect(() => {
     // Function to check if the overlap has been resolved between Recipe
     const checkOverlaps = () => {
@@ -127,7 +138,7 @@ const Flow = () => {
   return (
     <div className="reactflow-wrapper" ref={reactFlowWrapper}>
       <ReactFlow
-        style={{ height: isFooterVisible ? 'calc(100% - 40px)' : '100%' }}
+        style={{ height: isFooterVisible ? 'calc(100% - 150px)' : '100%' }}
         nodeTypes={nodeTypes}
         nodes={nodes}
         edges={edges}
@@ -163,15 +174,18 @@ const Flow = () => {
             </div>
           </div>
           <span className="flex items-center mx-2">=</span>
-          <input
-            type="text"
-            name="emoji"
-            placeholder="🌏"
-            value={footerInput.emoji}
-            onChange={handleInputChange}
-            onMouseDown={(e) => e.stopPropagation()}
-            className="border border-gray-300 rounded-md p-2 m-1 w-16"
-          />
+          <button
+            onClick={toggleEmojiPicker} // Toggle visibility on click
+            className="border border-gray-300 hover:bg-gray-300 text-white font-bold py-2 px-4 rounded"
+          >
+            {selectedEmoji ? selectedEmoji : '🌏'}
+          </button>
+
+          {showEmojiPicker && (
+            <div className="fixed left-12 bottom-0 bg-white shadow-md p-4 flex justify-between items-center z-100">
+              <EmojiPicker onEmojiClick={onClick} autoFocusSearch={false} />
+            </div>
+          )}
           <input
             type="text"
             name="label"
