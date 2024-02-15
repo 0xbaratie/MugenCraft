@@ -27,6 +27,15 @@ const Flow = () => {
     node1: { label: null, emoji: null },
     node2: { label: null, emoji: null },
   });
+  interface SelectedNodesInfo {
+    draggedNode: Node<NodeModel> | null;
+    overlappingNode: Node<NodeModel> | null;
+  }
+
+  const [selectedNodesInfo, setSelectedNodesInfo] = useState<SelectedNodesInfo>({
+    draggedNode: null,
+    overlappingNode: null,
+  });
 
   function onClick(emojiData: EmojiClickData, event: MouseEvent) {
     setFooterInput((prev) => ({ ...prev, emoji: emojiData.emoji }));
@@ -81,6 +90,10 @@ const Flow = () => {
 
     if (overlappingNode) {
       message.warning({ content: 'Nodes are overlapping!', key: 'overlapWarning' });
+      setSelectedNodesInfo({
+        draggedNode: draggedNode,
+        overlappingNode: overlappingNode,
+      });
       const updatedNodes = nodes.filter((node) => node.id !== draggedNode.id);
       setIsFooterVisible(true);
       setOverlappingNodesInfo({
@@ -108,13 +121,27 @@ const Flow = () => {
 
   const updateNodeFromFooter = () => {
     const { label, emoji } = footerInput;
-    if (label && emoji) {
+    const { draggedNode, overlappingNode } = selectedNodesInfo;
+    if (label && emoji && draggedNode && overlappingNode) {
+      const updatedNodes = nodes
+        .filter((node) => node.id !== draggedNode.id)
+        .map((node) => {
+          if (node.id === overlappingNode.id) {
+            return {
+              ...node,
+              data: { ...node.data, label, emoji, key: label.toLowerCase() },
+            };
+          }
+          return node;
+        });
+      addNode(label.toLowerCase(), emoji, label);
+      setNodes(updatedNodes);
       setIsFooterVisible(false);
+      setSelectedNodesInfo({ draggedNode: null, overlappingNode: null });
     }
   };
-
   // Existing state and function definitions...
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false); // Step 1: Visibility state
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const toggleEmojiPicker = () => setShowEmojiPicker(!showEmojiPicker);
 
   useEffect(() => {
