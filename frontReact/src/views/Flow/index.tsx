@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import ReactFlow, { addEdge, useNodesState, useEdgesState, Controls, Background, Node, Connection } from 'react-flow-renderer';
 import 'reactflow/dist/style.css';
 import './Flow.scss';
