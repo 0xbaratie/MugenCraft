@@ -1,18 +1,7 @@
 import React, { useState } from "react";
 import styles from "./Sidebar.module.css";
-
-// import { useNodeContext } from '../Nodes/NodeContext';
-// import { ConnectButton } from '@rainbow-me/rainbowkit';
-
-import ReactFlow, {
-  Node,
-  useNodesState,
-  useEdgesState,
-  addEdge,
-  Connection,
-  Edge,
-  ConnectionLineType,
-} from "reactflow";
+import { ConnectKitButton } from "connectkit";
+import ReactFlow, { Node } from "reactflow";
 
 let tapSound: any = null;
 if (typeof window !== "undefined") {
@@ -92,7 +81,7 @@ const Sidebar: React.FC = () => {
               </div>
             </div>
           )}
-          {/* <ConnectButton /> */}
+          <ConnectKitButton />
         </div>
         <div className="sidebar-body flex-grow">
           <div className="sidebar-nodes">
@@ -109,7 +98,6 @@ const Sidebar: React.FC = () => {
             ))}
           </div>
         </div>
-        <div>hoge</div>
         <div className="p-4 text-center border-t border-gray-200 flex items-center justify-center h-16">
           {/* TODO: Change numbers dynamically */}
           <div className="text-gray-500">You earned 0.1 ETH ⛽️</div>
