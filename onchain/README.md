@@ -83,6 +83,10 @@ $  forge script script/Deploy.s.sol:Deploy --rpc-url xxx --broadcast --verify --
 $ forge script script/MugenToken.s.sol --broadcast --fork-url <RPC_URL> --etherscan-api-key <ETHERSCAN_API_KEY>  --verify
 ```
 
+```sh
+$ forge script script/MugenToken.s.sol --broadcast --fork-url https://sepolia.blast.io --etherscan-api-key verifyContract  --verify --verifier-url 'https://api.routescan.io/v2/network/testnet/evm/168587773/etherscan'
+```
+
 ### Format
 
 Format the contracts:
