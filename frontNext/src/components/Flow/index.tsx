@@ -10,6 +10,7 @@ import ReactFlow, {
   Controls,
   Background,
 } from "reactflow";
+import Footer from "components/Footer";
 
 import CustomNode from "./CustomNode";
 const nodeTypes = {
@@ -18,77 +19,91 @@ const nodeTypes = {
 
 import styles from "./Flow.module.css";
 
-const nodeMap: { [key: string]: Node } = {
+let flow_id = 0;
+let craft_id = 6;
+
+//TODO local storage
+let nodeMap: { [key: string]: Node } = {
   "1": {
     id: "",
     type: "custom",
-    data: { element_id: "1", emoji: "🪨", label: "Stone" },
+    data: { craft_id: "1", emoji: "🪨", label: "Stone" },
     position: { x: 0, y: 0 },
   },
   "2": {
     id: "",
     type: "custom",
-    data: { element_id: "2", emoji: "🌱", label: "Seed" },
+    data: { craft_id: "2", emoji: "🌱", label: "Seed" },
     position: { x: 0, y: 0 },
   },
   "3": {
     id: "",
     type: "custom",
-    data: { element_id: "3", emoji: "💛", label: "Soul" },
+    data: { craft_id: "3", emoji: "💛", label: "Soul" },
     position: { x: 0, y: 0 },
   },
   "4": {
     id: "",
     type: "custom",
-    data: { element_id: "4", emoji: "🌏", label: "Earth" },
+    data: { craft_id: "4", emoji: "🌏", label: "Earth" },
     position: { x: 0, y: 0 },
   },
   "5": {
     id: "",
     type: "custom",
-    data: { element_id: "5", emoji: "🔨", label: "Hammer" },
+    data: { craft_id: "5", emoji: "🔨", label: "Hammer" },
     position: { x: 0, y: 0 },
   },
   "6": {
     id: "",
     type: "custom",
-    data: { element_id: "6", emoji: "💩", label: "Poop" },
+    data: { craft_id: "6", emoji: "💩", label: "Poop" },
     position: { x: 0, y: 0 },
   },
 };
 
-// const initialNodes: Node[] = [
-//   {
-//     id: "1",
-//     type: "custom",
-//     data: { emoji: "🪨", label: "Stone" },
-//     position: { x: 250, y: 5 },
-//   },
-//   {
-//     id: "2",
-//     type: "custom",
-//     data: { emoji: "🌱", label: "Seed" },
-//     position: { x: 350, y: 5 },
-//   },
-//   {
-//     id: "3",
-//     type: "custom",
-//     data: { emoji: "💛", label: "Soul" },
-//     position: { x: 450, y: 5 },
-//   },
-//   {
-//     id: "4",
-//     type: "custom",
-//     data: { emoji: "🌏", label: "Earth" },
-//     position: { x: 550, y: 5 },
-//   },
-//   {
-//     id: "5",
-//     type: "custom",
-//     data: { emoji: "🔨", label: "Hammer" },
-//     position: { x: 650, y: 5 },
-//   },
-// ];
+//TODO local storage
+const addNodeMap = (emoji: string, label: string) => {
+  const new_craft_id = `${craft_id++}`;
+  nodeMap[new_craft_id] = {
+    id: "",
+    type: "custom",
+    data: { craft_id: new_craft_id, emoji: emoji, label: label },
+    position: { x: 0, y: 0 },
+  };
+};
+
+//TODO local storage
+const getNodeMap = (id: string): Node => {
+  return nodeMap[id];
+};
+
+const recipeMap: { [key: string]: string } = {
+  "1_1": "6",
+  "1_2": "6",
+  "1_3": "6",
+  "1_4": "6",
+  "1_5": "6",
+  "2_2": "6",
+  "2_3": "6",
+  "2_4": "6",
+  "2_5": "6",
+  "3_3": "6",
+  "3_4": "6",
+  "3_5": "6",
+  "4_4": "6",
+  "4_5": "6",
+  "5_5": "6",
+};
+
+const getRecipeId = (idA: string, idB: string): string => {
+  // align a and b to be in ascending order
+  if (idA > idB) {
+    [idA, idB] = [idB, idA];
+  }
+  // get recipe map value
+  return recipeMap[`${idA}_${idB}`];
+};
 
 const initialNodes: Node[] = [];
 
@@ -114,6 +129,41 @@ function Flow() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+  const [isFooterVisible, setIsFooterVisible] = useState(true);
+  const [footerNodeA, setFooterNodeA] = useState<Node | undefined>();
+  const [footerNodeB, setFooterNodeB] = useState<Node | undefined>();
+  const [footerInput, setFooterInput] = useState({ emoji: "", label: "" });
+
+  const updateNodeFromFooter = () => {
+    if (!footerNodeA || !footerNodeB) {
+      return;
+    }
+
+    const position = {
+      x: (footerNodeA.position.x + footerNodeB.position.x) / 2,
+      y: (footerNodeA.position.y + footerNodeB.position.y) / 2,
+    };
+
+    const newNode: Node = {
+      id: `${flow_id++}`,
+      type: "custom",
+      data: { emoji: footerInput.emoji, label: footerInput.label },
+      position: position,
+    };
+
+    // unite footerNodeA and footerNodeB into new node
+    setNodes((currentNodes) =>
+      currentNodes
+        .filter((n) => n.id !== footerNodeA.id && n.id !== footerNodeB.id)
+        .concat(newNode)
+    );
+
+    //TODO add new recipe to recipeMap
+    addNodeMap(footerInput.emoji, footerInput.label);
+    setIsFooterVisible(false);
+    setFooterNodeA(undefined);
+    setFooterNodeB(undefined);
+  };
 
   const onConnect = useCallback(
     (params: Connection | Edge) => setEdges((eds) => addEdge(params, eds)),
@@ -144,16 +194,16 @@ function Flow() {
         y: event.clientY - reactFlowBounds.top,
       });
 
-      const baseNode = nodeMap[id];
+      const baseNode = getNodeMap(id);
       if (!baseNode) {
         // Handle case where node is not found in nodeMap
-        // message.warning("Node type not found!");
+        // message.warning("Node type not found!"); //TODO
         return;
       }
 
       const newNode: Node = {
         ...baseNode,
-        id: `${baseNode.id}-${Date.now()}`, // TODO generete unique id
+        id: `${flow_id++}`,
         position: position,
       };
 
@@ -171,30 +221,59 @@ function Flow() {
       (n) => n.id !== node.id && nodesOverlap(n, node)
     );
     if (overlappingNode) {
-      //TODO
-      // Logic to combine nodes and create a new node with id "6"
-      const newNode = {
-        id: "6", // Assuming '6' is always the new id, adjust logic as needed
-        type: "custom",
-        data: { element_id: "6", emoji: "💩", label: "Poop" }, // Example data, replace with your combined node logic
-        position: {
-          x: (node.position.x + overlappingNode.position.x) / 2,
-          y: (node.position.y + overlappingNode.position.y) / 2,
-        }, // Position the new node between the two
-      };
-
-      // Remove the original nodes and add the new node
-      setNodes((currentNodes) =>
-        currentNodes
-          .filter((n) => n.id !== node.id && n.id !== overlappingNode.id)
-          .concat(newNode)
+      // get new craft_id by getRecipeId
+      const newCraftId = getRecipeId(
+        node.data.craft_id,
+        overlappingNode.data.craft_id
       );
-      // Optionally, handle edges if needed
+
+      // recipe exists
+      if (newCraftId) {
+        console.log("recipe exists");
+        const _newNode = getNodeMap(newCraftId);
+        if (!_newNode) {
+          // Handle case where node is not found in nodeMap
+          // message.warning("Node type not found!"); //TODO
+          return;
+        }
+
+        const newNode: Node = {
+          ..._newNode,
+          id: `${flow_id++}`,
+          position: {
+            x: (node.position.x + overlappingNode.position.x) / 2,
+            y: (node.position.y + overlappingNode.position.y) / 2,
+          },
+        };
+
+        // Remove the original nodes and add the new node
+        setNodes((currentNodes) =>
+          currentNodes
+            .filter((n) => n.id !== node.id && n.id !== overlappingNode.id)
+            .concat(newNode)
+        );
+
+        //mint new recipe by footer
+      } else {
+        console.log("recipe not exists");
+        setIsFooterVisible(true);
+        setFooterNodeA(node);
+        setFooterNodeB(overlappingNode);
+      }
     }
   };
 
   return (
     <div className={styles.flow}>
+      {isFooterVisible && (
+        <Footer
+          nodeA={footerNodeA}
+          nodeB={footerNodeB}
+          footerInput={footerInput}
+          setFooterInput={setFooterInput}
+          updateNodeFromFooter={updateNodeFromFooter}
+        />
+      )}
       <ReactFlow
         nodes={nodes}
         onNodeDragStop={onNodeDragStop}
