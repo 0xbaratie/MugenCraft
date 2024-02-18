@@ -57,8 +57,8 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className={styles.sidebar}>
-      <div className="dnd-flow-sidebar flex flex-col justify-between min-h-screen">
+    <div className={`${styles.sidebar} w-[330px]`}>
+      <div className="shadow-custom px-2 flex flex-col justify-between min-h-screen">
         <div className="relative flex items-center justify-between p-2 border-b border-gray-200">
           <button
             className="px-4 py-2 bg-gray-400 text-white rounded-xl"
@@ -83,8 +83,8 @@ const Sidebar: React.FC = () => {
           )}
           <ConnectKitButton />
         </div>
-        <div className="sidebar-body flex-grow">
-          <div className="sidebar-nodes">
+        <div className="mt-4 flex-grow">
+          <div className="flex flex-wrap">
             {initialNodes.map((node, i) => (
               <div
                 key={node.id}
