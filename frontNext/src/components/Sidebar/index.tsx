@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./Sidebar.module.css";
+import styles from "../../styles/Sidebar.module.css";
 import { ConnectKitButton } from "connectkit";
 import ReactFlow, { Node } from "reactflow";
 

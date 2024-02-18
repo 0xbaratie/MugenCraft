@@ -17,7 +17,7 @@ const nodeTypes = {
   custom: CustomNode,
 };
 
-import styles from "./Flow.module.css";
+import styles from "../../styles/Flow.module.css";
 
 let flow_id = 0;
 let craft_id = 6;
