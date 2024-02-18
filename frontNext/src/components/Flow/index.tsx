@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useRef } from "react";
 import ReactFlow, {
   Node,
   useNodesState,
@@ -16,8 +16,6 @@ import CustomNode from "./CustomNode";
 const nodeTypes = {
   custom: CustomNode,
 };
-
-import styles from "./Flow.module.css";
 
 let flow_id = 0;
 let craft_id = 6;
@@ -288,8 +286,10 @@ function Flow() {
     }
   };
 
+  const reactFlowWrapper = useRef<any>(null);
+
   return (
-    <div className={styles.flow}>
+    <div className="flex flex-col h-screen w-full">
       {isFooterVisible && (
         <Footer
           nodeA={footerNodeA}
@@ -299,23 +299,26 @@ function Flow() {
           updateNodeFromFooter={updateNodeFromFooter}
         />
       )}
-      <ReactFlow
-        nodes={nodes}
-        onNodeDragStop={onNodeDragStop}
-        onNodesChange={onNodesChange}
-        edges={edges}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        onInit={setReactFlowInstance}
-        onDrop={onDrop}
-        onDragOver={onDragOver}
-        nodeTypes={nodeTypes}
-        defaultEdgeOptions={defaultEdgeOptions}
-        connectionLineType={ConnectionLineType.SmoothStep}
-        fitView
-      />
-      {/* <Controls />
-      <Background /> */}
+      <div className="flex-grow h-full w-full" ref={reactFlowWrapper}>
+        <ReactFlow
+          nodes={nodes}
+          onNodeDragStop={onNodeDragStop}
+          onNodesChange={onNodesChange}
+          edges={edges}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          onInit={setReactFlowInstance}
+          onDrop={onDrop}
+          onDragOver={onDragOver}
+          nodeTypes={nodeTypes}
+          defaultEdgeOptions={defaultEdgeOptions}
+          connectionLineType={ConnectionLineType.SmoothStep}
+          fitView
+        >
+          <Controls />
+          <Background />
+        </ReactFlow>
+      </div>
     </div>
   );
 }
