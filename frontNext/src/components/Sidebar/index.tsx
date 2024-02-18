@@ -56,7 +56,7 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className={`w-[330px]`}>
+    <div className="w-[340px] border-l border-gray-400">
       <div className="shadow-custom px-2 flex flex-col justify-between min-h-screen">
         <div className="relative flex items-center justify-between p-2 border-b border-gray-200">
           <button
