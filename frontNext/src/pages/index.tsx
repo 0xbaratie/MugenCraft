@@ -5,7 +5,6 @@ import Flow from "components/Flow";
 import { ReactFlowProvider } from 'react-flow-renderer';
 import styles from "../styles/Home.module.css";
 import Sidebar from "components/Sidebar";
-import { NodeProvider } from '../components/NodeContext';
 
 const Home: NextPage = () => {
   return (
