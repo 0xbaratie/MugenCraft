@@ -16,8 +16,6 @@ import CustomNode from "./CustomNode";
 const nodeTypes = {
   custom: CustomNode,
 };
-// import 'reactflow/dist/style.css';
-// import styles from "../../styles/Flow.module.css";
 
 let flow_id = 0;
 let craft_id = 6;
@@ -276,7 +274,7 @@ function Flow() {
           updateNodeFromFooter={updateNodeFromFooter}
         />
       )}
-      <div className="reactflow-wrapper h-full w-full" ref={reactFlowWrapper}> {/* min-w-80をw-fullに変更 */}
+      <div className="flex-grow h-full w-full" ref={reactFlowWrapper}> {/* min-w-80をw-fullに変更 */}
         <ReactFlow
           nodes={nodes}
           onNodeDragStop={onNodeDragStop}

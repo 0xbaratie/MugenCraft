@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import styles from "../../styles/Sidebar.module.css";
 import { ConnectKitButton } from "connectkit";
-import ReactFlow, { Node } from "reactflow";
+import { Node } from "reactflow";
 
 let tapSound: any = null;
 if (typeof window !== "undefined") {
@@ -57,7 +56,7 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className={`${styles.sidebar} w-[330px]`}>
+    <div className={`w-[330px]`}>
       <div className="shadow-custom px-2 flex flex-col justify-between min-h-screen">
         <div className="relative flex items-center justify-between p-2 border-b border-gray-200">
           <button
