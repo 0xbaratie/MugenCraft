@@ -274,7 +274,7 @@ function Flow() {
           updateNodeFromFooter={updateNodeFromFooter}
         />
       )}
-      <div className="flex-grow h-full w-full" ref={reactFlowWrapper}> {/* min-w-80をw-fullに変更 */}
+      <div className="flex-grow h-full w-full" ref={reactFlowWrapper}>
         <ReactFlow
           nodes={nodes}
           onNodeDragStop={onNodeDragStop}
