@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.20.5",
+    "@vercel/kv": "^1.0.1",
     "connectkit": "^1.7.1",
     "emoji-picker-react": "^4.7.17",
     "next": "^13.4.12",
