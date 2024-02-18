@@ -19,8 +19,8 @@ const Footer: React.FC<FooterProps> = ({
   setFooterInput,
   updateNodeFromFooter,
 }) => {
-  if (!nodeA || !nodeB) return null;
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  if (!nodeA || !nodeB) return null;
 
   return (
     <div>

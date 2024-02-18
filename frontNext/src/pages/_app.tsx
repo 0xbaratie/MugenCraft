@@ -16,6 +16,8 @@ const config = createConfig(
     // Required API Keys
     walletConnectProjectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!,
 
+    ssr: true,
+
     // Required App Info
     appName: "Your App Name",
 
