@@ -87,11 +87,11 @@ const Sidebar: React.FC = () => {
             {initialNodes.map((node, i) => (
               <div
                 key={node.id}
-                className="relative border border-gray-300 bg-white p-2 m-1 rounded-md overflow-hidden"
+                className="relative border border-gray-400 bg-white p-2 m-1 rounded-md overflow-hidden hover:bg-gradient-to-b"
                 onDragStart={(event) => onDragStart(event, node.id)}
                 draggable
               >
-                <span className="font-bold">{node.data.emoji}</span>
+                <span className="font-bold mr-1">{node.data.emoji}</span>
                 <span className="font-bold">{node.data.label}</span>
               </div>
             ))}

@@ -10,10 +10,11 @@ const sourceHandleStyleB: CSSProperties = {
 const CustomNode: FC<NodeProps> = ({ data, xPos, yPos }) => {
   return (
     <>
-      <div>
-        <div>
-          {data.emoji} {data.label}
-        </div>
+      <div
+        className="border border-gray-400 bg-white px-2 py-1 m-1 rounded-md overflow-hidden  hover:bg-gradient-to-b"
+      >
+        <span className="font-semibold mr-1">{data.emoji}</span>
+        <span className="font-semibold">{data.label}</span>
       </div>
     </>
   );
