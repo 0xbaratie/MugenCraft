@@ -63,17 +63,6 @@ let nodeMap: { [key: string]: Node } = {
 };
 
 //TODO local storage
-const addNodeMap = (emoji: string, label: string) => {
-  const new_craft_id = `${craft_id++}`;
-  nodeMap[new_craft_id] = {
-    id: "",
-    type: "custom",
-    data: { craft_id: new_craft_id, emoji: emoji, label: label },
-    position: { x: 0, y: 0 },
-  };
-};
-
-//TODO local storage
 const getNodeMap = (id: string): Node => {
   return nodeMap[id];
 };
@@ -134,7 +123,43 @@ function Flow() {
   const [footerNodeB, setFooterNodeB] = useState<Node | undefined>();
   const [footerInput, setFooterInput] = useState({ emoji: "", label: "" });
 
-  const updateNodeFromFooter = () => {
+  //TODO local storage
+  const addNodeMap = async (emoji: string, label: string) => {
+    console.log("addNodeMap");
+    const new_craft_id = `${craft_id++}`;
+    nodeMap[new_craft_id] = {
+      id: "",
+      type: "custom",
+      data: { craft_id: new_craft_id, emoji: emoji, label: label },
+      position: { x: 0, y: 0 },
+    };
+    await postCraftApi(new_craft_id, emoji, label);
+  };
+
+  const postCraftApi = async (
+    craft_id: string,
+    emoji: string,
+    label: string
+  ) => {
+    console.log("postCraftApi");
+    console.log("craft_id", craft_id);
+    const url = `/api/craft?craft_id=${craft_id}`;
+    try {
+      const response = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({ craft_id, emoji, label }),
+      });
+      console.log(response);
+    } catch (error) {
+      // TODO Handle response data
+      console.error("Error:", error);
+    }
+  };
+
+  const updateNodeFromFooter = async () => {
     if (!footerNodeA || !footerNodeB) {
       return;
     }
@@ -158,8 +183,8 @@ function Flow() {
         .concat(newNode)
     );
 
-    //TODO add new recipe to recipeMap
-    addNodeMap(footerInput.emoji, footerInput.label);
+    //TODO add new recipe to KV
+    await addNodeMap(footerInput.emoji, footerInput.label);
     setIsFooterVisible(false);
     setFooterNodeA(undefined);
     setFooterNodeB(undefined);
