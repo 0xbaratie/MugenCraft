@@ -56,7 +56,7 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className={`w-[330px]`}>
+    <div className="w-[340px] border-l border-gray-400">
       <div className="shadow-custom px-2 flex flex-col justify-between min-h-screen">
         <div className="relative flex items-center justify-between p-2 border-b border-gray-200">
           <button
@@ -87,11 +87,11 @@ const Sidebar: React.FC = () => {
             {initialNodes.map((node, i) => (
               <div
                 key={node.id}
-                className="relative border border-gray-300 bg-white p-2 m-1 rounded-md overflow-hidden"
+                className="relative border border-gray-400 bg-white p-2 m-1 rounded-md overflow-hidden hover:bg-gradient-to-b"
                 onDragStart={(event) => onDragStart(event, node.id)}
                 draggable
               >
-                <span className="font-bold">{node.data.emoji}</span>
+                <span className="font-bold mr-1">{node.data.emoji}</span>
                 <span className="font-bold">{node.data.label}</span>
               </div>
             ))}
