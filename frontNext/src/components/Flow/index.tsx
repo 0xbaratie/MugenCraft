@@ -290,15 +290,6 @@ function Flow() {
 
   return (
     <div className="flex flex-col h-screen w-full">
-      {isFooterVisible && (
-        <Footer
-          nodeA={footerNodeA}
-          nodeB={footerNodeB}
-          footerInput={footerInput}
-          setFooterInput={setFooterInput}
-          updateNodeFromFooter={updateNodeFromFooter}
-        />
-      )}
       <div className="flex-grow h-full w-full" ref={reactFlowWrapper}>
         <ReactFlow
           nodes={nodes}
@@ -319,6 +310,15 @@ function Flow() {
           <Background />
         </ReactFlow>
       </div>
+      {isFooterVisible && (
+        <Footer
+          nodeA={footerNodeA}
+          nodeB={footerNodeB}
+          footerInput={footerInput}
+          setFooterInput={setFooterInput}
+          updateNodeFromFooter={updateNodeFromFooter}
+        />
+      )}
     </div>
   );
 }
