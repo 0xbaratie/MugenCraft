@@ -11,11 +11,8 @@ import ReactFlow, {
   Background,
 } from "reactflow";
 import Footer from "components/Footer";
-
 import CustomNode from "./CustomNode";
-const nodeTypes = {
-  custom: CustomNode,
-};
+import { getCraftApi, postCraftApi } from "utils/utils";
 
 let fusionSound: any = null;
 if (typeof window !== "undefined") {
@@ -57,28 +54,12 @@ let nodeMap: { [key: string]: Node } = {
     data: { craft_id: "5", emoji: "🔨", label: "Hammer" },
     position: { x: 0, y: 0 },
   },
-  "6": {
-    id: "",
-    type: "custom",
-    data: { craft_id: "6", emoji: "💩", label: "Poop" },
-    position: { x: 0, y: 0 },
-  },
-};
-
-//TODO local storage
-const addNodeMap = (emoji: string, label: string) => {
-  const new_craft_id = `${craft_id++}`;
-  nodeMap[new_craft_id] = {
-    id: "",
-    type: "custom",
-    data: { craft_id: new_craft_id, emoji: emoji, label: label },
-    position: { x: 0, y: 0 },
-  };
-};
-
-//TODO local storage
-const getNodeMap = (id: string): Node => {
-  return nodeMap[id];
+  // "6": {
+  //   id: "",
+  //   type: "custom",
+  //   data: { craft_id: "6", emoji: "💩", label: "Poop" },
+  //   position: { x: 0, y: 0 },
+  // },
 };
 
 const recipeMap: { [key: string]: string } = {
@@ -108,36 +89,46 @@ const getRecipeId = (idA: string, idB: string): string => {
   return recipeMap[`${idA}_${idB}`];
 };
 
-const initialNodes: Node[] = [];
-
-const initialEdges: Edge[] = [
-  { id: "e1-2", source: "1", target: "2" },
-  { id: "e1-3", source: "1", target: "3" },
-];
-
-const defaultEdgeOptions = {
-  animated: true,
-  type: "smoothstep",
-};
-
-const nodesOverlap = (nodeA: Node, nodeB: Node): boolean => {
-  const buffer = 50; // A buffer to account for node size; adjust as needed
-  return (
-    Math.abs(nodeA.position.x - nodeB.position.x) < buffer &&
-    Math.abs(nodeA.position.y - nodeB.position.y) < buffer
-  );
-};
-
 function Flow() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([
+    { id: "e1-2", source: "1", target: "2" },
+    { id: "e1-3", source: "1", target: "3" },
+  ]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
   const [isFooterVisible, setIsFooterVisible] = useState(true);
   const [footerNodeA, setFooterNodeA] = useState<Node | undefined>();
   const [footerNodeB, setFooterNodeB] = useState<Node | undefined>();
   const [footerInput, setFooterInput] = useState({ emoji: "", label: "" });
 
-  const updateNodeFromFooter = () => {
+  const getNodeMap = (id: string): Node => {
+    //TODO local storage
+    return nodeMap[id];
+  };
+
+  const getNodeMapByApi = async (id: string): Promise<Node> => {
+    const res = await getCraftApi(id);
+    return {
+      id: "",
+      type: "custom",
+      data: { craft_id: res.craft_id, emoji: res.emoji, label: res.label },
+      position: { x: 0, y: 0 },
+    };
+  };
+
+  //TODO local storage
+  const addNodeMap = async (emoji: string, label: string) => {
+    const new_craft_id = `${craft_id++}`;
+    nodeMap[new_craft_id] = {
+      id: "",
+      type: "custom",
+      data: { craft_id: new_craft_id, emoji: emoji, label: label },
+      position: { x: 0, y: 0 },
+    };
+    await postCraftApi(new_craft_id, emoji, label);
+  };
+
+  const updateNodeFromFooter = async () => {
     if (!footerNodeA || !footerNodeB) {
       return;
     }
@@ -183,7 +174,7 @@ function Flow() {
   }, []);
 
   const onDrop = useCallback(
-    (event: React.DragEvent<HTMLDivElement>) => {
+    async (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
 
       const reactFlowBounds = event.currentTarget.getBoundingClientRect();
@@ -222,7 +213,15 @@ function Flow() {
     [reactFlowInstance, setNodes]
   );
 
-  const onNodeDragStop = (event: React.MouseEvent, node: Node) => {
+  const nodesOverlap = (nodeA: Node, nodeB: Node): boolean => {
+    const buffer = 50; // A buffer to account for node size; adjust as needed
+    return (
+      Math.abs(nodeA.position.x - nodeB.position.x) < buffer &&
+      Math.abs(nodeA.position.y - nodeB.position.y) < buffer
+    );
+  };
+
+  const onNodeDragStop = async (event: React.MouseEvent, node: Node) => {
     // Find if the dragged node overlaps with any other node
     const overlappingNode = nodes.find(
       (n) => n.id !== node.id && nodesOverlap(n, node)
@@ -234,12 +233,14 @@ function Flow() {
         overlappingNode.data.craft_id
       );
 
-      // recipe exists
+      // TODO recipe exists
       if (newCraftId) {
-        console.log("recipe exists");
-        const _newNode = getNodeMap(newCraftId);
+        // if node exists in local storage
+        let _newNode = getNodeMap(newCraftId);
         if (!_newNode) {
-          // Handle case where node is not found in nodeMap
+          _newNode = await getNodeMapByApi(newCraftId);
+        }
+        if (!_newNode) {
           // message.warning("Node type not found!"); //TODO
           return;
         }
@@ -274,18 +275,16 @@ function Flow() {
   };
 
   const reactFlowWrapper = useRef<any>(null);
+  const nodeTypes = {
+    custom: CustomNode,
+  };
+  const defaultEdgeOptions = {
+    animated: true,
+    type: "smoothstep",
+  };
 
   return (
     <div className="flex flex-col h-screen w-full">
-      {isFooterVisible && (
-        <Footer
-          nodeA={footerNodeA}
-          nodeB={footerNodeB}
-          footerInput={footerInput}
-          setFooterInput={setFooterInput}
-          updateNodeFromFooter={updateNodeFromFooter}
-        />
-      )}
       <div className="flex-grow h-full w-full" ref={reactFlowWrapper}>
         <ReactFlow
           nodes={nodes}
@@ -306,6 +305,15 @@ function Flow() {
           <Background />
         </ReactFlow>
       </div>
+      {isFooterVisible && (
+        <Footer
+          nodeA={footerNodeA}
+          nodeB={footerNodeB}
+          footerInput={footerInput}
+          setFooterInput={setFooterInput}
+          updateNodeFromFooter={updateNodeFromFooter}
+        />
+      )}
     </div>
   );
 }
