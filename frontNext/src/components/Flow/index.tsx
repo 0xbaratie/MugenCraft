@@ -25,8 +25,6 @@ if (typeof window !== "undefined") {
 }
 
 let flow_id = 0;
-let craft_id = 6;
-
 //TODO local storage
 let nodeMap: { [key: string]: Node } = {
   "1": {
@@ -59,14 +57,15 @@ let nodeMap: { [key: string]: Node } = {
     data: { craft_id: "5", emoji: "🔨", label: "Hammer" },
     position: { x: 0, y: 0 },
   },
-  // "6": {
-  //   id: "",
-  //   type: "custom",
-  //   data: { craft_id: "6", emoji: "💩", label: "Poop" },
-  //   position: { x: 0, y: 0 },
-  // },
+  "6": {
+    id: "",
+    type: "custom",
+    data: { craft_id: "6", emoji: "💩", label: "Poop" },
+    position: { x: 0, y: 0 },
+  },
 };
 
+//TODO local storage
 const recipeMap: { [key: string]: string } = {
   "1_1": "6",
   "1_2": "6",
@@ -86,6 +85,8 @@ const recipeMap: { [key: string]: string } = {
 };
 
 function Flow() {
+  let craft_id = 6;
+
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([
     { id: "e1-2", source: "1", target: "2" },
@@ -97,11 +98,10 @@ function Flow() {
   const [footerNodeB, setFooterNodeB] = useState<Node | undefined>();
   const [footerInput, setFooterInput] = useState({ emoji: "", label: "" });
 
+  //recipe
   const getRecipeMap = (idA: string, idB: string): string => {
     // align a and b to be in ascending order
-    if (idA > idB) {
-      [idA, idB] = [idB, idA];
-    }
+    [idA, idB] = idA > idB ? [idB, idA] : [idA, idB];
     return recipeMap[`${idA}_${idB}`];
   };
 
@@ -109,12 +109,22 @@ function Flow() {
     idA: string,
     idB: string
   ): Promise<string> => {
+    [idA, idB] = idA > idB ? [idB, idA] : [idA, idB];
     const res = await getRecipeApi(`${idA}_${idB}`);
+    if (!res) {
+      return "";
+    }
     return res.craft_id;
   };
 
+  const addRecipeMap = async (idA: string, idB: string, newCraftId: string) => {
+    [idA, idB] = idA > idB ? [idB, idA] : [idA, idB];
+    recipeMap[`${idA}_${idB}`] = newCraftId;
+    await postRecipeApi(`${idA}_${idB}`, newCraftId);
+  };
+
+  //craft
   const getNodeMap = (id: string): Node => {
-    //TODO local storage
     return nodeMap[id];
   };
 
@@ -128,18 +138,17 @@ function Flow() {
     };
   };
 
-  //TODO local storage
-  const addNodeMap = async (emoji: string, label: string) => {
-    const new_craft_id = `${craft_id++}`;
-    nodeMap[new_craft_id] = {
+  const addNodeMap = async (craft_id: string, emoji: string, label: string) => {
+    nodeMap[craft_id] = {
       id: "",
       type: "custom",
-      data: { craft_id: new_craft_id, emoji: emoji, label: label },
+      data: { craft_id: craft_id, emoji: emoji, label: label },
       position: { x: 0, y: 0 },
     };
-    await postCraftApi(new_craft_id, emoji, label);
+    await postCraftApi(craft_id, footerInput.emoji, footerInput.label);
   };
 
+  //footer function
   const updateNodeFromFooter = async () => {
     if (!footerNodeA || !footerNodeB) {
       return;
@@ -169,12 +178,20 @@ function Flow() {
       .catch((err: Error) => console.error("Audio play failed:", err));
 
     //TODO yama add new recipe to recipeMap
-    addNodeMap(footerInput.emoji, footerInput.label);
+    const new_craft_id = `${craft_id++}`;
+    await addNodeMap(new_craft_id, footerInput.emoji, footerInput.label);
+    await addRecipeMap(
+      footerNodeA.data.craft_id,
+      footerNodeB.data.craft_id,
+      new_craft_id
+    );
+
     setIsFooterVisible(false);
     setFooterNodeA(undefined);
     setFooterNodeB(undefined);
   };
 
+  //flow functions
   const onConnect = useCallback(
     (params: Connection | Edge) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
@@ -244,12 +261,15 @@ function Flow() {
         node.data.craft_id,
         overlappingNode.data.craft_id
       );
+      console.log("newCraftId by getRecipeMap", newCraftId);
       if (!newCraftId) {
         newCraftId = await getRecipeMapByApi(
           node.data.craft_id,
           overlappingNode.data.craft_id
         );
+        console.log("newCraftId by getRecipeMapByApi", newCraftId);
       }
+      console.log("newCraftId", newCraftId);
 
       // recipe exists
       if (newCraftId) {
@@ -292,6 +312,7 @@ function Flow() {
     }
   };
 
+  //flow settings
   const reactFlowWrapper = useRef<any>(null);
   const nodeTypes = {
     custom: CustomNode,
