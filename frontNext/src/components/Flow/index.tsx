@@ -12,7 +12,12 @@ import ReactFlow, {
 } from "reactflow";
 import Footer from "components/Footer";
 import CustomNode from "./CustomNode";
-import { getCraftApi, postCraftApi } from "utils/utils";
+import {
+  getCraftApi,
+  postCraftApi,
+  getRecipeApi,
+  postRecipeApi,
+} from "utils/utils";
 
 let fusionSound: any = null;
 if (typeof window !== "undefined") {
@@ -80,15 +85,6 @@ const recipeMap: { [key: string]: string } = {
   "5_5": "6",
 };
 
-const getRecipeId = (idA: string, idB: string): string => {
-  // align a and b to be in ascending order
-  if (idA > idB) {
-    [idA, idB] = [idB, idA];
-  }
-  // get recipe map value
-  return recipeMap[`${idA}_${idB}`];
-};
-
 function Flow() {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([
@@ -100,6 +96,22 @@ function Flow() {
   const [footerNodeA, setFooterNodeA] = useState<Node | undefined>();
   const [footerNodeB, setFooterNodeB] = useState<Node | undefined>();
   const [footerInput, setFooterInput] = useState({ emoji: "", label: "" });
+
+  const getRecipeMap = (idA: string, idB: string): string => {
+    // align a and b to be in ascending order
+    if (idA > idB) {
+      [idA, idB] = [idB, idA];
+    }
+    return recipeMap[`${idA}_${idB}`];
+  };
+
+  const getRecipeMapByApi = async (
+    idA: string,
+    idB: string
+  ): Promise<string> => {
+    const res = await getRecipeApi(`${idA}_${idB}`);
+    return res.craft_id;
+  };
 
   const getNodeMap = (id: string): Node => {
     //TODO local storage
@@ -156,7 +168,7 @@ function Flow() {
       .play()
       .catch((err: Error) => console.error("Audio play failed:", err));
 
-    //TODO add new recipe to recipeMap
+    //TODO yama add new recipe to recipeMap
     addNodeMap(footerInput.emoji, footerInput.label);
     setIsFooterVisible(false);
     setFooterNodeA(undefined);
@@ -228,12 +240,18 @@ function Flow() {
     );
     if (overlappingNode) {
       // get new craft_id by getRecipeId
-      const newCraftId = getRecipeId(
+      let newCraftId = getRecipeMap(
         node.data.craft_id,
         overlappingNode.data.craft_id
       );
+      if (!newCraftId) {
+        newCraftId = await getRecipeMapByApi(
+          node.data.craft_id,
+          overlappingNode.data.craft_id
+        );
+      }
 
-      // TODO recipe exists
+      // recipe exists
       if (newCraftId) {
         // if node exists in local storage
         let _newNode = getNodeMap(newCraftId);
