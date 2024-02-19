@@ -85,8 +85,6 @@ const recipeMap: { [key: string]: string } = {
 };
 
 function Flow() {
-  let craft_id = 6;
-
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([
     { id: "e1-2", source: "1", target: "2" },
@@ -97,6 +95,14 @@ function Flow() {
   const [footerNodeA, setFooterNodeA] = useState<Node | undefined>();
   const [footerNodeB, setFooterNodeB] = useState<Node | undefined>();
   const [footerInput, setFooterInput] = useState({ emoji: "", label: "" });
+
+  const getMaxCraftId = async (): Promise<number> => {
+    const res = await fetch("/api/keys");
+    const data = await res.json();
+    //TODO
+    const initialNodeCount = 6;
+    return data.length + initialNodeCount;
+  };
 
   //recipe
   const getRecipeMap = (idA: string, idB: string): string => {
@@ -159,10 +165,24 @@ function Flow() {
       y: (footerNodeA.position.y + footerNodeB.position.y) / 2,
     };
 
+    // add KV and local storage
+    const new_craft_id = (await getMaxCraftId()) + 1 + "";
+    console.log("new_craft_id", new_craft_id);
+    await addNodeMap(new_craft_id, footerInput.emoji, footerInput.label);
+    await addRecipeMap(
+      footerNodeA.data.craft_id,
+      footerNodeB.data.craft_id,
+      new_craft_id
+    );
+
     const newNode: Node = {
       id: `${flow_id++}`,
       type: "custom",
-      data: { emoji: footerInput.emoji, label: footerInput.label },
+      data: {
+        craft_id: new_craft_id,
+        emoji: footerInput.emoji,
+        label: footerInput.label,
+      },
       position: position,
     };
 
@@ -176,15 +196,6 @@ function Flow() {
     fusionSound
       .play()
       .catch((err: Error) => console.error("Audio play failed:", err));
-
-    //TODO yama add new recipe to recipeMap
-    const new_craft_id = `${craft_id++}`;
-    await addNodeMap(new_craft_id, footerInput.emoji, footerInput.label);
-    await addRecipeMap(
-      footerNodeA.data.craft_id,
-      footerNodeB.data.craft_id,
-      new_craft_id
-    );
 
     setIsFooterVisible(false);
     setFooterNodeA(undefined);
