@@ -11,11 +11,8 @@ import ReactFlow, {
   Background,
 } from "reactflow";
 import Footer from "components/Footer";
-
 import CustomNode from "./CustomNode";
-const nodeTypes = {
-  custom: CustomNode,
-};
+import { getCraftApi, postCraftApi } from "utils/utils";
 
 let fusionSound: any = null;
 if (typeof window !== "undefined") {
@@ -92,29 +89,12 @@ const getRecipeId = (idA: string, idB: string): string => {
   return recipeMap[`${idA}_${idB}`];
 };
 
-const initialNodes: Node[] = [];
-
-const initialEdges: Edge[] = [
-  { id: "e1-2", source: "1", target: "2" },
-  { id: "e1-3", source: "1", target: "3" },
-];
-
-const defaultEdgeOptions = {
-  animated: true,
-  type: "smoothstep",
-};
-
-const nodesOverlap = (nodeA: Node, nodeB: Node): boolean => {
-  const buffer = 50; // A buffer to account for node size; adjust as needed
-  return (
-    Math.abs(nodeA.position.x - nodeB.position.x) < buffer &&
-    Math.abs(nodeA.position.y - nodeB.position.y) < buffer
-  );
-};
-
 function Flow() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([
+    { id: "e1-2", source: "1", target: "2" },
+    { id: "e1-3", source: "1", target: "3" },
+  ]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
   const [isFooterVisible, setIsFooterVisible] = useState(true);
   const [footerNodeA, setFooterNodeA] = useState<Node | undefined>();
@@ -136,26 +116,6 @@ function Flow() {
     };
   };
 
-  const getCraftApi = async (craft_id: string) => {
-    console.log("getCraftApi");
-    //url parameter craft_id
-    const url = `/api/craft?craft_id=${craft_id}`;
-    try {
-      const response = await fetch(url, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "GET",
-      });
-      const data = await response.json();
-      console.log("api data", data);
-      return data;
-    } catch (error) {
-      // TODO Handle response data
-      console.error("Error:", error);
-    }
-  };
-
   //TODO local storage
   const addNodeMap = async (emoji: string, label: string) => {
     const new_craft_id = `${craft_id++}`;
@@ -166,29 +126,6 @@ function Flow() {
       position: { x: 0, y: 0 },
     };
     await postCraftApi(new_craft_id, emoji, label);
-  };
-
-  const postCraftApi = async (
-    craft_id: string,
-    emoji: string,
-    label: string
-  ) => {
-    console.log("postCraftApi");
-    console.log("craft_id", craft_id);
-    const url = `/api/craft?craft_id=${craft_id}`;
-    try {
-      const response = await fetch(url, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({ craft_id, emoji, label }),
-      });
-      console.log(response);
-    } catch (error) {
-      // TODO Handle response data
-      console.error("Error:", error);
-    }
   };
 
   const updateNodeFromFooter = async () => {
@@ -276,6 +213,14 @@ function Flow() {
     [reactFlowInstance, setNodes]
   );
 
+  const nodesOverlap = (nodeA: Node, nodeB: Node): boolean => {
+    const buffer = 50; // A buffer to account for node size; adjust as needed
+    return (
+      Math.abs(nodeA.position.x - nodeB.position.x) < buffer &&
+      Math.abs(nodeA.position.y - nodeB.position.y) < buffer
+    );
+  };
+
   const onNodeDragStop = async (event: React.MouseEvent, node: Node) => {
     // Find if the dragged node overlaps with any other node
     const overlappingNode = nodes.find(
@@ -330,6 +275,13 @@ function Flow() {
   };
 
   const reactFlowWrapper = useRef<any>(null);
+  const nodeTypes = {
+    custom: CustomNode,
+  };
+  const defaultEdgeOptions = {
+    animated: true,
+    type: "smoothstep",
+  };
 
   return (
     <div className="flex flex-col h-screen w-full">
