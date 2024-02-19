@@ -24,7 +24,7 @@ const Footer: React.FC<FooterProps> = ({
 
   return (
     <div>
-      <div className="left-12 bottom-0 bg-white shadow-md p-4 flex justify-between items-center z-100">
+      <div className="left-12 bottom-0 bg-white shadow-md p-4 flex justify-between items-center z-10">
         <div className="flex items-center space-x-4">
           <div className="flex items-center border border-blue-gray-100 bg-white rounded-md">
             {nodeA.data.label ? (

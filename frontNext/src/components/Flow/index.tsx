@@ -17,6 +17,11 @@ const nodeTypes = {
   custom: CustomNode,
 };
 
+let fusionSound: any = null;
+if (typeof window !== "undefined") {
+  fusionSound = new Audio("/se/new-discover.mp3");
+}
+
 let flow_id = 0;
 let craft_id = 6;
 
@@ -181,8 +186,12 @@ function Flow() {
         .concat(newNode)
     );
 
-    //TODO add new recipe to KV
-    await addNodeMap(footerInput.emoji, footerInput.label);
+    fusionSound
+      .play()
+      .catch((err: Error) => console.error("Audio play failed:", err));
+
+    //TODO add new recipe to recipeMap
+    addNodeMap(footerInput.emoji, footerInput.label);
     setIsFooterVisible(false);
     setFooterNodeA(undefined);
     setFooterNodeB(undefined);
@@ -275,6 +284,9 @@ function Flow() {
             .filter((n) => n.id !== node.id && n.id !== overlappingNode.id)
             .concat(newNode)
         );
+        fusionSound
+          .play()
+          .catch((err: Error) => console.error("Audio play failed:", err));
 
         //mint new recipe by footer
       } else {
