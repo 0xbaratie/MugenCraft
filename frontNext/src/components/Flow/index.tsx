@@ -57,17 +57,12 @@ let nodeMap: { [key: string]: Node } = {
     data: { craft_id: "5", emoji: "🔨", label: "Hammer" },
     position: { x: 0, y: 0 },
   },
-  "6": {
-    id: "",
-    type: "custom",
-    data: { craft_id: "6", emoji: "💩", label: "Poop" },
-    position: { x: 0, y: 0 },
-  },
-};
-
-//TODO local storage
-const getNodeMap = (id: string): Node => {
-  return nodeMap[id];
+  // "6": {
+  //   id: "",
+  //   type: "custom",
+  //   data: { craft_id: "6", emoji: "💩", label: "Poop" },
+  //   position: { x: 0, y: 0 },
+  // },
 };
 
 const recipeMap: { [key: string]: string } = {
@@ -126,9 +121,43 @@ function Flow() {
   const [footerNodeB, setFooterNodeB] = useState<Node | undefined>();
   const [footerInput, setFooterInput] = useState({ emoji: "", label: "" });
 
+  const getNodeMap = (id: string): Node => {
+    //TODO local storage
+    return nodeMap[id];
+  };
+
+  const getNodeMapByApi = async (id: string): Promise<Node> => {
+    const res = await getCraftApi(id);
+    return {
+      id: "",
+      type: "custom",
+      data: { craft_id: res.craft_id, emoji: res.emoji, label: res.label },
+      position: { x: 0, y: 0 },
+    };
+  };
+
+  const getCraftApi = async (craft_id: string) => {
+    console.log("getCraftApi");
+    //url parameter craft_id
+    const url = `/api/craft?craft_id=${craft_id}`;
+    try {
+      const response = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "GET",
+      });
+      const data = await response.json();
+      console.log("api data", data);
+      return data;
+    } catch (error) {
+      // TODO Handle response data
+      console.error("Error:", error);
+    }
+  };
+
   //TODO local storage
   const addNodeMap = async (emoji: string, label: string) => {
-    console.log("addNodeMap");
     const new_craft_id = `${craft_id++}`;
     nodeMap[new_craft_id] = {
       id: "",
@@ -208,7 +237,7 @@ function Flow() {
   }, []);
 
   const onDrop = useCallback(
-    (event: React.DragEvent<HTMLDivElement>) => {
+    async (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
 
       const reactFlowBounds = event.currentTarget.getBoundingClientRect();
@@ -247,7 +276,7 @@ function Flow() {
     [reactFlowInstance, setNodes]
   );
 
-  const onNodeDragStop = (event: React.MouseEvent, node: Node) => {
+  const onNodeDragStop = async (event: React.MouseEvent, node: Node) => {
     // Find if the dragged node overlaps with any other node
     const overlappingNode = nodes.find(
       (n) => n.id !== node.id && nodesOverlap(n, node)
@@ -259,12 +288,14 @@ function Flow() {
         overlappingNode.data.craft_id
       );
 
-      // recipe exists
+      // TODO recipe exists
       if (newCraftId) {
-        console.log("recipe exists");
-        const _newNode = getNodeMap(newCraftId);
+        // if node exists in local storage
+        let _newNode = getNodeMap(newCraftId);
         if (!_newNode) {
-          // Handle case where node is not found in nodeMap
+          _newNode = await getNodeMapByApi(newCraftId);
+        }
+        if (!_newNode) {
           // message.warning("Node type not found!"); //TODO
           return;
         }
