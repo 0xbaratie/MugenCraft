@@ -188,6 +188,9 @@ function Flow() {
       position: position,
     };
 
+    // Needs to be added to display in Flow (When drag & drop)
+    await addNodeMap(new_craft_id, footerInput.emoji, footerInput.label);
+
     // unite footerNodeA and footerNodeB into new node
     setNodes((currentNodes) =>
       currentNodes
