@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ConnectKitButton } from "connectkit";
 import { Node } from "reactflow";
+import { useNodeContext } from 'contexts/NodeContext';
 
 let tapSound: any = null;
 if (typeof window !== "undefined") {
@@ -42,7 +43,7 @@ const initialNodes: Node[] = [
 
 const Sidebar: React.FC = () => {
   const [showDetails, setShowDetails] = useState(false);
-  // const { nodes } = useNodeContext();
+  const { nodes } = useNodeContext();
 
   const onDragStart = (
     event: React.DragEvent<HTMLDivElement>,
@@ -84,7 +85,7 @@ const Sidebar: React.FC = () => {
         </div>
         <div className="mt-4 flex-grow">
           <div className="flex flex-wrap">
-            {initialNodes.map((node, i) => (
+            {nodes.map((node, i) => (
               <div
                 key={node.id}
                 className="relative border border-gray-400 bg-white p-2 m-1 rounded-md overflow-hidden hover:bg-gradient-to-b"

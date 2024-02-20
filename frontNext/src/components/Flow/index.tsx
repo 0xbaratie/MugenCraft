@@ -18,6 +18,7 @@ import {
   getRecipeApi,
   postRecipeApi,
 } from "utils/utils";
+import { useNodeContext } from 'contexts/NodeContext';
 
 let fusionSound: any = null;
 if (typeof window !== "undefined") {
@@ -95,6 +96,7 @@ function Flow() {
   const [footerNodeA, setFooterNodeA] = useState<Node | undefined>();
   const [footerNodeB, setFooterNodeB] = useState<Node | undefined>();
   const [footerInput, setFooterInput] = useState({ emoji: "", label: "" });
+  const { addNode } = useNodeContext();
 
   const getMaxCraftId = async (): Promise<number> => {
     const res = await fetch("/api/keys");
@@ -192,6 +194,8 @@ function Flow() {
         .filter((n) => n.id !== footerNodeA.id && n.id !== footerNodeB.id)
         .concat(newNode)
     );
+
+    addNode(newNode);
 
     fusionSound
       .play()
@@ -302,6 +306,8 @@ function Flow() {
             y: (node.position.y + overlappingNode.position.y) / 2,
           },
         };
+
+        addNode(newNode)
 
         // Remove the original nodes and add the new node
         setNodes((currentNodes) =>
