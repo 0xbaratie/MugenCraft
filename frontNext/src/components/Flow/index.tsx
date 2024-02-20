@@ -300,7 +300,7 @@ function Flow() {
 
         const newNode: Node = {
           ..._newNode,
-          id: `${flow_id++}`,
+          id: `${_newNode.data.craft_id}`,
           position: {
             x: (node.position.x + overlappingNode.position.x) / 2,
             y: (node.position.y + overlappingNode.position.y) / 2,
