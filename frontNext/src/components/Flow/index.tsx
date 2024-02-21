@@ -59,7 +59,7 @@ const Flow: React.FC = () => {
     const res = await fetch("/api/keys");
     const data = await res.json();
     //TODO
-    const initialNodeCount = 6;
+    const initialNodeCount = 600;
     return data.length + initialNodeCount;
   };
 

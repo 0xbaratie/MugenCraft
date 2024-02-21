@@ -8,47 +8,7 @@ import Sidebar from "components/Sidebar";
 
 import { Node } from "reactflow";
 
-const initialSideNodes: Node[] = [
-  {
-    id: "1",
-    type: "custom",
-    data: { craft_id: "1", emoji: "🔨", label: "Hammer" },
-    position: { x: 0, y: 0 },
-  },
-  {
-    id: "2",
-    type: "custom",
-    data: { craft_id: "2", emoji: "🗿", label: "Stone" },
-    position: { x: 0, y: 0 },
-  },
-  {
-    id: "3",
-    type: "custom",
-    data: { craft_id: "3", emoji: "🌱", label: "Seed" },
-    position: { x: 0, y: 0 },
-  },
-  {
-    id: "4",
-    type: "custom",
-    data: { craft_id: "4", emoji: "🧡", label: "Soul" },
-    position: { x: 0, y: 0 },
-  },
-  {
-    id: "5",
-    type: "custom",
-    data: { craft_id: "5", emoji: "🌏", label: "Earth" },
-    position: { x: 0, y: 0 },
-  },
-];
-
 const Home: NextPage = () => {
-  const [sideNodes, setSideNodes] = useState<Node[]>(initialSideNodes);
-
-  const addSideNode = (node: Node) => {
-    setSideNodes((currentNodes) => [...(currentNodes || []), node]);
-    console.log("sideNodes", sideNodes);
-  };
-
   return (
     <div className="flex flex-col h-screen">
       <Head>
