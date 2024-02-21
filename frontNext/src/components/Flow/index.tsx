@@ -18,7 +18,8 @@ import {
   getRecipeApi,
   postRecipeApi,
 } from "utils/utils";
-import { useNodeContext } from 'contexts/NodeContext';
+import { useNodeContext } from "contexts/NodeContext";
+import { initialNodeMap, initialRecipeMap } from "utils/initialObject";
 
 let fusionSound: any = null;
 if (typeof window !== "undefined") {
@@ -27,63 +28,10 @@ if (typeof window !== "undefined") {
 
 let flow_id = 0;
 //TODO local storage
-let nodeMap: { [key: string]: Node } = {
-  "1": {
-    id: "",
-    type: "custom",
-    data: { craft_id: "1", emoji: "🪨", label: "Stone" },
-    position: { x: 0, y: 0 },
-  },
-  "2": {
-    id: "",
-    type: "custom",
-    data: { craft_id: "2", emoji: "🌱", label: "Seed" },
-    position: { x: 0, y: 0 },
-  },
-  "3": {
-    id: "",
-    type: "custom",
-    data: { craft_id: "3", emoji: "💛", label: "Soul" },
-    position: { x: 0, y: 0 },
-  },
-  "4": {
-    id: "",
-    type: "custom",
-    data: { craft_id: "4", emoji: "🌏", label: "Earth" },
-    position: { x: 0, y: 0 },
-  },
-  "5": {
-    id: "",
-    type: "custom",
-    data: { craft_id: "5", emoji: "🔨", label: "Hammer" },
-    position: { x: 0, y: 0 },
-  },
-  "6": {
-    id: "",
-    type: "custom",
-    data: { craft_id: "6", emoji: "💩", label: "Poop" },
-    position: { x: 0, y: 0 },
-  },
-};
+let nodeMap: { [key: string]: Node } = initialNodeMap;
 
 //TODO local storage
-const recipeMap: { [key: string]: string } = {
-  "1_1": "6",
-  "1_2": "6",
-  "1_3": "6",
-  "1_4": "6",
-  "1_5": "6",
-  "2_2": "6",
-  "2_3": "6",
-  "2_4": "6",
-  "2_5": "6",
-  "3_3": "6",
-  "3_4": "6",
-  "3_5": "6",
-  "4_4": "6",
-  "4_5": "6",
-  "5_5": "6",
-};
+const recipeMap: { [key: string]: string } = initialRecipeMap;
 
 function Flow() {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -310,7 +258,7 @@ function Flow() {
           },
         };
 
-        addNode(newNode)
+        addNode(newNode);
 
         // Remove the original nodes and add the new node
         setNodes((currentNodes) =>
