@@ -19,7 +19,11 @@ import {
   getRecipeApi,
   postRecipeApi,
 } from "utils/utils";
-import { defaultNodeMap, defaultRecipeMap } from "utils/defaultObject";
+import {
+  defaultSideNodes,
+  defaultNodeMap,
+  defaultRecipeMap,
+} from "utils/defaultObject";
 
 let fusionSound: any = null;
 if (typeof window !== "undefined") {
@@ -29,39 +33,6 @@ if (typeof window !== "undefined") {
 let flow_id = 1;
 let nodeMap: { [key: string]: Node } = defaultNodeMap;
 const recipeMap: { [key: string]: string } = defaultRecipeMap;
-
-const initialSideNodes: Node[] = [
-  {
-    id: "",
-    type: "custom",
-    data: { craft_id: "1", emoji: "🔨", label: "Hammer" },
-    position: { x: 0, y: 0 },
-  },
-  {
-    id: "2",
-    type: "custom",
-    data: { craft_id: "2", emoji: "🗿", label: "Stone" },
-    position: { x: 0, y: 0 },
-  },
-  {
-    id: "3",
-    type: "custom",
-    data: { craft_id: "3", emoji: "🌱", label: "Seed" },
-    position: { x: 0, y: 0 },
-  },
-  {
-    id: "4",
-    type: "custom",
-    data: { craft_id: "4", emoji: "🧡", label: "Soul" },
-    position: { x: 0, y: 0 },
-  },
-  {
-    id: "5",
-    type: "custom",
-    data: { craft_id: "5", emoji: "🌏", label: "Earth" },
-    position: { x: 0, y: 0 },
-  },
-];
 
 const Flow: React.FC = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -74,7 +45,7 @@ const Flow: React.FC = () => {
   const [footerNodeA, setFooterNodeA] = useState<Node | undefined>();
   const [footerNodeB, setFooterNodeB] = useState<Node | undefined>();
   const [footerInput, setFooterInput] = useState({ emoji: "", label: "" });
-  const [sideNodes, setSideNodes] = useState<Node[]>(initialSideNodes);
+  const [sideNodes, setSideNodes] = useState<Node[]>(defaultSideNodes);
 
   const addSideNode = (node: Node) => {
     //if already exists, don't add

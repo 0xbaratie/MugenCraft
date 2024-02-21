@@ -33,9 +33,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        {/* <ConnectKitProvider> */}
-        <Component {...pageProps} />
-        {/* </ConnectKitProvider> */}
+        <ConnectKitProvider>
+          <Component {...pageProps} />
+        </ConnectKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );

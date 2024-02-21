@@ -1,5 +1,38 @@
 import { Node } from "reactflow";
 
+export const defaultSideNodes: Node[] = [
+  {
+    id: "",
+    type: "custom",
+    data: { craft_id: "1", emoji: "🔨", label: "Hammer" },
+    position: { x: 0, y: 0 },
+  },
+  {
+    id: "2",
+    type: "custom",
+    data: { craft_id: "2", emoji: "🗿", label: "Stone" },
+    position: { x: 0, y: 0 },
+  },
+  {
+    id: "3",
+    type: "custom",
+    data: { craft_id: "3", emoji: "🌱", label: "Seed" },
+    position: { x: 0, y: 0 },
+  },
+  {
+    id: "4",
+    type: "custom",
+    data: { craft_id: "4", emoji: "🧡", label: "Soul" },
+    position: { x: 0, y: 0 },
+  },
+  {
+    id: "5",
+    type: "custom",
+    data: { craft_id: "5", emoji: "🌏", label: "Earth" },
+    position: { x: 0, y: 0 },
+  },
+];
+
 export const defaultNodeMap: { [key: string]: Node } = {
   "1": {
     id: "",

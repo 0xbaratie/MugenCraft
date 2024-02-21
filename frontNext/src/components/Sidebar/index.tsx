@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import { ConnectKitButton } from "connectkit";
+import { ConnectKitButton } from "connectkit";
 import { Node } from "reactflow";
 
 let tapSound: any = null;
@@ -50,7 +50,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
               </div>
             </div>
           )}
-          {/* <ConnectKitButton /> */}
+          <ConnectKitButton />
         </div>
         <div className="mt-4 flex-grow">
           <div className="flex flex-wrap">
