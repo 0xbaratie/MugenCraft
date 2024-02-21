@@ -11,6 +11,7 @@ import ReactFlow, {
   Background,
 } from "reactflow";
 import Footer from "components/Footer";
+import Sidebar from "components/Sidebar";
 import CustomNode from "./CustomNode";
 import {
   getCraftApi,
@@ -18,74 +19,22 @@ import {
   getRecipeApi,
   postRecipeApi,
 } from "utils/utils";
-import { useNodeContext } from 'contexts/NodeContext';
+import {
+  defaultSideNodes,
+  defaultNodeMap,
+  defaultRecipeMap,
+} from "utils/defaultObject";
 
 let fusionSound: any = null;
 if (typeof window !== "undefined") {
   fusionSound = new Audio("/se/new-discover.mp3");
 }
 
-let flow_id = 0;
-//TODO local storage
-let nodeMap: { [key: string]: Node } = {
-  "1": {
-    id: "",
-    type: "custom",
-    data: { craft_id: "1", emoji: "🪨", label: "Stone" },
-    position: { x: 0, y: 0 },
-  },
-  "2": {
-    id: "",
-    type: "custom",
-    data: { craft_id: "2", emoji: "🌱", label: "Seed" },
-    position: { x: 0, y: 0 },
-  },
-  "3": {
-    id: "",
-    type: "custom",
-    data: { craft_id: "3", emoji: "💛", label: "Soul" },
-    position: { x: 0, y: 0 },
-  },
-  "4": {
-    id: "",
-    type: "custom",
-    data: { craft_id: "4", emoji: "🌏", label: "Earth" },
-    position: { x: 0, y: 0 },
-  },
-  "5": {
-    id: "",
-    type: "custom",
-    data: { craft_id: "5", emoji: "🔨", label: "Hammer" },
-    position: { x: 0, y: 0 },
-  },
-  "6": {
-    id: "",
-    type: "custom",
-    data: { craft_id: "6", emoji: "💩", label: "Poop" },
-    position: { x: 0, y: 0 },
-  },
-};
+let flow_id = 1;
+let nodeMap: { [key: string]: Node } = defaultNodeMap;
+const recipeMap: { [key: string]: string } = defaultRecipeMap;
 
-//TODO local storage
-const recipeMap: { [key: string]: string } = {
-  "1_1": "6",
-  "1_2": "6",
-  "1_3": "6",
-  "1_4": "6",
-  "1_5": "6",
-  "2_2": "6",
-  "2_3": "6",
-  "2_4": "6",
-  "2_5": "6",
-  "3_3": "6",
-  "3_4": "6",
-  "3_5": "6",
-  "4_4": "6",
-  "4_5": "6",
-  "5_5": "6",
-};
-
-function Flow() {
+const Flow: React.FC = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([
     { id: "e1-2", source: "1", target: "2" },
@@ -96,7 +45,15 @@ function Flow() {
   const [footerNodeA, setFooterNodeA] = useState<Node | undefined>();
   const [footerNodeB, setFooterNodeB] = useState<Node | undefined>();
   const [footerInput, setFooterInput] = useState({ emoji: "", label: "" });
-  const { addNode } = useNodeContext();
+  const [sideNodes, setSideNodes] = useState<Node[]>(defaultSideNodes);
+
+  const addSideNode = (node: Node) => {
+    //if already exists, don't add
+    if (sideNodes.find((n) => n.data.craft_id === node.data.craft_id)) {
+      return;
+    }
+    setSideNodes((currentNodes) => currentNodes.concat(node));
+  };
 
   const getMaxCraftId = async (): Promise<number> => {
     const res = await fetch("/api/keys");
@@ -188,9 +145,6 @@ function Flow() {
       position: position,
     };
 
-    // Needs to be added to display in Flow (When drag & drop)
-    await addNodeMap(new_craft_id, footerInput.emoji, footerInput.label);
-
     // unite footerNodeA and footerNodeB into new node
     setNodes((currentNodes) =>
       currentNodes
@@ -198,7 +152,11 @@ function Flow() {
         .concat(newNode)
     );
 
-    addNode(newNode);
+    addSideNode({
+      ...newNode,
+      id: "",
+      position: { x: 0, y: 0 },
+    });
 
     fusionSound
       .play()
@@ -225,14 +183,12 @@ function Flow() {
       event.preventDefault();
 
       const reactFlowBounds = event.currentTarget.getBoundingClientRect();
-      const id = event.dataTransfer.getData("application/reactflow") as any;
+      const id = event.dataTransfer.getData("application/reactflow");
 
       if (typeof id === "undefined" || !id) {
-        //TODO
-        // message.warning("Node type not found!");
+        // TODO message.warning("Node type not found!");
         return;
       }
-      console.log("id", id);
 
       const position = reactFlowInstance.project({
         x: event.clientX - reactFlowBounds.left,
@@ -241,7 +197,6 @@ function Flow() {
 
       const baseNode = getNodeMap(id);
       if (!baseNode) {
-        // Handle case where node is not found in nodeMap
         // message.warning("Node type not found!"); //TODO
         return;
       }
@@ -279,15 +234,15 @@ function Flow() {
         node.data.craft_id,
         overlappingNode.data.craft_id
       );
-      console.log("newCraftId by getRecipeMap", newCraftId);
+      // console.log("newCraftId by getRecipeMap", newCraftId);
       if (!newCraftId) {
         newCraftId = await getRecipeMapByApi(
           node.data.craft_id,
           overlappingNode.data.craft_id
         );
-        console.log("newCraftId by getRecipeMapByApi", newCraftId);
+        // console.log("newCraftId by getRecipeMapByApi", newCraftId);
       }
-      console.log("newCraftId", newCraftId);
+      // console.log("newCraftId", newCraftId);
 
       // recipe exists
       if (newCraftId) {
@@ -310,14 +265,19 @@ function Flow() {
           },
         };
 
-        addNode(newNode)
-
         // Remove the original nodes and add the new node
         setNodes((currentNodes) =>
           currentNodes
             .filter((n) => n.id !== node.id && n.id !== overlappingNode.id)
             .concat(newNode)
         );
+
+        addSideNode({
+          ..._newNode,
+          id: "",
+          position: { x: 0, y: 0 },
+        });
+
         fusionSound
           .play()
           .catch((err: Error) => console.error("Audio play failed:", err));
@@ -343,38 +303,41 @@ function Flow() {
   };
 
   return (
-    <div className="flex flex-col h-screen w-full">
-      <div className="flex-grow h-full w-full" ref={reactFlowWrapper}>
-        <ReactFlow
-          nodes={nodes}
-          onNodeDragStop={onNodeDragStop}
-          onNodesChange={onNodesChange}
-          edges={edges}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          onInit={setReactFlowInstance}
-          onDrop={onDrop}
-          onDragOver={onDragOver}
-          nodeTypes={nodeTypes}
-          defaultEdgeOptions={defaultEdgeOptions}
-          connectionLineType={ConnectionLineType.SmoothStep}
-          fitView
-        >
-          <Controls />
-          <Background />
-        </ReactFlow>
+    <div className="flex flex-row flex-grow">
+      <div className="flex flex-col h-screen w-full">
+        <div className="flex-grow h-full w-full" ref={reactFlowWrapper}>
+          <ReactFlow
+            nodes={nodes}
+            onNodeDragStop={onNodeDragStop}
+            onNodesChange={onNodesChange}
+            edges={edges}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            onInit={setReactFlowInstance}
+            onDrop={onDrop}
+            onDragOver={onDragOver}
+            nodeTypes={nodeTypes}
+            defaultEdgeOptions={defaultEdgeOptions}
+            connectionLineType={ConnectionLineType.SmoothStep}
+            fitView
+          >
+            <Controls />
+            <Background />
+          </ReactFlow>
+        </div>
+        {isFooterVisible && (
+          <Footer
+            nodeA={footerNodeA}
+            nodeB={footerNodeB}
+            footerInput={footerInput}
+            setFooterInput={setFooterInput}
+            updateNodeFromFooter={updateNodeFromFooter}
+          />
+        )}
       </div>
-      {isFooterVisible && (
-        <Footer
-          nodeA={footerNodeA}
-          nodeB={footerNodeB}
-          footerInput={footerInput}
-          setFooterInput={setFooterInput}
-          updateNodeFromFooter={updateNodeFromFooter}
-        />
-      )}
+      <Sidebar sideNodes={sideNodes} />
     </div>
   );
-}
+};
 
 export default Flow;
