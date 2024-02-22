@@ -1,49 +1,18 @@
 import React, { useState } from "react";
 import { ConnectKitButton } from "connectkit";
 import { Node } from "reactflow";
-import { useNodeContext } from 'contexts/NodeContext';
 
 let tapSound: any = null;
 if (typeof window !== "undefined") {
   tapSound = new Audio("/se/tap.mp3");
 }
 
-const initialNodes: Node[] = [
-  {
-    id: "1",
-    type: "custom",
-    data: { emoji: "🪨", label: "Stone" },
-    position: { x: 250, y: 5 },
-  },
-  {
-    id: "2",
-    type: "custom",
-    data: { emoji: "🌱", label: "Seed" },
-    position: { x: 350, y: 5 },
-  },
-  {
-    id: "3",
-    type: "custom",
-    data: { emoji: "💛", label: "Soul" },
-    position: { x: 450, y: 5 },
-  },
-  {
-    id: "4",
-    type: "custom",
-    data: { emoji: "🌏", label: "Earth" },
-    position: { x: 550, y: 5 },
-  },
-  {
-    id: "5",
-    type: "custom",
-    data: { emoji: "🔨", label: "Hammer" },
-    position: { x: 650, y: 5 },
-  },
-];
+interface SidebarProps {
+  sideNodes: Node[];
+}
 
-const Sidebar: React.FC = () => {
+const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
   const [showDetails, setShowDetails] = useState(false);
-  const { nodes } = useNodeContext();
 
   const onDragStart = (
     event: React.DragEvent<HTMLDivElement>,
@@ -85,11 +54,11 @@ const Sidebar: React.FC = () => {
         </div>
         <div className="mt-4 flex-grow">
           <div className="flex flex-wrap">
-            {nodes.map((node, i) => (
+            {sideNodes.map((node, i) => (
               <div
                 key={node.id}
                 className="relative border border-gray-400 bg-white p-2 m-1 rounded-md overflow-hidden hover:bg-gradient-to-b"
-                onDragStart={(event) => onDragStart(event, node.id)}
+                onDragStart={(event) => onDragStart(event, node.data.craft_id)}
                 draggable
               >
                 <span className="font-bold mr-1">{node.data.emoji}</span>
