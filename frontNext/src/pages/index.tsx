@@ -5,6 +5,7 @@ import Flow from "components/Flow";
 import { ReactFlowProvider } from 'react-flow-renderer';
 import { NodeProvider } from '../contexts/NodeContext';
 import Sidebar from "components/Sidebar";
+import { Toaster } from "@/components/ui/toaster"
 
 const Home: NextPage = () => {
   return (
@@ -21,6 +22,7 @@ const Home: NextPage = () => {
               <Flow />
               <Sidebar />
             </div>
+            <Toaster />
           </ReactFlowProvider>
         </div>
       </NodeProvider>

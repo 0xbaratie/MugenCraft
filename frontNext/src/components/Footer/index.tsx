@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Node } from "reactflow";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
+import { useToast } from "@/components/ui/use-toast"
 
 interface FooterProps {
   nodeA: Node | undefined;
@@ -22,26 +23,39 @@ const Footer: React.FC<FooterProps> = ({
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [validationMessage, setValidationMessage] = useState("");
+  const { toast } = useToast()
 
   useEffect(() => {
-    if (footerInput.label.length === 0) {
-      setIsButtonDisabled(true); // Disable button but don't show validation message
-      setValidationMessage("");
-      return;
-    }
-
+    // Disable buttons by default
+    let isDisabled = true;
     let message = "";
-    if (footerInput.label.length > 30) {
+  
+    if (footerInput.label.length === 0) {
+      // Empty input does not display a message and disables the button
+      message = "";
+    } else if (footerInput.label.length > 30) {
       message = "The label must be within 30 characters.";
     } else if (!/^[A-Z]/.test(footerInput.label)) {
       message = "The first character must be an uppercase letter.";
     } else if (!/^[A-Z][A-Za-z0-9 ]*$/.test(footerInput.label)) {
       message = "Use only alphanumeric characters and spaces.";
+    } else {
+      // If all validations are passed, activate the button
+      isDisabled = false;
+      message = ""; // Clear if no validation message
     }
-
-    setValidationMessage(message);
-    setIsButtonDisabled(!!message);
+  
+    if (message) {
+      toast({
+        title: "Input alert🚨",
+        description: message,
+      });
+    }
+  
+    setIsButtonDisabled(isDisabled);
   }, [footerInput.label]);
+  
+
   if (!nodeA || !nodeB) return null;
 
   return (
@@ -103,9 +117,6 @@ const Footer: React.FC<FooterProps> = ({
         >
           Define
         </button>
-        {validationMessage && (
-          <div className="text-red-500 text-sm mt-1">{validationMessage}</div>
-        )}
       </div>
       
     </div>
