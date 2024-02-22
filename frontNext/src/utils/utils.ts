@@ -1,3 +1,7 @@
+export const orderIds = (idA: string, idB: string): [string, string] => {
+  return Number(idA) > Number(idB) ? [idB, idA] : [idA, idB];
+};
+
 export const getCraftApi = async (craft_id: string) => {
   console.log("getCraftApi");
   //url parameter craft_id

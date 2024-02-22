@@ -14,6 +14,7 @@ import Footer from "components/Footer";
 import Sidebar from "components/Sidebar";
 import CustomNode from "./CustomNode";
 import {
+  orderIds,
   getCraftApi,
   postCraftApi,
   getRecipeApi,
@@ -66,7 +67,7 @@ const Flow: React.FC = () => {
   //recipe
   const getRecipeMap = (idA: string, idB: string): string => {
     // align a and b to be in ascending order
-    [idA, idB] = idA > idB ? [idB, idA] : [idA, idB];
+    [idA, idB] = orderIds(idA, idB);
     return recipeMap[`${idA}_${idB}`];
   };
 
@@ -74,7 +75,7 @@ const Flow: React.FC = () => {
     idA: string,
     idB: string
   ): Promise<string> => {
-    [idA, idB] = idA > idB ? [idB, idA] : [idA, idB];
+    [idA, idB] = orderIds(idA, idB);
     const res = await getRecipeApi(`${idA}_${idB}`);
     if (!res) {
       return "";
@@ -83,7 +84,7 @@ const Flow: React.FC = () => {
   };
 
   const addRecipeMap = async (idA: string, idB: string, newCraftId: string) => {
-    [idA, idB] = idA > idB ? [idB, idA] : [idA, idB];
+    [idA, idB] = orderIds(idA, idB);
     recipeMap[`${idA}_${idB}`] = newCraftId;
     await postRecipeApi(`${idA}_${idB}`, newCraftId);
   };
