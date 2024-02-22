@@ -5,6 +5,7 @@ import { useState } from "react";
 import Flow from "components/Flow";
 import { ReactFlowProvider } from "react-flow-renderer";
 import Sidebar from "components/Sidebar";
+import { Toaster } from "@/components/ui/toaster"
 
 import { Node } from "reactflow";
 
@@ -19,6 +20,7 @@ const Home: NextPage = () => {
       <div className="flex flex-grow">
         <ReactFlowProvider>
           <Flow />
+          <Toaster />
         </ReactFlowProvider>
       </div>
     </div>

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import ReactFlow, { Node } from "reactflow";
+import React, { useState, useEffect } from "react";
+import { Node } from "reactflow";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
+import { useToast } from "@/components/ui/use-toast"
 
 interface FooterProps {
   nodeA: Node | undefined;
@@ -20,6 +21,41 @@ const Footer: React.FC<FooterProps> = ({
   updateNodeFromFooter,
 }) => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [validationMessage, setValidationMessage] = useState("");
+  const { toast } = useToast()
+
+  useEffect(() => {
+    // Disable buttons by default
+    let isDisabled = true;
+    let message = "";
+  
+    if (footerInput.label.length === 0) {
+      // Empty input does not display a message and disables the button
+      message = "";
+    } else if (footerInput.label.length > 30) {
+      message = "The label must be within 30 characters.";
+    } else if (!/^[A-Z]/.test(footerInput.label)) {
+      message = "The first character must be an uppercase letter.";
+    } else if (!/^[A-Z][A-Za-z0-9 ]*$/.test(footerInput.label)) {
+      message = "Use only alphanumeric characters and spaces.";
+    } else {
+      // If all validations are passed, activate the button
+      isDisabled = false;
+      message = ""; // Clear if no validation message
+    }
+  
+    if (message) {
+      toast({
+        title: "Input alert🚨",
+        description: message,
+      });
+    }
+  
+    setIsButtonDisabled(isDisabled);
+  }, [footerInput.label]);
+  
+
   if (!nodeA || !nodeB) return null;
 
   return (
@@ -74,11 +110,15 @@ const Footer: React.FC<FooterProps> = ({
         />
         <button
           onClick={updateNodeFromFooter}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1"
+          disabled={isButtonDisabled}
+          className={`${
+            isButtonDisabled ? 'bg-gray-400 hover:bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-700'
+          } text-white font-bold py-2 px-4 rounded m-1`}
         >
           Define
         </button>
       </div>
+      
     </div>
   );
 };
