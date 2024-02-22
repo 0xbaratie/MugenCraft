@@ -23,6 +23,7 @@ const Home: NextPage = () => {
           <Toaster />
         </ReactFlowProvider>
       </div>
+    </div>
   );
 };
 
