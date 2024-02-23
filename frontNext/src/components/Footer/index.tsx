@@ -11,7 +11,7 @@ interface FooterProps {
   nodeB: Node | undefined;
   footerInput: { label: string; emoji: string };
   setFooterInput: React.Dispatch<
-    React.SetStateAction<{ label: string; emoji: string[] }>
+    React.SetStateAction<{ label: string; emoji: string }>
   >;
   updateNodeFromFooter: () => void;
 }
@@ -85,9 +85,9 @@ const Footer: React.FC<FooterProps> = ({
         </div>
         <span className="flex items-center mx-2">=</span>
 
-        <button className="flex items-center justify-between border border-gray-300 text-white font-bold py-2 px-4 rounded min-w-40">
+        <button className="flex items-center justify-between border border-gray-300 text-gray-400  py-2 px-2 rounded min-w-40">
           <div>
-            {footerInput.emoji.length > 0 ? footerInput.emoji : "🌏"}
+            {footerInput.emoji.length > 0 ? footerInput.emoji : "Emoji"}
           </div>
 
           <div className="flex-shrink-0 flex items-center">
@@ -109,10 +109,11 @@ const Footer: React.FC<FooterProps> = ({
               height="20"
               onClick={(e) => {
                 e.stopPropagation();
-                setFooterInput((prev) => ({
-                  ...prev,
-                  emoji: prev.emoji.slice(0, -1),
-                }));
+                setFooterInput(prev => {
+                  const emojis = prev.emoji.split(' ').filter(Boolean);
+                  emojis.pop();
+                  return { ...prev, emoji: emojis.join(' ') };
+                });
               }}
               className="hover:fill-blue-500 ml-2"
             />
@@ -124,12 +125,12 @@ const Footer: React.FC<FooterProps> = ({
           <div className="fixed left-12 bottom-0 bg-white shadow-md p-4 flex justify-between items-center z-100">
             <EmojiPicker
               onEmojiClick={(emojiData: EmojiClickData, event: MouseEvent) => {
-                setFooterInput((prev) => {
-                  if (prev.emoji.length < 3) {
-                    return {
-                      ...prev,
-                      emoji: [...prev.emoji, emojiData.emoji],
-                    };
+                setFooterInput(prev => { // 絵文字の個数を計算（ここでは単純に空白で区切られた個数とする）
+                  const emojiCount = prev.emoji.split(' ').filter(Boolean).length;
+                  
+                  if (emojiCount < 3) {
+                    const newEmoji = prev.emoji + (prev.emoji ? ' ' : '') + emojiData.emoji;
+                    return { ...prev, emoji: newEmoji };
                   } else {
                     toast({
                       title: "Input alert🚨",
