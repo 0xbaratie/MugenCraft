@@ -90,7 +90,6 @@ const Footer: React.FC<FooterProps> = ({
             {footerInput.emoji.length > 0 ? footerInput.emoji : "🌏"}
           </div>
 
-          {/* 画像を右寄せにするためのコンテナ */}
           <div className="flex-shrink-0 flex items-center">
             <Image
               src="/svg/emoji-smile.svg"
@@ -109,7 +108,7 @@ const Footer: React.FC<FooterProps> = ({
               width="20"
               height="20"
               onClick={(e) => {
-                e.stopPropagation(); // 別のイベントハンドラーがあればここに追加
+                e.stopPropagation();
                 setFooterInput((prev) => ({
                   ...prev,
                   emoji: prev.emoji.slice(0, -1),
@@ -124,17 +123,14 @@ const Footer: React.FC<FooterProps> = ({
         {showEmojiPicker && (
           <div className="fixed left-12 bottom-0 bg-white shadow-md p-4 flex justify-between items-center z-100">
             <EmojiPicker
-              // EmojiPickerのonEmojiClickイベントハンドラ
               onEmojiClick={(emojiData: EmojiClickData, event: MouseEvent) => {
                 setFooterInput((prev) => {
-                  // 絵文字配列が3つ未満の場合のみ、新しい絵文字を追加
                   if (prev.emoji.length < 3) {
                     return {
                       ...prev,
                       emoji: [...prev.emoji, emojiData.emoji],
                     };
                   } else {
-                    // 絵文字配列が3つの場合、トーストメッセージを表示して現在の状態を維持
                     toast({
                       title: "Input alert🚨",
                       description: "Maximum of 3 emojis",
