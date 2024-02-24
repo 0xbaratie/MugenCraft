@@ -10,7 +10,8 @@ import ReactFlow, {
   Controls,
   Background,
 } from "reactflow";
-import Footer from "components/Footer";
+import FooterDefine from "components/Footer/FooterDefine";
+import FooterMint from "components/Footer/FooterMint";
 import Sidebar from "components/Sidebar";
 import CustomNode from "./CustomNode";
 import {
@@ -42,11 +43,14 @@ const Flow: React.FC = () => {
     { id: "e1-3", source: "1", target: "3" },
   ]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
-  const [isFooterVisible, setIsFooterVisible] = useState(true);
+  const [isFooterDefineVisible, setIsFooterDefineVisible] = useState(true);
+  const [isFooterMintVisible, setIsFooterMintVisible] = useState(false);
   const [footerNodeA, setFooterNodeA] = useState<Node | undefined>();
   const [footerNodeB, setFooterNodeB] = useState<Node | undefined>();
   const [footerInput, setFooterInput] = useState({ emoji: "", label: "" });
   const [sideNodes, setSideNodes] = useState<Node[]>(defaultSideNodes);
+  const [remainSum, setRemainSum] = useState(0);
+  const [minted, setMinted] = useState(false);
 
   const addSideNode = (node: Node) => {
     //if already exists, don't add
@@ -163,7 +167,7 @@ const Flow: React.FC = () => {
       .play()
       .catch((err: Error) => console.error("Audio play failed:", err));
 
-    setIsFooterVisible(false);
+    setIsFooterDefineVisible(false);
     setFooterNodeA(undefined);
     setFooterNodeB(undefined);
   };
@@ -235,6 +239,16 @@ const Flow: React.FC = () => {
     return true;
   };
 
+  const onNodeDrag = async (event: React.MouseEvent, node: Node) => {
+    setIsFooterDefineVisible(false);
+    setIsFooterMintVisible(true);
+    setFooterNodeA(node);
+    // TODO: Get the number of mints already minted or remaining
+    setRemainSum(1);
+    // TODO: Determine if the user has minted (only after Wallet connection)
+    setMinted(false);
+  };
+
   const onNodeDragStop = async (event: React.MouseEvent, node: Node) => {
     // Find if the dragged node overlaps with any other node
     const overlappingNode = nodes.find(
@@ -242,7 +256,7 @@ const Flow: React.FC = () => {
     );
 
     if (checkNodesOverlap(nodes)) {
-      setIsFooterVisible(false);
+      setIsFooterDefineVisible(false);
     }
     
     if (overlappingNode) {
@@ -302,7 +316,8 @@ const Flow: React.FC = () => {
         //mint new recipe by footer
       } else {
         console.log("recipe not exists");
-        setIsFooterVisible(true);
+        setIsFooterMintVisible(false);
+        setIsFooterDefineVisible(true);
         setFooterNodeA(node);
         setFooterNodeB(overlappingNode);
       }
@@ -325,6 +340,7 @@ const Flow: React.FC = () => {
         <div className="flex-grow h-full w-full" ref={reactFlowWrapper}>
           <ReactFlow
             nodes={nodes}
+            onNodeDragStart={onNodeDrag}
             onNodeDragStop={onNodeDragStop}
             onNodesChange={onNodesChange}
             edges={edges}
@@ -342,13 +358,20 @@ const Flow: React.FC = () => {
             <Background />
           </ReactFlow>
         </div>
-        {isFooterVisible && (
-          <Footer
+        {isFooterDefineVisible && (
+          <FooterDefine
             nodeA={footerNodeA}
             nodeB={footerNodeB}
             footerInput={footerInput}
             setFooterInput={setFooterInput}
             updateNodeFromFooter={updateNodeFromFooter}
+          />
+        )}
+        {isFooterMintVisible && (
+          <FooterMint 
+            node={footerNodeA} 
+            remainSum={remainSum}
+            minted={minted}
           />
         )}
       </div>

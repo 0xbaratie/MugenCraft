@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { ConnectKitButton } from "connectkit";
 import { Node } from "reactflow";
+import { ConnectWallet } from "components/Button/ConnectWallet";
 
 let tapSound: any = null;
 if (typeof window !== "undefined") {
@@ -30,7 +30,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
       <div className="shadow-custom px-2 flex flex-col justify-between min-h-screen">
         <div className="relative flex items-center justify-between p-2 border-b border-gray-200">
           <button
-            className="px-4 py-2 bg-gray-400 text-white rounded-xl"
+            className="px-4 py-2 bg-white text-blue-500 border border-blue-500 rounded-xl mr-4"
             onClick={() => setShowDetails(!showDetails)}
           >
             Points
@@ -50,7 +50,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
               </div>
             </div>
           )}
-          <ConnectKitButton />
+          <ConnectWallet />
         </div>
         <div className="mt-4 flex-grow">
           <div className="flex flex-wrap">

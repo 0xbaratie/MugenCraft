@@ -6,7 +6,7 @@ import { useToast } from "@/components/ui/use-toast"
 import Image from 'next/image'
 
 
-interface FooterProps {
+interface FooterDefineProps {
   nodeA: Node | undefined;
   nodeB: Node | undefined;
   footerInput: { label: string; emoji: string };
@@ -16,7 +16,7 @@ interface FooterProps {
   updateNodeFromFooter: () => void;
 }
 
-const Footer: React.FC<FooterProps> = ({
+const FooterDefine: React.FC<FooterDefineProps> = ({
   nodeA,
   nodeB,
   footerInput,
@@ -173,4 +173,4 @@ const Footer: React.FC<FooterProps> = ({
   );
 };
 
-export default Footer;
+export default FooterDefine;
