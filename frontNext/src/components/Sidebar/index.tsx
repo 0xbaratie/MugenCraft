@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ConnectKitButton } from "connectkit";
 import { Node } from "reactflow";
+import { ConnectWallet } from "components/Button/ConnectWallet";
 
 let tapSound: any = null;
 if (typeof window !== "undefined") {
@@ -50,7 +51,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
               </div>
             </div>
           )}
-          <ConnectKitButton />
+          <ConnectWallet />
         </div>
         <div className="mt-4 flex-grow">
           <div className="flex flex-wrap">

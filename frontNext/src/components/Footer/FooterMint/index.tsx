@@ -5,8 +5,7 @@ import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { useToast } from "@/components/ui/use-toast"
 import Image from 'next/image'
 import { useAccount } from "wagmi";
-import { ConnectKitButton } from "connectkit";
-
+import { ConnectWallet } from "components/Button/ConnectWallet";
 interface FooterMintProps {
   node: Node | undefined;
   remainSum: number;
@@ -43,7 +42,7 @@ const FooterMint: React.FC<FooterMintProps> = ({
             {minted ? 'Already minted' : 'Mint'}
           </button>
         ) : (
-          <ConnectKitButton />
+          <ConnectWallet />
         )}
       </div>
     </>
