@@ -5,7 +5,7 @@ const StyledButton = styled.button`
   cursor: pointer;
   position: relative;
   display: inline-block;
-  padding: 8px 24px;
+  padding: 8px 16px;
   color: #ffffff;
   background: #1a88f8;
   font-size: 16px;
