@@ -224,11 +224,27 @@ const Flow: React.FC = () => {
     );
   };
 
+  const checkNodesOverlap = (nodes: Node[]) => {
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        if (nodesOverlap(nodes[i], nodes[j])) {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+
   const onNodeDragStop = async (event: React.MouseEvent, node: Node) => {
     // Find if the dragged node overlaps with any other node
     const overlappingNode = nodes.find(
       (n) => n.id !== node.id && nodesOverlap(n, node)
     );
+
+    if (checkNodesOverlap(nodes)) {
+      setIsFooterVisible(false);
+    }
+    
     if (overlappingNode) {
       // get new craft_id by getRecipeId
       let newCraftId = getRecipeMap(
