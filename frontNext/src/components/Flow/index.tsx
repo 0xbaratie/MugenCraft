@@ -11,6 +11,7 @@ import ReactFlow, {
   Background,
 } from "reactflow";
 import FooterDefine from "components/Footer/FooterDefine";
+import FooterMint from "components/Footer/FooterMint";
 import Sidebar from "components/Sidebar";
 import CustomNode from "./CustomNode";
 import {
@@ -43,10 +44,13 @@ const Flow: React.FC = () => {
   ]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
   const [isFooterDefineVisible, setIsFooterDefineVisible] = useState(true);
+  const [isFooterMintVisible, setIsFooterMintVisible] = useState(false);
   const [footerNodeA, setFooterNodeA] = useState<Node | undefined>();
   const [footerNodeB, setFooterNodeB] = useState<Node | undefined>();
   const [footerInput, setFooterInput] = useState({ emoji: "", label: "" });
   const [sideNodes, setSideNodes] = useState<Node[]>(defaultSideNodes);
+  const [remainSum, setRemainSum] = useState(0);
+  const [minted, setMinted] = useState(false);
 
   const addSideNode = (node: Node) => {
     //if already exists, don't add
@@ -235,6 +239,16 @@ const Flow: React.FC = () => {
     return true;
   };
 
+  const onNodeDrag = async (event: React.MouseEvent, node: Node) => {
+    setIsFooterDefineVisible(false);
+    setIsFooterMintVisible(true);
+    setFooterNodeA(node);
+    // TODO: Get the number of mints already minted or remaining
+    setRemainSum(1);
+    // TODO: Determine if the user has minted (only after Wallet connection)
+    setMinted(false);
+  };
+
   const onNodeDragStop = async (event: React.MouseEvent, node: Node) => {
     // Find if the dragged node overlaps with any other node
     const overlappingNode = nodes.find(
@@ -302,6 +316,7 @@ const Flow: React.FC = () => {
         //mint new recipe by footer
       } else {
         console.log("recipe not exists");
+        setIsFooterMintVisible(false);
         setIsFooterDefineVisible(true);
         setFooterNodeA(node);
         setFooterNodeB(overlappingNode);
@@ -325,6 +340,7 @@ const Flow: React.FC = () => {
         <div className="flex-grow h-full w-full" ref={reactFlowWrapper}>
           <ReactFlow
             nodes={nodes}
+            onNodeDragStart={onNodeDrag}
             onNodeDragStop={onNodeDragStop}
             onNodesChange={onNodesChange}
             edges={edges}
@@ -349,6 +365,13 @@ const Flow: React.FC = () => {
             footerInput={footerInput}
             setFooterInput={setFooterInput}
             updateNodeFromFooter={updateNodeFromFooter}
+          />
+        )}
+        {isFooterMintVisible && (
+          <FooterMint 
+            node={footerNodeA} 
+            remainSum={remainSum}
+            minted={minted}
           />
         )}
       </div>
