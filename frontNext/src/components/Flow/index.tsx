@@ -10,7 +10,7 @@ import ReactFlow, {
   Controls,
   Background,
 } from "reactflow";
-import Footer from "components/Footer";
+import FooterDefine from "components/Footer/FooterDefine";
 import Sidebar from "components/Sidebar";
 import CustomNode from "./CustomNode";
 import {
@@ -42,7 +42,7 @@ const Flow: React.FC = () => {
     { id: "e1-3", source: "1", target: "3" },
   ]);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
-  const [isFooterVisible, setIsFooterVisible] = useState(true);
+  const [isFooterDefineVisible, setIsFooterDefineVisible] = useState(true);
   const [footerNodeA, setFooterNodeA] = useState<Node | undefined>();
   const [footerNodeB, setFooterNodeB] = useState<Node | undefined>();
   const [footerInput, setFooterInput] = useState({ emoji: "", label: "" });
@@ -163,7 +163,7 @@ const Flow: React.FC = () => {
       .play()
       .catch((err: Error) => console.error("Audio play failed:", err));
 
-    setIsFooterVisible(false);
+    setIsFooterDefineVisible(false);
     setFooterNodeA(undefined);
     setFooterNodeB(undefined);
   };
@@ -242,7 +242,7 @@ const Flow: React.FC = () => {
     );
 
     if (checkNodesOverlap(nodes)) {
-      setIsFooterVisible(false);
+      setIsFooterDefineVisible(false);
     }
     
     if (overlappingNode) {
@@ -302,7 +302,7 @@ const Flow: React.FC = () => {
         //mint new recipe by footer
       } else {
         console.log("recipe not exists");
-        setIsFooterVisible(true);
+        setIsFooterDefineVisible(true);
         setFooterNodeA(node);
         setFooterNodeB(overlappingNode);
       }
@@ -342,8 +342,8 @@ const Flow: React.FC = () => {
             <Background />
           </ReactFlow>
         </div>
-        {isFooterVisible && (
-          <Footer
+        {isFooterDefineVisible && (
+          <FooterDefine
             nodeA={footerNodeA}
             nodeB={footerNodeB}
             footerInput={footerInput}
