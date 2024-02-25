@@ -26,7 +26,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
   };
 
   return (
-    <div className="w-[340px] border-l border-gray-400">
+    <div className="w-[400px] border-l border-gray-400">
       <div className="shadow-custom px-2 flex flex-col justify-between min-h-screen">
         <div className="relative flex items-center justify-between p-2 border-b border-gray-200">
           <button
@@ -52,7 +52,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
           )}
           <ConnectWallet />
         </div>
-        <div className="mt-4 flex-grow">
+        <div className="mt-4 flex-grow overflow-y-auto max-h-[700px]">
           <div className="flex flex-wrap">
             {sideNodes.map((node, i) => (
               <div

@@ -4,7 +4,8 @@ import { Node } from "reactflow";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { useToast } from "@/components/ui/use-toast"
 import Image from 'next/image'
-
+import { useAccount } from "wagmi";
+import { ConnectWallet } from "components/Button/ConnectWallet";
 
 interface FooterDefineProps {
   nodeA: Node | undefined;
@@ -27,7 +28,7 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [validationMessage, setValidationMessage] = useState("");
   const { toast } = useToast()
-  
+  const { isConnected } = useAccount()
 
   useEffect(() => {
     // Disable buttons by default
@@ -65,7 +66,7 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
   return (
     <>
       <p className="ml-4 font-bold text-gray-400">Point chance! Let's define a new recipe to earn 1000 points!</p>
-      <div className="left-12 bottom-0 bg-white shadow-md px-4 pb-4 flex justify-between items-center z-10">
+      <div className="left-12 bottom-0 bg-white shadow-md p-4 flex justify-between items-center z-10">
         <div className="relative flex items-center justify-center space-x-4">
           <div className="flex items-center border border-blue-gray-100 bg-gray-100 rounded-md">
             {nodeA.data.label ? (
@@ -158,15 +159,19 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
           onMouseDown={(e) => e.stopPropagation()}
           className="border border-gray-300 rounded-md p-2 m-1 flex-1"
         />
-        <button
-          onClick={updateNodeFromFooter}
-          disabled={isButtonDisabled}
-          className={`${
-            isButtonDisabled ? 'bg-gray-400 hover:bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-700'
-          } text-white font-bold py-2 px-4 rounded m-1`}
-        >
-          Define
-        </button>
+        {isConnected ? (
+          <button
+            onClick={updateNodeFromFooter}
+            disabled={isButtonDisabled}
+            className={`${
+              isButtonDisabled ? 'bg-gray-400 hover:bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-700'
+            } text-white font-bold py-2 px-4 rounded m-1`}
+          >
+            Define
+          </button>
+        ) : (
+          <ConnectWallet />
+        )}
       </div>
       
     </>
