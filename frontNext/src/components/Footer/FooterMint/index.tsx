@@ -22,7 +22,7 @@ const FooterMint: React.FC<FooterMintProps> = ({
   let mintable = !minted && remainSum > 0;
   return (
     <>
-      <div className="left-12 inset-x-0 bottom-0 bg-white px-4 pb-4 flex items-center justify-center z-10 mx-auto">
+      <div className="left-12 inset-x-0 bottom-0 bg-white p-4 flex items-center justify-center z-10 mx-auto">
         <p className="mx-2 font-bold">{remainSum > 0 ? `${remainSum} / 69 Left` : ''}</p>
         <div className="mx-2 items-center border border-blue-gray-100 bg-gray-100 rounded-md">
           {node.data.label ? (
