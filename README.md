@@ -1,4 +1,5 @@
 # Mugen Craft
+![ogp](https://github.com/0xbaratie/MugenCraft/assets/8872443/cdb55a82-5ae2-43fc-8b3b-84f58786f5ce)
 
 Mugen Craft is a UGC fully onchain game. Combine recipes with recipes and endless combinations of recipes!
 
