@@ -10,9 +10,11 @@ import { MugenToken } from "../src/MugenToken.sol";
 
 contract MugenTokenTest is PRBTest, StdCheats {
     MugenToken internal token;
+    address internal alice;
 
     /// @dev A function invoked before each test case is run.
     function setUp() public virtual {
+        alice = address(0x1);
         token = new MugenToken();
     }
 
@@ -21,5 +23,15 @@ contract MugenTokenTest is PRBTest, StdCheats {
         string memory uri = token.uri(0);
         console2.log(uri);
         // console2.log(string(Base64.decode(uri)));
+    }
+
+    //TODO for testnet
+    function test_setMetadataAndMint() external {
+        vm.prank(alice);
+        token.setMetadataAndMint(1, "Dog", "Dog &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
+        // console2.log(token.uri(1));
+        vm.prank(alice);
+        token.setMetadataAndMint(1, "Cat", "Cat &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
+        console2.log(token.uri(1));
     }
 }

@@ -20,14 +20,14 @@ contract MugenRecipeTest is PRBTest, StdCheats {
         token.grantRole(token.MINTER_ROLE(), address(recipe));
     }
 
-    function test_setBasicRecipe() external {
-        recipe.setBasicRecipe(1, "Dog", "Dog &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
+    function test_setDefaultRecipe() external {
+        recipe.setDefaultRecipe(1, "Dog", "Dog &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
         console2.log(token.uri(1));
     }
 
     function test_setRecipe() external {
-        recipe.setBasicRecipe(1, "Dog", "Dog &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
-        recipe.setBasicRecipe(2, "Cat", "Cat &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
+        recipe.setDefaultRecipe(1, "Dog", "Dog &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
+        recipe.setDefaultRecipe(2, "Cat", "Cat &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
         recipe.setRecipe(3, "Sheep", "Sheep &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;", 1, 2);
         console2.log(token.uri(3));
     }
