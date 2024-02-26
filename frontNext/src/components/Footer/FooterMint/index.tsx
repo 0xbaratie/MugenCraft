@@ -21,9 +21,22 @@ interface FooterMintProps {
 
 const FooterMint: React.FC<FooterMintProps> = ({ node, remainSum, minted }) => {
   const { isConnected } = useAccount();
-
   const { data: hash, writeContract } = useWriteContract();
 
+  const writeMint = async () => {
+    writeContract({
+      address: addresses.MugenToken as `0x${string}`,
+      abi: MugenTokenAbi,
+      functionName: "setMetadataAndMint",
+      args: [
+        BigInt(node!.data.craft_id),
+        node!.data.label,
+        `${node!.data.emoji} ${node!.data.label}`,
+      ],
+    });
+  };
+
+  //for test
   const { data: uri } = useReadContract({
     address: addresses.MugenToken as `0x${string}`,
     abi: MugenTokenAbi,
@@ -55,26 +68,14 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, remainSum, minted }) => {
                 ? "bg-blue-500 hover:bg-blue-700"
                 : "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
             } mx-2 text-white font-bold py-2 px-4 rounded m-1`}
-            onClick={() =>
-              writeContract({
-                address: addresses.MugenToken as `0x${string}`,
-                abi: MugenTokenAbi,
-                functionName: "setMetadataAndMint",
-                args: [
-                  BigInt(node!.data.craft_id),
-                  node!.data.label,
-                  `${node!.data.emoji} ${node!.data.label}`,
-                ],
-              })
-            }
+            onClick={writeMint}
           >
             {minted ? "Already minted" : "Mint"}
           </button>
         ) : (
-          <></>
-          // <ConnectWallet />
+          <ConnectWallet />
         )}
-        <div>Uri: {uri?.toString()}</div>
+        {/* for test <div>Uri: {uri?.toString()}</div> */}
       </div>
     </>
   );
