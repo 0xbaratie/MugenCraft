@@ -52,7 +52,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
           )}
           <ConnectWallet />
         </div>
-        <div className="mt-4 flex-grow overflow-y-auto max-h-[700px]">
+        <div className="mt-4 flex-grow overflow-y-auto">
           <div className="flex flex-wrap">
             {sideNodes.map((node, i) => (
               <div
