@@ -37,7 +37,7 @@ contract MugenRecipe is Ownable {
         token.setMetaData(_id, _name, _imageText);
     }
 
-    function setBasicRecipe(uint256 _id, string memory _name, string memory _imageText) external onlyOwner {
+    function setDefaultRecipe(uint256 _id, string memory _name, string memory _imageText) external onlyOwner {
         _setMetaDataForToken(_id, _name, _imageText);
     }
 

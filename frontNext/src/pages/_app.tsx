@@ -1,7 +1,7 @@
 import type { AppProps } from "next/app";
 import "../styles/globals.css";
 import "reactflow/dist/style.css";
-import { WagmiProvider, createConfig } from "wagmi";
+import { WagmiProvider, createConfig, http } from "wagmi";
 import { blastSepolia } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
@@ -10,9 +10,9 @@ const config = createConfig(
   getDefaultConfig({
     // Your dApps chains
     chains: [blastSepolia],
-    // transports: {
-    //   [blastSepolia.id]: blastSepolia.rpcUrls.default.http,
-    // },
+    transports: {
+      [blastSepolia.id]: http(blastSepolia.rpcUrls.default.http[0]),
+    },
     // Required API Keys
     walletConnectProjectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!,
 
