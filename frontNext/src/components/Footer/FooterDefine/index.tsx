@@ -7,10 +7,6 @@ import Image from "next/image";
 import { useAccount } from "wagmi";
 import { ConnectWallet } from "components/Button/ConnectWallet";
 
-import { type BaseError, useWriteContract } from "wagmi";
-import { MugenRecipeAbi } from "constants/abis";
-import { addresses } from "constants/addresses";
-
 interface FooterDefineProps {
   nodeA: Node | undefined;
   nodeB: Node | undefined;
@@ -33,24 +29,6 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
   const [validationMessage, setValidationMessage] = useState("");
   const { toast } = useToast();
   const { isConnected } = useAccount();
-  const { data, error, writeContract } = useWriteContract();
-
-  const writeMint = () => {
-    // add Contract
-    const res = writeContract({
-      address: addresses.MugenRecipe as `0x${string}`,
-      abi: MugenRecipeAbi,
-      functionName: "setRecipe",
-      args: [
-        BigInt(1111),
-        footerInput.label,
-        `${footerInput.emoji} ${footerInput.label}`,
-        BigInt(2222),
-        BigInt(3333),
-      ],
-    });
-    console.log("writeMint res", res);
-  };
 
   useEffect(() => {
     // Disable buttons by default
@@ -187,7 +165,6 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
         {isConnected ? (
           <button
             onClick={updateNodeFromFooter}
-            // onClick={writeMint}
             disabled={isButtonDisabled}
             className={`${
               isButtonDisabled
@@ -200,14 +177,6 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
         ) : (
           <ConnectWallet />
         )}
-        <div>
-          {" "}
-          {error && (
-            <div>
-              Error: {(error as BaseError).shortMessage || error.message}
-            </div>
-          )}{" "}
-        </div>
       </div>
     </>
   );
