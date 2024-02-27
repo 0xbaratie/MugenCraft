@@ -104,11 +104,12 @@ contract MugenRecipe is ERC721, Ownable, Pausable {
     //////////////////////////////////////////////////////////////*/
     function _setRecipe(uint256 _id, uint256 _idA, uint256 _idB) internal {
         //check materials tokens exists
-        if (!isMetadataExists(_idA)) {
-            revert("MugenRecipe: tokenA not exists");
-        } else if (!isMetadataExists(_idB)) {
-            revert("MugenRecipe: tokenB not exists");
-        }
+        //TODO
+        // if (!isMetadataExists(_idA)) {
+        //     revert("MugenRecipe: tokenA not exists");
+        // } else if (!isMetadataExists(_idB)) {
+        //     revert("MugenRecipe: tokenB not exists");
+        // }
 
         // arrange _idA < _idB
         if (_idA > _idB) {

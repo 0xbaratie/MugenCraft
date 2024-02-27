@@ -26,6 +26,9 @@ import {
   defaultNodeMap,
   defaultRecipeMap,
 } from "utils/defaultObject";
+import { useWriteContract } from "wagmi";
+import { MugenRecipeAbi } from "constants/abis";
+import { addresses } from "constants/addresses";
 
 let fusionSound: any = null;
 if (typeof window !== "undefined") {
@@ -51,6 +54,7 @@ const Flow: React.FC = () => {
   const [sideNodes, setSideNodes] = useState<Node[]>(defaultSideNodes);
   const [remainSum, setRemainSum] = useState(0);
   const [minted, setMinted] = useState(false);
+  const { data, writeContract } = useWriteContract();
 
   const addSideNode = (node: Node) => {
     //if already exists, don't add
@@ -85,12 +89,6 @@ const Flow: React.FC = () => {
       return "";
     }
     return res.craft_id;
-  };
-
-  const addRecipeMap = async (idA: string, idB: string, newCraftId: string) => {
-    [idA, idB] = orderIds(idA, idB);
-    recipeMap[`${idA}_${idB}`] = newCraftId;
-    await postRecipeApi(`${idA}_${idB}`, newCraftId);
   };
 
   //craft
@@ -129,47 +127,68 @@ const Flow: React.FC = () => {
       y: (footerNodeA.position.y + footerNodeB.position.y) / 2,
     };
 
-    // add KV and local storage
     const new_craft_id = (await getMaxCraftId()) + 1 + "";
     console.log("new_craft_id", new_craft_id);
-    await addNodeMap(new_craft_id, footerInput.emoji, footerInput.label);
-    await addRecipeMap(
+    const [craft_idA, craft_idB] = orderIds(
       footerNodeA.data.craft_id,
-      footerNodeB.data.craft_id,
-      new_craft_id
+      footerNodeB.data.craft_id
     );
 
-    const newNode: Node = {
-      id: `${flow_id++}`,
-      type: "custom",
-      data: {
-        craft_id: new_craft_id,
-        emoji: footerInput.emoji,
-        label: footerInput.label,
+    // add Contract
+    writeContract(
+      {
+        address: addresses.MugenRecipe as `0x${string}`,
+        abi: MugenRecipeAbi,
+        functionName: "setRecipe",
+        args: [
+          BigInt(new_craft_id),
+          footerInput.label,
+          `${footerInput.emoji} ${footerInput.label}`,
+          BigInt(craft_idA),
+          BigInt(craft_idB),
+        ],
       },
-      position: position,
-    };
+      {
+        onSuccess(data, variables, context) {
+          // add KV and local storage
+          addNodeMap(new_craft_id, footerInput.emoji, footerInput.label);
+          recipeMap[`${craft_idA}_${craft_idB}`] = new_craft_id; //add recipeMap
+          postRecipeApi(`${craft_idA}_${craft_idB}`, new_craft_id);
 
-    // unite footerNodeA and footerNodeB into new node
-    setNodes((currentNodes) =>
-      currentNodes
-        .filter((n) => n.id !== footerNodeA.id && n.id !== footerNodeB.id)
-        .concat(newNode)
+          const newNode: Node = {
+            id: `${flow_id++}`,
+            type: "custom",
+            data: {
+              craft_id: new_craft_id,
+              emoji: footerInput.emoji,
+              label: footerInput.label,
+            },
+            position: position,
+          };
+
+          // unite footerNodeA and footerNodeB into new node
+          setNodes((currentNodes) =>
+            currentNodes
+              .filter((n) => n.id !== footerNodeA.id && n.id !== footerNodeB.id)
+              .concat(newNode)
+          );
+
+          addSideNode({
+            ...newNode,
+            id: "",
+            position: { x: 0, y: 0 },
+          });
+
+          fusionSound
+            .play()
+            .catch((err: Error) => console.error("Audio play failed:", err));
+
+          setIsFooterDefineVisible(false);
+          setFooterNodeA(undefined);
+          setFooterNodeB(undefined);
+        },
+      }
     );
-
-    addSideNode({
-      ...newNode,
-      id: "",
-      position: { x: 0, y: 0 },
-    });
-
-    fusionSound
-      .play()
-      .catch((err: Error) => console.error("Audio play failed:", err));
-
-    setIsFooterDefineVisible(false);
-    setFooterNodeA(undefined);
-    setFooterNodeB(undefined);
   };
 
   //flow functions
@@ -258,7 +277,7 @@ const Flow: React.FC = () => {
     if (checkNodesOverlap(nodes)) {
       setIsFooterDefineVisible(false);
     }
-    
+
     if (overlappingNode) {
       // get new craft_id by getRecipeId
       let newCraftId = getRecipeMap(
@@ -368,8 +387,8 @@ const Flow: React.FC = () => {
           />
         )}
         {isFooterMintVisible && (
-          <FooterMint 
-            node={footerNodeA} 
+          <FooterMint
+            node={footerNodeA}
             remainSum={remainSum}
             minted={minted}
           />

@@ -11,7 +11,7 @@ import {
   useWaitForTransactionReceipt,
 } from "wagmi";
 import { ConnectWallet } from "components/Button/ConnectWallet";
-import { MugenTokenAbi } from "constants/abis";
+import { MugenTokenForTestAbi } from "constants/abis";
 import { addresses } from "constants/addresses";
 interface FooterMintProps {
   node: Node | undefined;
@@ -25,8 +25,8 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, remainSum, minted }) => {
 
   const writeMint = async () => {
     writeContract({
-      address: addresses.MugenToken as `0x${string}`,
-      abi: MugenTokenAbi,
+      address: addresses.MugenTokenForTest as `0x${string}`,
+      abi: MugenTokenForTestAbi,
       functionName: "setMetadataAndMint",
       args: [
         BigInt(node!.data.craft_id),
@@ -38,8 +38,8 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, remainSum, minted }) => {
 
   //for test
   const { data: uri } = useReadContract({
-    address: addresses.MugenToken as `0x${string}`,
-    abi: MugenTokenAbi,
+    address: addresses.MugenTokenForTest as `0x${string}`,
+    abi: MugenTokenForTestAbi,
     functionName: "uri",
     args: [BigInt(1)],
   });
