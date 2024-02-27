@@ -2,10 +2,14 @@
 import React, { useState, useEffect } from "react";
 import { Node } from "reactflow";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
-import { useToast } from "@/components/ui/use-toast"
-import Image from 'next/image'
+import { useToast } from "@/components/ui/use-toast";
+import Image from "next/image";
 import { useAccount } from "wagmi";
 import { ConnectWallet } from "components/Button/ConnectWallet";
+
+import { type BaseError, useWriteContract } from "wagmi";
+import { MugenRecipeAbi } from "constants/abis";
+import { addresses } from "constants/addresses";
 
 interface FooterDefineProps {
   nodeA: Node | undefined;
@@ -27,14 +31,32 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [validationMessage, setValidationMessage] = useState("");
-  const { toast } = useToast()
-  const { isConnected } = useAccount()
+  const { toast } = useToast();
+  const { isConnected } = useAccount();
+  const { data, error, writeContract } = useWriteContract();
+
+  const writeMint = () => {
+    // add Contract
+    const res = writeContract({
+      address: addresses.MugenRecipe as `0x${string}`,
+      abi: MugenRecipeAbi,
+      functionName: "setRecipe",
+      args: [
+        BigInt(1111),
+        footerInput.label,
+        `${footerInput.emoji} ${footerInput.label}`,
+        BigInt(2222),
+        BigInt(3333),
+      ],
+    });
+    console.log("writeMint res", res);
+  };
 
   useEffect(() => {
     // Disable buttons by default
     let isDisabled = true;
     let message = "";
-  
+
     if (footerInput.label.length === 0) {
       // Empty input does not display a message and disables the button
       message = "";
@@ -49,23 +71,24 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
       isDisabled = false;
       message = ""; // Clear if no validation message
     }
-  
+
     if (message) {
       toast({
         title: "Input alert🚨",
         description: message,
       });
     }
-  
+
     setIsButtonDisabled(isDisabled);
   }, [footerInput.label]);
-  
 
   if (!nodeA || !nodeB) return null;
 
   return (
     <>
-      <p className="ml-4 font-bold text-gray-400">Point chance! Let's define a new recipe to earn 1000 points!</p>
+      <p className="ml-4 font-bold text-gray-400">
+        Point chance! Let's define a new recipe to earn 1000 points!
+      </p>
       <div className="left-12 bottom-0 bg-white shadow-md p-4 flex justify-between items-center z-10">
         <div className="relative flex items-center justify-center space-x-4">
           <div className="flex items-center border border-blue-gray-100 bg-gray-100 rounded-md">
@@ -110,10 +133,10 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
               height="20"
               onClick={(e) => {
                 e.stopPropagation();
-                setFooterInput(prev => {
-                  const emojis = prev.emoji.split(' ').filter(Boolean);
+                setFooterInput((prev) => {
+                  const emojis = prev.emoji.split(" ").filter(Boolean);
                   emojis.pop();
-                  return { ...prev, emoji: emojis.join(' ') };
+                  return { ...prev, emoji: emojis.join(" ") };
                 });
               }}
               className="hover:fill-blue-500 ml-2"
@@ -121,16 +144,19 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
           </div>
         </button>
 
-
         {showEmojiPicker && (
           <div className="fixed left-12 bottom-0 bg-white shadow-md p-4 flex justify-between items-center z-100">
             <EmojiPicker
               onEmojiClick={(emojiData: EmojiClickData, event: MouseEvent) => {
-                setFooterInput(prev => { // 絵文字の個数を計算（ここでは単純に空白で区切られた個数とする）
-                  const emojiCount = prev.emoji.split(' ').filter(Boolean).length;
-                  
+                setFooterInput((prev) => {
+                  // 絵文字の個数を計算（ここでは単純に空白で区切られた個数とする）
+                  const emojiCount = prev.emoji
+                    .split(" ")
+                    .filter(Boolean).length;
+
                   if (emojiCount < 3) {
-                    const newEmoji = prev.emoji + (prev.emoji ? ' ' : '') + emojiData.emoji;
+                    const newEmoji =
+                      prev.emoji + (prev.emoji ? " " : "") + emojiData.emoji;
                     return { ...prev, emoji: newEmoji };
                   } else {
                     toast({
@@ -142,12 +168,11 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
                 });
                 setShowEmojiPicker(false);
               }}
-
               autoFocusSearch={false}
             />
           </div>
         )}
-        
+
         <input
           type="text"
           name="label"
@@ -162,9 +187,12 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
         {isConnected ? (
           <button
             onClick={updateNodeFromFooter}
+            // onClick={writeMint}
             disabled={isButtonDisabled}
             className={`${
-              isButtonDisabled ? 'bg-gray-400 hover:bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-700'
+              isButtonDisabled
+                ? "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
+                : "bg-blue-500 hover:bg-blue-700"
             } text-white font-bold py-2 px-4 rounded m-1`}
           >
             Define
@@ -172,8 +200,15 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
         ) : (
           <ConnectWallet />
         )}
+        <div>
+          {" "}
+          {error && (
+            <div>
+              Error: {(error as BaseError).shortMessage || error.message}
+            </div>
+          )}{" "}
+        </div>
       </div>
-      
     </>
   );
 };
