@@ -29,6 +29,7 @@ import {
 import { useWriteContract } from "wagmi";
 import { MugenRecipeAbi } from "constants/abis";
 import { addresses } from "constants/addresses";
+import { toast } from "sonner"
 
 let fusionSound: any = null;
 if (typeof window !== "undefined") {
@@ -352,6 +353,13 @@ const Flow: React.FC = () => {
     animated: true,
     type: "smoothstep",
   };
+
+  toast("New recipe has been defined!", {
+    action: {
+      label: "Undo",
+      onClick: () => console.log("Undo"),
+    },
+  })
 
   return (
     <div className="flex flex-row flex-grow">
