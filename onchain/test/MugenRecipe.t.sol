@@ -72,7 +72,17 @@ contract MugenRecipeTest is PRBTest, StdCheats {
 
     function test_mint_Fail2() external {
         recipe.setDefaultMetadata(1, "Dog", "Dog &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
-        for (uint8 i = 0; i < 69; i++) token.mint(msg.sender, 1, 987, 987);
+        token.mint(msg.sender, 1, 987, 987);
+        vm.expectRevert("MugenToken: already minted");
+        token.mint(msg.sender, 1, 987, 987);
+    }
+
+    function test_mint_Fail3() external {
+        recipe.setDefaultMetadata(1, "Dog", "Dog &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
+        for (uint8 i = 0; i < 69; i++) {
+            // each 69 address can mint 1 token
+            token.mint(address(uint160(uint256(keccak256(abi.encodePacked(i))))), 1, 987, 987);
+        }
         vm.expectRevert("MugenToken: max supply reached");
         token.mint(msg.sender, 1, 987, 987);
     }

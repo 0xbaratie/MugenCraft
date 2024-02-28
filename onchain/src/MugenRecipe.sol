@@ -7,6 +7,7 @@ import { Pausable } from "@openzeppelin/contracts/utils/Pausable.sol";
 import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 import { Base64 } from "solady/utils/Base64.sol";
 import { NFTDescriptor } from "./utils/NFTDescriptor.sol";
+import { IBlast } from "./interfaces/IBlast.sol";
 
 struct Metadata {
     string name;
@@ -20,6 +21,7 @@ contract MugenRecipe is ERC721, Ownable, Pausable {
     /*//////////////////////////////////////////////////////////////
                                 STORAGE
     //////////////////////////////////////////////////////////////*/
+    IBlast public constant BLAST = IBlast(0x4300000000000000000000000000000000000002);
     uint256 public constant RECIPE_CREATE_POINT = 1000;
 
     string constant NAME = "MugenCraft #";
@@ -33,7 +35,9 @@ contract MugenRecipe is ERC721, Ownable, Pausable {
     /*//////////////////////////////////////////////////////////////
                               CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
-    constructor() ERC721("MugenRecipe", "MugenRecipe") Ownable(msg.sender) {}
+    constructor() ERC721("MugenRecipe", "MugenRecipe") Ownable(msg.sender) {
+        BLAST.configureClaimableGas();
+    }
 
     /*//////////////////////////////////////////////////////////////
                             EXTERNAL UPDATE
@@ -141,5 +145,13 @@ contract MugenRecipe is ERC721, Ownable, Pausable {
         }
 
         metadatas[_id] = Metadata(_name, _imageText, _creator);
+    }
+    /*//////////////////////////////////////////////////////////////
+                            Blast
+    //////////////////////////////////////////////////////////////*/
+
+
+    function claimMyContractsGas() external onlyOwner{
+        BLAST.claimAllGas(address(this), msg.sender);
     }
 }

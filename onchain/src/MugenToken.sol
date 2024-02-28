@@ -7,6 +7,7 @@ import { ERC1155Supply, ERC1155 } from "@openzeppelin/contracts/token/ERC1155/ex
 import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 import { Base64 } from "solady/utils/Base64.sol";
 import { NFTDescriptor } from "./utils/NFTDescriptor.sol";
+import { IBlast } from "./interfaces/IBlast.sol";
 
 interface IERC721Mintable is IERC721 {
     function tokenURI(uint256 tokenId) external view returns (string memory);
@@ -24,6 +25,7 @@ contract MugenToken is ERC1155Supply, Ownable {
     /*//////////////////////////////////////////////////////////////
                                 STORAGE
     //////////////////////////////////////////////////////////////*/
+    IBlast public constant BLAST = IBlast(0x4300000000000000000000000000000000000002);
     string constant NAME = "MugenToken #";
     string constant DESCRIPTION = "MugenCraft is onchain, infinte craftable NFTs, where you can craft your own NFTs.";
     uint256 public constant MINT_POINT = 420;
@@ -39,6 +41,7 @@ contract MugenToken is ERC1155Supply, Ownable {
                               CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
     constructor(address _token) ERC1155("") Ownable(msg.sender) {
+        BLAST.configureClaimableGas();
         token = IERC721Mintable(_token);
     }
 
@@ -46,6 +49,11 @@ contract MugenToken is ERC1155Supply, Ownable {
                             EXTERNAL UPDATE
     //////////////////////////////////////////////////////////////*/
     function mint(address _to, uint256 _id, uint256 _idA, uint256 _idB) external {
+        // if already minted, revert
+        if (balanceOf(_to, _id) > 0) {
+            revert("MugenToken: already minted");
+        }
+
         if (!token.isMetadataExists(_id)) {
             revert("MugenToken: metadata not exists");
         }
@@ -117,4 +125,13 @@ contract MugenToken is ERC1155Supply, Ownable {
     /*//////////////////////////////////////////////////////////////
                             INTERNAL UPDATE
     //////////////////////////////////////////////////////////////*/
+
+    /*//////////////////////////////////////////////////////////////
+                            Blast
+    //////////////////////////////////////////////////////////////*/
+
+    function claimMyContractsGas() external onlyOwner{
+        BLAST.claimAllGas(address(this), msg.sender);
+    }
+
 }
