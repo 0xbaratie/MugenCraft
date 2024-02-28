@@ -11,7 +11,7 @@ const CustomNode: FC<NodeProps> = ({ data, xPos, yPos }) => {
   return (
     <>
       <div
-        className="border border-gray-400 bg-white px-2 py-1 m-1 rounded-md overflow-hidden hover:bg-gradient-to-b"
+        className="border border-gray-300 bg-white px-2 py-1 m-1 rounded-md overflow-hidden hover:bg-gradient-to-b"
       >
         <span className="font-semibold mr-1">{data.emoji}</span>
         <span className="font-semibold">{data.label}</span>

@@ -30,7 +30,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
       <div className="shadow-custom px-2 flex flex-col justify-between min-h-screen">
         <div className="relative flex items-center justify-between p-2 border-b border-gray-200">
           <button
-            className="px-4 py-2 bg-white text-blue-500 border border-blue-500 rounded-xl mr-4"
+            className="px-4 py-2 bg-white text-orange border border-orange rounded-xl mr-4"
             onClick={() => setShowDetails(!showDetails)}
           >
             Points
@@ -57,7 +57,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
             {sideNodes.map((node, i) => (
               <div
                 key={node.id}
-                className="relative border border-gray-400 bg-white p-2 m-1 rounded-md overflow-hidden hover:bg-gradient-to-b"
+                className="relative border border-gray-300 bg-white p-2 m-1 rounded-md overflow-hidden hover:bg-gradient-to-b"
                 onDragStart={(event) => onDragStart(event, node.data.craft_id)}
                 draggable
               >
