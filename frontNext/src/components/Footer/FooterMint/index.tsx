@@ -52,7 +52,7 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, remainSum, minted }) => {
         <p className="mx-2 font-bold">
           {remainSum > 0 ? `${remainSum} / 69 Left` : ""}
         </p>
-        <div className="mx-2 items-center border border-blue-gray-100 bg-gray-100 rounded-md">
+        <div className="mx-2 items-center border border-gray-100 bg-gray-100 rounded-md">
           {node.data.label ? (
             <div className="p-2">
               <span className="font-bold">{`${node.data.emoji}${node.data.label}`}</span>
@@ -65,7 +65,7 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, remainSum, minted }) => {
             disabled={!mintable}
             className={`${
               mintable
-                ? "bg-blue-500 hover:bg-blue-700"
+                ? "bg-orange hover:bg-orangeHover"
                 : "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
             } mx-2 text-white font-bold py-2 px-4 rounded m-1`}
             onClick={writeMint}
