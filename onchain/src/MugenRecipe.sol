@@ -82,10 +82,10 @@ contract MugenRecipe is ERC721, Ownable, Pausable {
                 string(
                     abi.encodePacked(
                         '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 320 320" style="background-color:white">',
-                        '<text x="150" y="145" font-size="16" fill="#000" text-anchor="middle">',
+                        '<text x="150" y="140" font-size="12" fill="#000" text-anchor="middle">',
                         Strings.toHexString(_creator),
                         '</text>',
-                        '<text x="150" y="165" font-size="16" fill="#000" text-anchor="middle">',
+                        '<text x="150" y="170" font-size="16" fill="#000" text-anchor="middle">',
                         _imageText,
                         '</text>',
                         '</svg>'
