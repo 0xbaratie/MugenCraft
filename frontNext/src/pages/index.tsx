@@ -6,6 +6,7 @@ import Flow from "components/Flow";
 import { ReactFlowProvider } from "react-flow-renderer";
 import Sidebar from "components/Sidebar";
 import { Toaster } from "@/components/ui/toaster"
+import { Toaster as ToasterSonner } from "@/components/ui/sonner"
 
 import { Node } from "reactflow";
 
@@ -31,7 +32,7 @@ const Home: NextPage = () => {
         />
         <meta
           name='twitter:image'
-          content='/ogp.png'
+          content='https://mugencraft.vercel.app/ogp.png'
         />
       </Head>
       <div className="flex flex-grow">
@@ -39,6 +40,7 @@ const Home: NextPage = () => {
           <Flow />
           <Toaster />
         </ReactFlowProvider>
+        <ToasterSonner />
       </div>
     </div>
   );

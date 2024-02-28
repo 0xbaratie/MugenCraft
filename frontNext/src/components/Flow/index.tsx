@@ -29,6 +29,7 @@ import {
 import { useWriteContract } from "wagmi";
 import { MugenRecipeAbi } from "constants/abis";
 import { addresses } from "constants/addresses";
+import { toast } from "sonner"
 
 let fusionSound: any = null;
 if (typeof window !== "undefined") {
@@ -177,6 +178,20 @@ const Flow: React.FC = () => {
             ...newNode,
             id: "",
             position: { x: 0, y: 0 },
+          });
+
+          toast("New recipe has been defined!", {
+            action: {
+              label: "Share on X",
+              onClick: () => {
+                const shareText = encodeURIComponent(`I defined a new recipe for Mugen Craft.\nThe recipe count reached ${new_craft_id}. @0xBaratie @nealagarwal @PacmanBlur\nhttps://mugencraft.vercel.app/`);
+                const hashtags = encodeURIComponent("mugencraft,blast");
+                const related = encodeURIComponent("twitterapi,twitter");
+                const url = `https://twitter.com/intent/tweet?text=${shareText}&hashtags=${hashtags}&related=${related}`;
+                const newWindow = window.open(url, '_blank');
+                newWindow?.focus();
+              },
+            },
           });
 
           fusionSound
@@ -352,7 +367,7 @@ const Flow: React.FC = () => {
     animated: true,
     type: "smoothstep",
   };
-
+ 
   return (
     <div className="flex flex-row flex-grow">
       <div className="flex flex-col h-screen w-full">
