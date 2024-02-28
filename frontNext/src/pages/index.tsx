@@ -32,7 +32,7 @@ const Home: NextPage = () => {
         />
         <meta
           name='twitter:image'
-          content='/ogp.png'
+          content='https://mugencraft.vercel.app/ogp.png'
         />
       </Head>
       <div className="flex flex-grow">
