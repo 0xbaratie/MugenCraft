@@ -123,32 +123,37 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
         </button>
 
         {showEmojiPicker && (
-          <div className="fixed left-12 bottom-0 bg-white shadow-md p-4 flex justify-between items-center z-100">
-            <EmojiPicker
-              onEmojiClick={(emojiData: EmojiClickData, event: MouseEvent) => {
-                setFooterInput((prev) => {
-                  // 絵文字の個数を計算（ここでは単純に空白で区切られた個数とする）
-                  const emojiCount = prev.emoji
-                    .split(" ")
-                    .filter(Boolean).length;
+          <>
+            <div
+              className="fixed inset-0"
+              onClick={() => setShowEmojiPicker(false)} // Close EmojiPicker when the overlay is clicked.
+            ></div>
+            <div className="fixed left-12 bottom-0 bg-white shadow-md p-4 flex justify-between items-center z-100">
+              <EmojiPicker
+                onEmojiClick={(emojiData: EmojiClickData, event: MouseEvent) => {
+                  setFooterInput((prev) => {
+                    const emojiCount = prev.emoji
+                      .split(" ")
+                      .filter(Boolean).length;
 
-                  if (emojiCount < 3) {
-                    const newEmoji =
-                      prev.emoji + (prev.emoji ? " " : "") + emojiData.emoji;
-                    return { ...prev, emoji: newEmoji };
-                  } else {
-                    toast({
-                      title: "Input alert🚨",
-                      description: "Maximum of 3 emojis",
-                    });
-                    return prev;
-                  }
-                });
-                setShowEmojiPicker(false);
-              }}
-              autoFocusSearch={false}
-            />
-          </div>
+                    if (emojiCount < 3) {
+                      const newEmoji =
+                        prev.emoji + (prev.emoji ? " " : "") + emojiData.emoji;
+                      return { ...prev, emoji: newEmoji };
+                    } else {
+                      toast({
+                        title: "Input alert🚨",
+                        description: "Maximum of 3 emojis",
+                      });
+                      return prev;
+                    }
+                  });
+                  setShowEmojiPicker(false);
+                }}
+                autoFocusSearch={false}
+              />
+            </div>
+          </>
         )}
 
         <input
