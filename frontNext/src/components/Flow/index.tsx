@@ -194,13 +194,13 @@ const Flow: React.FC = () => {
             },
           });
 
+          setIsFooterDefineVisible(false);
+          setIsFooterMintVisible(true);
+          setFooterNodeA(newNode);
+          setFooterNodeB(undefined);
           fusionSound
             .play()
             .catch((err: Error) => console.error("Audio play failed:", err));
-
-          setIsFooterDefineVisible(false);
-          setFooterNodeA(undefined);
-          setFooterNodeB(undefined);
         },
       }
     );
@@ -275,8 +275,7 @@ const Flow: React.FC = () => {
 
   const onNodeDrag = async (event: React.MouseEvent, node: Node) => {
     setIsFooterDefineVisible(false);
-    setIsFooterMintVisible(true);
-    setFooterNodeA(node);
+    setIsFooterMintVisible(false);
     // TODO: Get the number of mints already minted or remaining
     setRemainSum(1);
     // TODO: Determine if the user has minted (only after Wallet connection)
@@ -343,6 +342,9 @@ const Flow: React.FC = () => {
           position: { x: 0, y: 0 },
         });
 
+        setIsFooterDefineVisible(false);
+        setIsFooterMintVisible(true);
+        setFooterNodeA(_newNode);
         fusionSound
           .play()
           .catch((err: Error) => console.error("Audio play failed:", err));
