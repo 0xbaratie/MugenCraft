@@ -1,5 +1,5 @@
 export const addresses = {
-  MugenTokenForTest: "0x4b3DeA2232fB8E5419CfacF9f633bf638267699a",
-  MugenRecipe: "0x151d442787dEca43B6A36C31ef83A00DBb65B573",
-  // MugenToken: "0xb1A6529B6fDB6a361dF0b6680695ab7BeBc38c69",
+  // MugenTokenForTest: "0x4b3DeA2232fB8E5419CfacF9f633bf638267699a",
+  MugenRecipe: "0x05421Fe1993581536da827f5D5C73Bb667b55dd5",
+  MugenToken: "0x8736169d930aC18e86a78fd7DD0da854FC40a9b9",
 };

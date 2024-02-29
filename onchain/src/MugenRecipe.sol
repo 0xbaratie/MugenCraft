@@ -7,27 +7,38 @@ import { Pausable } from "@openzeppelin/contracts/utils/Pausable.sol";
 import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 import { Base64 } from "solady/utils/Base64.sol";
 import { NFTDescriptor } from "./utils/NFTDescriptor.sol";
+import { IBlast } from "./interfaces/IBlast.sol";
+// import { console2 } from "forge-std/console2.sol";
 
 struct Metadata {
     string name;
     string imageText;
+    address creator;
 }
+
+event Point(address indexed _to, uint256 _point);
 
 contract MugenRecipe is ERC721, Ownable, Pausable {
     /*//////////////////////////////////////////////////////////////
                                 STORAGE
     //////////////////////////////////////////////////////////////*/
+    IBlast public constant BLAST = IBlast(0x4300000000000000000000000000000000000002);
+    uint256 public constant RECIPE_CREATE_POINT = 1000;
+
     string constant NAME = "MugenCraft #";
     string constant DESCRIPTION = "MugenCraft is onchain, infinte craftable NFTs, where you can craft your own NFTs.";
 
     mapping(uint256 => Metadata) public metadatas;
     // A,B,Hash of C
     mapping(uint256 => mapping(uint256 => bytes32)) public recipes;
+    mapping(address => uint256) public recipePoints;
 
     /*//////////////////////////////////////////////////////////////
                               CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
-    constructor() ERC721("MugenRecipe", "MugenRecipe") Ownable(msg.sender) {}
+    constructor() ERC721("MugenRecipe", "MugenRecipe") Ownable(msg.sender) {
+        BLAST.configureClaimableGas();
+    }
 
     /*//////////////////////////////////////////////////////////////
                             EXTERNAL UPDATE
@@ -40,12 +51,18 @@ contract MugenRecipe is ERC721, Ownable, Pausable {
         }
     }
 
-    function setDefaultRecipe(uint256 _id, string memory _name, string memory _imageText) external onlyOwner {
-        _setMetaData(_id, _name, _imageText);
+    function setDefaultRecipe(uint256 _id, uint256 _idA, uint256 _idB) external onlyOwner {
+        _setRecipe(_id, _idA, _idB);
     }
 
     function setDefaultMetadata(uint256 _id, string memory _name, string memory _imageText) external onlyOwner {
-        _setMetaData(_id, _name, _imageText);
+        _setMetaData(_id, _name, _imageText, address(0));
+    }
+
+    function setDefaultMetadatas(uint256[] memory _id, string[] memory _name, string[] memory _imageText) external onlyOwner {
+        for(uint i = 0; i < _id.length; i++){
+            _setMetaData(_id[i], _name[i], _imageText[i], address(0));
+        }
     }
 
     function setRecipe(
@@ -56,7 +73,9 @@ contract MugenRecipe is ERC721, Ownable, Pausable {
         uint256 _idB
     ) external whenNotPaused {
         _setRecipe(_id, _idA, _idB);
-        _setMetaData(_id, _name, _imageText);
+        _setMetaData(_id, _name, _imageText, msg.sender);
+        recipePoints[msg.sender] += RECIPE_CREATE_POINT;
+        emit Point(msg.sender, RECIPE_CREATE_POINT);
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -64,9 +83,9 @@ contract MugenRecipe is ERC721, Ownable, Pausable {
     //////////////////////////////////////////////////////////////*/
 
     // prettier-ignore
-    function generateImage(uint256 _id)
+    function generateImage(string memory _imageText, address _creator)
         public
-        view
+        pure
         returns (string memory)
     {
         return
@@ -74,8 +93,11 @@ contract MugenRecipe is ERC721, Ownable, Pausable {
                 string(
                     abi.encodePacked(
                         '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 320 320" style="background-color:white">',
-                        '<text x="150" y="155" font-size="16" fill="#000" text-anchor="middle">',
-                        metadatas[_id].imageText,
+                        '<text x="150" y="140" font-size="12" fill="#000" text-anchor="middle">',
+                        Strings.toHexString(_creator),
+                        '</text>',
+                        '<text x="150" y="170" font-size="16" fill="#000" text-anchor="middle">',
+                        _imageText,
                         '</text>',
                         '</svg>'
                     )
@@ -87,7 +109,7 @@ contract MugenRecipe is ERC721, Ownable, Pausable {
         NFTDescriptor.TokenURIParams memory params = NFTDescriptor.TokenURIParams({
             name: string(abi.encodePacked(NAME, Strings.toString(_id), " ", metadatas[_id].name)),
             description: DESCRIPTION,
-            image: generateImage(_id)
+            image: generateImage(metadatas[_id].imageText, metadatas[_id].creator)
         });
         return NFTDescriptor.constructTokenURI(params);
     }
@@ -124,11 +146,19 @@ contract MugenRecipe is ERC721, Ownable, Pausable {
         recipes[_idA][_idB] = keccak256(abi.encodePacked(_id));
     }
 
-    function _setMetaData(uint256 _id, string memory _name, string memory _imageText) internal {
+    function _setMetaData(uint256 _id, string memory _name, string memory _imageText, address _creator) internal {
         if (isMetadataExists(_id)) {
             revert("MugenRecipe: token already exists");
         }
 
-        metadatas[_id] = Metadata(_name, _imageText);
+        metadatas[_id] = Metadata(_name, _imageText, _creator);
+    }
+    /*//////////////////////////////////////////////////////////////
+                            Blast
+    //////////////////////////////////////////////////////////////*/
+
+
+    function claimMyContractsGas() external onlyOwner{
+        BLAST.claimAllGas(address(this), msg.sender);
     }
 }

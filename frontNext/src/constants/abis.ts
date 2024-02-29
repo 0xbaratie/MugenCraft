@@ -47,6 +47,8 @@ export const MugenTokenAbi: any = [
     inputs: [
       { name: "_to", type: "address", internalType: "address" },
       { name: "_id", type: "uint256", internalType: "uint256" },
+      { name: "_idA", type: "uint256", internalType: "uint256" },
+      { name: "_idB", type: "uint256", internalType: "uint256" },
     ],
     outputs: [],
     stateMutability: "nonpayable",
