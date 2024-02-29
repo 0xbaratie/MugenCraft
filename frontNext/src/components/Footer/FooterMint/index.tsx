@@ -11,35 +11,44 @@ import {
   useWaitForTransactionReceipt,
 } from "wagmi";
 import { ConnectWallet } from "components/Button/ConnectWallet";
-import { MugenTokenForTestAbi } from "constants/abis";
+import { MugenTokenAbi } from "constants/abis";
 import { addresses } from "constants/addresses";
 interface FooterMintProps {
   node: Node | undefined;
+  nodeA: Node | undefined;
+  nodeB: Node | undefined;
   remainSum: number;
   minted: boolean;
 }
 
-const FooterMint: React.FC<FooterMintProps> = ({ node, remainSum, minted }) => {
-  const { isConnected } = useAccount();
+const FooterMint: React.FC<FooterMintProps> = ({
+  node,
+  nodeA,
+  nodeB,
+  remainSum,
+  minted,
+}) => {
+  const { address, isConnected } = useAccount();
   const { data: hash, writeContract } = useWriteContract();
 
   const writeMint = async () => {
     writeContract({
-      address: addresses.MugenTokenForTest as `0x${string}`,
-      abi: MugenTokenForTestAbi,
-      functionName: "setMetadataAndMint",
+      address: addresses.MugenToken as `0x${string}`,
+      abi: MugenTokenAbi,
+      functionName: "mint",
       args: [
+        address as `0x${string}`,
         BigInt(node!.data.craft_id),
-        node!.data.label,
-        `${node!.data.emoji} ${node!.data.label}`,
+        BigInt(nodeA?.data.craft_id),
+        BigInt(nodeB?.data.craft_id),
       ],
     });
   };
 
   //for test
   const { data: uri } = useReadContract({
-    address: addresses.MugenTokenForTest as `0x${string}`,
-    abi: MugenTokenForTestAbi,
+    address: addresses.MugenToken as `0x${string}`,
+    abi: MugenTokenAbi,
     functionName: "uri",
     args: [BigInt(1)],
   });

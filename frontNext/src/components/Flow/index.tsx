@@ -29,7 +29,7 @@ import {
 import { useWriteContract } from "wagmi";
 import { MugenRecipeAbi } from "constants/abis";
 import { addresses } from "constants/addresses";
-import { toast } from "sonner"
+import { toast } from "sonner";
 
 let fusionSound: any = null;
 if (typeof window !== "undefined") {
@@ -49,6 +49,7 @@ const Flow: React.FC = () => {
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
   const [isFooterDefineVisible, setIsFooterDefineVisible] = useState(true);
   const [isFooterMintVisible, setIsFooterMintVisible] = useState(false);
+  const [footerNode, setFooterNode] = useState<Node | undefined>();
   const [footerNodeA, setFooterNodeA] = useState<Node | undefined>();
   const [footerNodeB, setFooterNodeB] = useState<Node | undefined>();
   const [footerInput, setFooterInput] = useState({ emoji: "", label: "" });
@@ -184,11 +185,13 @@ const Flow: React.FC = () => {
             action: {
               label: "Share on X",
               onClick: () => {
-                const shareText = encodeURIComponent(`I defined a new recipe for Mugen Craft.\nThe recipe count reached ${new_craft_id}. @0xBaratie @nealagarwal @PacmanBlur\nhttps://mugencraft.vercel.app/`);
+                const shareText = encodeURIComponent(
+                  `I defined a new recipe for Mugen Craft.\nThe recipe count reached ${new_craft_id}. @0xBaratie @nealagarwal @PacmanBlur\nhttps://mugencraft.vercel.app/`
+                );
                 const hashtags = encodeURIComponent("mugencraft,blast");
                 const related = encodeURIComponent("twitterapi,twitter");
                 const url = `https://twitter.com/intent/tweet?text=${shareText}&hashtags=${hashtags}&related=${related}`;
-                const newWindow = window.open(url, '_blank');
+                const newWindow = window.open(url, "_blank");
                 newWindow?.focus();
               },
             },
@@ -196,8 +199,9 @@ const Flow: React.FC = () => {
 
           setIsFooterDefineVisible(false);
           setIsFooterMintVisible(true);
-          setFooterNodeA(newNode);
-          setFooterNodeB(undefined);
+          setFooterNode(newNode);
+          // setFooterNodeA(undefined);
+          // setFooterNodeB(undefined);
           fusionSound
             .play()
             .catch((err: Error) => console.error("Audio play failed:", err));
@@ -344,7 +348,9 @@ const Flow: React.FC = () => {
 
         setIsFooterDefineVisible(false);
         setIsFooterMintVisible(true);
-        setFooterNodeA(_newNode);
+        setFooterNode(_newNode);
+        setFooterNodeA(node);
+        setFooterNodeB(overlappingNode);
         fusionSound
           .play()
           .catch((err: Error) => console.error("Audio play failed:", err));
@@ -369,7 +375,7 @@ const Flow: React.FC = () => {
     animated: true,
     type: "smoothstep",
   };
- 
+
   return (
     <div className="flex flex-row flex-grow">
       <div className="flex flex-col h-screen w-full">
@@ -405,7 +411,9 @@ const Flow: React.FC = () => {
         )}
         {isFooterMintVisible && (
           <FooterMint
-            node={footerNodeA}
+            node={footerNode}
+            nodeA={footerNodeA}
+            nodeB={footerNodeB}
             remainSum={remainSum}
             minted={minted}
           />
