@@ -29,6 +29,7 @@ import {
 import { useWriteContract } from "wagmi";
 import { MugenRecipeAbi } from "constants/abis";
 import { addresses } from "constants/addresses";
+import { toast } from "sonner"
 
 let fusionSound: any = null;
 if (typeof window !== "undefined") {
@@ -179,13 +180,27 @@ const Flow: React.FC = () => {
             position: { x: 0, y: 0 },
           });
 
+          toast("New recipe has been defined!", {
+            action: {
+              label: "Share on X",
+              onClick: () => {
+                const shareText = encodeURIComponent(`I defined a new recipe for Mugen Craft.\nThe recipe count reached ${new_craft_id}. @0xBaratie @nealagarwal @PacmanBlur\nhttps://mugencraft.vercel.app/`);
+                const hashtags = encodeURIComponent("mugencraft,blast");
+                const related = encodeURIComponent("twitterapi,twitter");
+                const url = `https://twitter.com/intent/tweet?text=${shareText}&hashtags=${hashtags}&related=${related}`;
+                const newWindow = window.open(url, '_blank');
+                newWindow?.focus();
+              },
+            },
+          });
+
+          setIsFooterDefineVisible(false);
+          setIsFooterMintVisible(true);
+          setFooterNodeA(newNode);
+          setFooterNodeB(undefined);
           fusionSound
             .play()
             .catch((err: Error) => console.error("Audio play failed:", err));
-
-          setIsFooterDefineVisible(false);
-          setFooterNodeA(undefined);
-          setFooterNodeB(undefined);
         },
       }
     );
@@ -260,8 +275,7 @@ const Flow: React.FC = () => {
 
   const onNodeDrag = async (event: React.MouseEvent, node: Node) => {
     setIsFooterDefineVisible(false);
-    setIsFooterMintVisible(true);
-    setFooterNodeA(node);
+    setIsFooterMintVisible(false);
     // TODO: Get the number of mints already minted or remaining
     setRemainSum(1);
     // TODO: Determine if the user has minted (only after Wallet connection)
@@ -328,6 +342,9 @@ const Flow: React.FC = () => {
           position: { x: 0, y: 0 },
         });
 
+        setIsFooterDefineVisible(false);
+        setIsFooterMintVisible(true);
+        setFooterNodeA(_newNode);
         fusionSound
           .play()
           .catch((err: Error) => console.error("Audio play failed:", err));
@@ -352,7 +369,7 @@ const Flow: React.FC = () => {
     animated: true,
     type: "smoothstep",
   };
-
+ 
   return (
     <div className="flex flex-row flex-grow">
       <div className="flex flex-col h-screen w-full">

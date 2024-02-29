@@ -51,6 +51,8 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        orange: '#FF720C',
+        orangeHover: '#E06207',
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -72,7 +74,7 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       backgroundImage: {
-        'gradient-to-b': 'linear-gradient(to bottom, #ffffff, #d6fcff)',
+        'gradient-to-b': 'linear-gradient(to bottom, #ffffff, #FFDEC7)',
       }
     },
   },

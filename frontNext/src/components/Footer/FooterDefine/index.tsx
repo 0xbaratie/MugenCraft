@@ -69,7 +69,7 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
       </p>
       <div className="left-12 bottom-0 bg-white shadow-md p-4 flex justify-between items-center z-10">
         <div className="relative flex items-center justify-center space-x-4">
-          <div className="flex items-center border border-blue-gray-100 bg-gray-100 rounded-md">
+          <div className="flex items-center border border-gray-100 bg-gray-100 rounded-md">
             {nodeA.data.label ? (
               <div className="p-2">
                 <span className="font-bold">{`${nodeA.data.emoji}${nodeA.data.label}`}</span>
@@ -77,7 +77,7 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
             ) : null}
           </div>
           <span className="flex items-center">+</span>
-          <div className="flex items-center border border-blue-gray-100 bg-gray-100 rounded-md">
+          <div className="flex items-center border border-gray-100 bg-gray-100 rounded-md">
             {nodeB.data.label ? (
               <div className="p-2">
                 <span className="font-bold">{`${nodeB.data.emoji}${nodeB.data.label}`}</span>
@@ -102,7 +102,7 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
                 e.stopPropagation();
                 setShowEmojiPicker(!showEmojiPicker);
               }}
-              className="hover:fill-blue-500"
+              className="hover:fill-orange"
             />
             <Image
               src="/svg/trash.svg"
@@ -117,38 +117,43 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
                   return { ...prev, emoji: emojis.join(" ") };
                 });
               }}
-              className="hover:fill-blue-500 ml-2"
+              className="hover:fill-orange ml-2"
             />
           </div>
         </button>
 
         {showEmojiPicker && (
-          <div className="fixed left-12 bottom-0 bg-white shadow-md p-4 flex justify-between items-center z-100">
-            <EmojiPicker
-              onEmojiClick={(emojiData: EmojiClickData, event: MouseEvent) => {
-                setFooterInput((prev) => {
-                  // 絵文字の個数を計算（ここでは単純に空白で区切られた個数とする）
-                  const emojiCount = prev.emoji
-                    .split(" ")
-                    .filter(Boolean).length;
+          <>
+            <div
+              className="fixed inset-0"
+              onClick={() => setShowEmojiPicker(false)} // Close EmojiPicker when the overlay is clicked.
+            ></div>
+            <div className="fixed left-12 bottom-0 bg-white shadow-md p-4 flex justify-between items-center z-100">
+              <EmojiPicker
+                onEmojiClick={(emojiData: EmojiClickData, event: MouseEvent) => {
+                  setFooterInput((prev) => {
+                    const emojiCount = prev.emoji
+                      .split(" ")
+                      .filter(Boolean).length;
 
-                  if (emojiCount < 3) {
-                    const newEmoji =
-                      prev.emoji + (prev.emoji ? " " : "") + emojiData.emoji;
-                    return { ...prev, emoji: newEmoji };
-                  } else {
-                    toast({
-                      title: "Input alert🚨",
-                      description: "Maximum of 3 emojis",
-                    });
-                    return prev;
-                  }
-                });
-                setShowEmojiPicker(false);
-              }}
-              autoFocusSearch={false}
-            />
-          </div>
+                    if (emojiCount < 3) {
+                      const newEmoji =
+                        prev.emoji + (prev.emoji ? " " : "") + emojiData.emoji;
+                      return { ...prev, emoji: newEmoji };
+                    } else {
+                      toast({
+                        title: "Input alert🚨",
+                        description: "Maximum of 3 emojis",
+                      });
+                      return prev;
+                    }
+                  });
+                  setShowEmojiPicker(false);
+                }}
+                autoFocusSearch={false}
+              />
+            </div>
+          </>
         )}
 
         <input
@@ -169,7 +174,7 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
             className={`${
               isButtonDisabled
                 ? "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
-                : "bg-blue-500 hover:bg-blue-700"
+                : "bg-orange hover:bg-orangeHover"
             } text-white font-bold py-2 px-4 rounded m-1`}
           >
             Define
