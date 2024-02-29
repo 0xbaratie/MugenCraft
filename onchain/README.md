@@ -51,43 +51,15 @@ Delete the build artifacts and cache directories:
 $ forge clean
 ```
 
-### Compile
-
-Compile the contracts:
-
-```sh
-$ forge build
-```
-
 ### Test
 
 ```sh
 $ forge test -vv --fork-url https://sepolia.blast.io --fork-block-number 2203024
 ```
 
-### Coverage
-
-Get a test coverage report:
-
-```sh
-$ forge coverage
-```
-
 ### Deploy
 
 Deploy to Anvil:
-
-```sh
-$ forge script script/Deploy.s.sol --broadcast --fork-url http://localhost:8545
-```
-
-```sh
-$  forge script script/Deploy.s.sol:Deploy --rpc-url xxx --broadcast --verify --legacy --ffi
-```
-
-```sh
-$ forge script script/MugenToken.s.sol --broadcast --fork-url <RPC_URL> --etherscan-api-key <ETHERSCAN_API_KEY>  --verify
-```
 
 ```sh
 $ forge script script/MugenToken.s.sol --broadcast --fork-url https://sepolia.blast.io --etherscan-api-key verifyContract  --verify --verifier-url 'https://api.routescan.io/v2/network/testnet/evm/168587773/etherscan'
@@ -99,49 +71,12 @@ $ forge script script/MugenToken.s.sol --broadcast --fork-url https://sepolia.bl
 $ forge script script/InsertToken.s.sol --broadcast --fork-url https://sepolia.blast.io
 ```
 
-### Format
-
-Format the contracts:
-
-```sh
-$ forge fmt
-```
-
-### Gas Usage
-
-Get a gas report:
-
-```sh
-$ forge test --gas-report
-```
-
 ### Lint
 
 Lint the contracts:
 
 ```sh
 $ bun run lint
-```
-
-### Test
-
-Run the tests:
-
-```sh
-$ forge test
-```
-
-Generate test coverage and output result to the terminal:
-
-```sh
-$ bun run test:coverage
-```
-
-Generate test coverage with lcov report (you'll have to open the `./coverage/index.html` file in your browser, to do so
-simply copy paste the path):
-
-```sh
-$ bun run test:coverage:report
 ```
 
 ## forge

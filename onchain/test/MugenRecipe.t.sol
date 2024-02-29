@@ -10,14 +10,15 @@ import { MugenToken } from "../src/MugenToken.sol";
 import { MugenRecipe } from "../src/MugenRecipe.sol";
 
 contract MugenRecipeTest is PRBTest, StdCheats {
-    address internal alice;
+    address internal alice = address(0x1);
+    address internal bob = address(0x2);
+    address internal charlie = address(0x3);
 
     MugenRecipe internal recipe;
     MugenToken internal token;
 
     /// @dev A function invoked before each test case is run.
     function setUp() public virtual {
-        alice = address(0x1);
         recipe = new MugenRecipe();
         token = new MugenToken(address(recipe));
     }
@@ -111,5 +112,26 @@ contract MugenRecipeTest is PRBTest, StdCheats {
             imageTexts[i] = metadatas[i].imageText;
         }
         recipe.setDefaultMetadatas(ids, names, imageTexts);
+    }
+
+    function test_points_Success() external {
+        recipe.setDefaultMetadata(1, "Dog", "Dog &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
+        recipe.setDefaultMetadata(2, "Cat", "Cat &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
+
+        recipe.setRecipe(3, "Sheep", "Sheep &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;", 1, 2);
+        assertEq(recipe.recipePoints(address(this)), recipe.RECIPE_CREATE_POINT());
+
+        vm.prank(alice);
+        recipe.setRecipe(4, "Sheep4", "Sheep &#x1f34b;", 1, 3);
+
+        vm.prank(bob);
+        recipe.setRecipe(5, "Sheep5", "Sheep &#x1f34b;", 1, 4);
+
+        vm.prank(charlie);
+        token.mint(charlie, 5, 3, 4);
+        assertEq(token.mintPoints(charlie), token.MINT_POINT());
+        assertEq(token.mintPoints(bob), token.RECIPE_CREATOR_POINT());
+        assertEq(token.mintPoints(address(this)), token.REFFERAL_RECIPE_CREATOR_POINT());
+        assertEq(token.mintPoints(alice), token.REFFERAL_RECIPE_CREATOR_POINT());
     }
 }

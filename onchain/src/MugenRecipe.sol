@@ -8,6 +8,7 @@ import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 import { Base64 } from "solady/utils/Base64.sol";
 import { NFTDescriptor } from "./utils/NFTDescriptor.sol";
 import { IBlast } from "./interfaces/IBlast.sol";
+// import { console2 } from "forge-std/console2.sol";
 
 struct Metadata {
     string name;

@@ -8,8 +8,9 @@ import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 import { Base64 } from "solady/utils/Base64.sol";
 import { NFTDescriptor } from "./utils/NFTDescriptor.sol";
 import { IBlast } from "./interfaces/IBlast.sol";
+// import { console2 } from "forge-std/console2.sol";
 
-interface IERC721Mintable is IERC721 {
+interface IMugenRecipe is IERC721 {
     function tokenURI(uint256 tokenId) external view returns (string memory);
 
     function metadatas(uint256 _id) external view returns (string memory, string memory, address);
@@ -34,15 +35,15 @@ contract MugenToken is ERC1155Supply, Ownable {
 
     uint256 public constant CAP = 69;
 
-    IERC721Mintable public token;
+    IMugenRecipe public recipe;
     mapping(address => uint256) public mintPoints;
 
     /*//////////////////////////////////////////////////////////////
                               CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
-    constructor(address _token) ERC1155("") Ownable(msg.sender) {
+    constructor(address _recipe) ERC1155("") Ownable(msg.sender) {
         BLAST.configureClaimableGas();
-        token = IERC721Mintable(_token);
+        recipe = IMugenRecipe(_recipe);
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -54,7 +55,7 @@ contract MugenToken is ERC1155Supply, Ownable {
             revert("MugenToken: already minted");
         }
 
-        if (!token.isMetadataExists(_id)) {
+        if (!recipe.isMetadataExists(_id)) {
             revert("MugenToken: metadata not exists");
         }
 
@@ -66,18 +67,18 @@ contract MugenToken is ERC1155Supply, Ownable {
         mintPoints[_to] += MINT_POINT;
         emit Point(_to, MINT_POINT);
         // creator points
-        (, , address _creator) = token.metadatas(_id);
+        (, , address _creator) = recipe.metadatas(_id);
         if (_creator != address(0)) {
             mintPoints[_creator] += RECIPE_CREATOR_POINT;
             emit Point(_creator, RECIPE_CREATOR_POINT);
         }
         // refferal points
-        (, , address _refferalA) = token.metadatas(_idA);
+        (, , address _refferalA) = recipe.metadatas(_idA);
         if (_refferalA != address(0)) {
             mintPoints[_refferalA] += REFFERAL_RECIPE_CREATOR_POINT;
             emit Point(_refferalA, REFFERAL_RECIPE_CREATOR_POINT);
         }
-        (, , address _refferalB) = token.metadatas(_idB);
+        (, , address _refferalB) = recipe.metadatas(_idB);
         if (_refferalB != address(0)) {
             mintPoints[_refferalB] += REFFERAL_RECIPE_CREATOR_POINT;
             emit Point(_refferalB, REFFERAL_RECIPE_CREATOR_POINT);
@@ -109,7 +110,7 @@ contract MugenToken is ERC1155Supply, Ownable {
     }
 
     function uri(uint256 _id) public view override returns (string memory) {
-        (string memory _name, string memory _imageText,) = token.metadatas(_id);
+        (string memory _name, string memory _imageText,) = recipe.metadatas(_id);
         NFTDescriptor.TokenURIParams memory params = NFTDescriptor.TokenURIParams({
             name: string(abi.encodePacked(NAME, Strings.toString(_id), " ", _name)),
             description: DESCRIPTION,
