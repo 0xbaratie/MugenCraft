@@ -86,4 +86,30 @@ contract MugenRecipeTest is PRBTest, StdCheats {
         vm.expectRevert("MugenToken: max supply reached");
         token.mint(msg.sender, 1, 987, 987);
     }
+
+    struct MetadataTest {
+        uint256 id;
+        string name;
+        string imageText;
+    }
+
+    function test_setDefaultMetadatas() external {
+        MetadataTest[3] memory metadatas = [
+            MetadataTest(1, "Dog", "Dog &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;"),
+            MetadataTest(2, "Cat", "Cat &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;"),
+            MetadataTest(3, "Sheep", "Sheep &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;")
+        ];
+        uint256 len = metadatas.length;
+
+        uint256[] memory ids = new uint256[](len);
+        string[] memory names = new string[](len);
+        string[] memory imageTexts = new string[](len);
+
+        for (uint256 i = 0; i < len; i++) {
+            ids[i] = metadatas[i].id;
+            names[i] = metadatas[i].name;
+            imageTexts[i] = metadatas[i].imageText;
+        }
+        recipe.setDefaultMetadatas(ids, names, imageTexts);
+    }
 }

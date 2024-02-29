@@ -58,6 +58,12 @@ contract MugenRecipe is ERC721, Ownable, Pausable {
         _setMetaData(_id, _name, _imageText, address(0));
     }
 
+    function setDefaultMetadatas(uint256[] memory _id, string[] memory _name, string[] memory _imageText) external onlyOwner {
+        for(uint i = 0; i < _id.length; i++){
+            _setMetaData(_id[i], _name[i], _imageText[i], address(0));
+        }
+    }
+
     function setRecipe(
         uint256 _id,
         string memory _name,
