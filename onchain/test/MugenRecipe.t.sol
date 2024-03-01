@@ -130,8 +130,8 @@ contract MugenRecipeTest is PRBTest, StdCheats {
         vm.prank(charlie);
         token.mint(charlie, 5, 3, 4);
         assertEq(token.mintPoints(charlie), token.MINT_POINT());
-        assertEq(token.mintPoints(bob), token.RECIPE_CREATOR_POINT());
-        assertEq(token.mintPoints(address(this)), token.REFFERAL_RECIPE_CREATOR_POINT());
-        assertEq(token.mintPoints(alice), token.REFFERAL_RECIPE_CREATOR_POINT());
+        assertEq(token.recipeCreatorPoints(bob), token.RECIPE_CREATOR_POINT());
+        assertEq(token.refferalRecipeCreatorPoints(address(this)), token.REFFERAL_RECIPE_CREATOR_POINT());
+        assertEq(token.refferalRecipeCreatorPoints(alice), token.REFFERAL_RECIPE_CREATOR_POINT());
     }
 }

@@ -16,7 +16,7 @@ struct Metadata {
     address creator;
 }
 
-event Point(address indexed _to, uint256 _point);
+event RecipePoint(address indexed _to, uint256 _point);
 
 contract MugenRecipe is ERC721, Ownable, Pausable {
     /*//////////////////////////////////////////////////////////////
@@ -75,7 +75,7 @@ contract MugenRecipe is ERC721, Ownable, Pausable {
         _setRecipe(_id, _idA, _idB);
         _setMetaData(_id, _name, _imageText, msg.sender);
         recipePoints[msg.sender] += RECIPE_CREATE_POINT;
-        emit Point(msg.sender, RECIPE_CREATE_POINT);
+        emit RecipePoint(msg.sender, RECIPE_CREATE_POINT);
     }
 
     /*//////////////////////////////////////////////////////////////
