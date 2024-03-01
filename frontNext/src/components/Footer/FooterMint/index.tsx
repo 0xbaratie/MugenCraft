@@ -14,6 +14,7 @@ import {
 import { ConnectWallet } from "components/Button/ConnectWallet";
 import { MugenTokenAbi } from "constants/abis";
 import { addresses } from "constants/addresses";
+const MAX_SUPPLY = 69;
 interface FooterMintProps {
   node: Node | undefined;
   nodeA: Node | undefined;
@@ -45,7 +46,18 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
       },
     ],
   });
-  console.log(results);
+  useEffect(() => {
+    if (results.isSuccess) {
+
+      const resultBalance = results.data[0].result;
+      setMinted(resultBalance != null && parseInt(resultBalance.toString()) > 0);
+
+      const resultTotalSupply = results.data[1].result;
+      const sum = resultTotalSupply != null ? parseInt(resultTotalSupply.toString()) : 0;
+      setRemainSum(MAX_SUPPLY - sum);
+    }
+  }, [results]);
+  
 
   const writeMint = async () => {
     writeContract({
@@ -61,29 +73,13 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
     });
   };
 
-  //for test
-  const { data: uri } = useReadContract({
-    address: addresses.MugenToken as `0x${string}`,
-    abi: MugenTokenAbi,
-    functionName: "uri",
-    args: [BigInt(1)],
-  });
-
   if (!node) return null;
   let mintable = !minted && remainSum > 0;
   return (
     <>
-      <div className="flex items-center justify-center">
-        {results.isSuccess && (
-          <div>
-            <p>{results.data[0].result?.toString()}</p>
-            <p>{results.data[1].result?.toString()}</p>
-          </div>
-        )}
-      </div>
       <div className="left-12 inset-x-0 bottom-0 bg-white p-4 flex items-center justify-center z-10 mx-auto">
         <p className="mx-2 font-bold">
-          {remainSum > 0 ? `${remainSum} / 69 Left` : ""}
+          {remainSum > 0 ? `${remainSum} / ${MAX_SUPPLY} Left` : ""}
         </p>
         <div className="mx-2 items-center border border-gray-100 bg-gray-100 rounded-md">
           {node.data.label ? (
