@@ -54,8 +54,6 @@ const Flow: React.FC = () => {
   const [footerNodeB, setFooterNodeB] = useState<Node | undefined>();
   const [footerInput, setFooterInput] = useState({ emoji: "", label: "" });
   const [sideNodes, setSideNodes] = useState<Node[]>(defaultSideNodes);
-  const [remainSum, setRemainSum] = useState(0);
-  const [minted, setMinted] = useState(false);
   const { data, writeContract } = useWriteContract();
 
   const addSideNode = (node: Node) => {
@@ -280,10 +278,6 @@ const Flow: React.FC = () => {
   const onNodeDrag = async (event: React.MouseEvent, node: Node) => {
     setIsFooterDefineVisible(false);
     setIsFooterMintVisible(false);
-    // TODO: Get the number of mints already minted or remaining
-    setRemainSum(1);
-    // TODO: Determine if the user has minted (only after Wallet connection)
-    setMinted(false);
   };
 
   const onNodeDragStop = async (event: React.MouseEvent, node: Node) => {
@@ -414,8 +408,6 @@ const Flow: React.FC = () => {
             node={footerNode}
             nodeA={footerNodeA}
             nodeB={footerNodeB}
-            remainSum={remainSum}
-            minted={minted}
           />
         )}
       </div>

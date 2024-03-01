@@ -8,6 +8,7 @@ import {
   useAccount,
   useWriteContract,
   useReadContract,
+  useReadContracts,
   useWaitForTransactionReceipt,
 } from "wagmi";
 import { ConnectWallet } from "components/Button/ConnectWallet";
@@ -17,19 +18,34 @@ interface FooterMintProps {
   node: Node | undefined;
   nodeA: Node | undefined;
   nodeB: Node | undefined;
-  remainSum: number;
-  minted: boolean;
 }
 
-const FooterMint: React.FC<FooterMintProps> = ({
-  node,
-  nodeA,
-  nodeB,
-  remainSum,
-  minted,
-}) => {
+const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
   const { address, isConnected } = useAccount();
   const { data: hash, writeContract } = useWriteContract();
+  const [remainSum, setRemainSum] = useState(1);
+  const [minted, setMinted] = useState(false);
+
+  const mugenTokenContract = {
+    address: addresses.MugenToken as `0x${string}`,
+    abi: MugenTokenAbi,
+  } as const;
+
+  const results = useReadContracts({
+    contracts: [
+      {
+        ...mugenTokenContract,
+        functionName: "balanceOf",
+        args: [address as `0x${string}`, BigInt(node!.data.craft_id)],
+      },
+      {
+        ...mugenTokenContract,
+        functionName: "totalSupply",
+        args: [BigInt(node!.data.craft_id)],
+      },
+    ],
+  });
+  console.log(results);
 
   const writeMint = async () => {
     writeContract({
@@ -57,6 +73,14 @@ const FooterMint: React.FC<FooterMintProps> = ({
   let mintable = !minted && remainSum > 0;
   return (
     <>
+      <div className="flex items-center justify-center">
+        {results.isSuccess && (
+          <div>
+            <p>{results.data[0].result?.toString()}</p>
+            <p>{results.data[1].result?.toString()}</p>
+          </div>
+        )}
+      </div>
       <div className="left-12 inset-x-0 bottom-0 bg-white p-4 flex items-center justify-center z-10 mx-auto">
         <p className="mx-2 font-bold">
           {remainSum > 0 ? `${remainSum} / 69 Left` : ""}
