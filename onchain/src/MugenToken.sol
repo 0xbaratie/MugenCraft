@@ -20,7 +20,9 @@ interface IMugenRecipe is IERC721 {
     function isMetadataExists(uint256 _id) external view returns (bool);
 }
 
-event Point(address indexed _to, uint256 _point);
+event MintPoint(address indexed _to, uint256 _point);
+event RecipeCreatorPoint(address indexed _to, uint256 _point);
+event RefferalRecipeCreatorPoint(address indexed _to, uint256 _point);
 
 contract MugenToken is ERC1155Supply, Ownable {
     /*//////////////////////////////////////////////////////////////
@@ -37,6 +39,8 @@ contract MugenToken is ERC1155Supply, Ownable {
 
     IMugenRecipe public recipe;
     mapping(address => uint256) public mintPoints;
+    mapping(address => uint256) public recipeCreatorPoints;
+    mapping(address => uint256) public refferalRecipeCreatorPoints;
 
     /*//////////////////////////////////////////////////////////////
                               CONSTRUCTOR
@@ -65,23 +69,23 @@ contract MugenToken is ERC1155Supply, Ownable {
 
         // points
         mintPoints[_to] += MINT_POINT;
-        emit Point(_to, MINT_POINT);
+        emit MintPoint(_to, MINT_POINT);
         // creator points
         (, , address _creator) = recipe.metadatas(_id);
         if (_creator != address(0)) {
-            mintPoints[_creator] += RECIPE_CREATOR_POINT;
-            emit Point(_creator, RECIPE_CREATOR_POINT);
+            recipeCreatorPoints[_creator] += RECIPE_CREATOR_POINT;
+            emit RecipeCreatorPoint(_creator, RECIPE_CREATOR_POINT);
         }
         // refferal points
         (, , address _refferalA) = recipe.metadatas(_idA);
         if (_refferalA != address(0)) {
-            mintPoints[_refferalA] += REFFERAL_RECIPE_CREATOR_POINT;
-            emit Point(_refferalA, REFFERAL_RECIPE_CREATOR_POINT);
+            refferalRecipeCreatorPoints[_refferalA] += REFFERAL_RECIPE_CREATOR_POINT;
+            emit RefferalRecipeCreatorPoint(_refferalA, REFFERAL_RECIPE_CREATOR_POINT);
         }
         (, , address _refferalB) = recipe.metadatas(_idB);
         if (_refferalB != address(0)) {
-            mintPoints[_refferalB] += REFFERAL_RECIPE_CREATOR_POINT;
-            emit Point(_refferalB, REFFERAL_RECIPE_CREATOR_POINT);
+            refferalRecipeCreatorPoints[_refferalB] += REFFERAL_RECIPE_CREATOR_POINT;
+            emit RefferalRecipeCreatorPoint(_refferalB, REFFERAL_RECIPE_CREATOR_POINT);
         }
     }
 
