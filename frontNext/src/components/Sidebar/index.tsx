@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Node } from "reactflow";
 import { ConnectWallet } from "components/Button/ConnectWallet";
+import { useAccount, useReadContracts } from "wagmi";
+import { MugenRecipeAbi } from "constants/MugenRecipeAbi";
+import { MugenTokenAbi } from "constants/MugenTokenAbi";
+import { addresses } from "constants/addresses";
 
 let tapSound: any = null;
 if (typeof window !== "undefined") {
@@ -12,6 +16,7 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
+  const { address, isConnected } = useAccount();
   const [showDetails, setShowDetails] = useState(false);
 
   const onDragStart = (
@@ -24,6 +29,41 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
       .play()
       .catch((err: Error) => console.error("Audio play failed:", err));
   };
+
+  const mugenTokenContract = {
+    address: addresses.MugenToken as `0x${string}`,
+    abi: MugenTokenAbi,
+  } as const;
+
+  const mugenRecipeContract = {
+    address: addresses.MugenRecipe as `0x${string}`,
+    abi: MugenRecipeAbi,
+  } as const;
+
+  const results = useReadContracts({
+    contracts: [
+      {
+        ...mugenTokenContract,
+        functionName: "mintPoints",
+        args: [address as `0x${string}`],
+      },
+      {
+        ...mugenRecipeContract,
+        functionName: "recipePoints",
+        args: [address as `0x${string}`],
+      },
+      {
+        ...mugenTokenContract,
+        functionName: "recipeCreatorPoints",
+        args: [address as `0x${string}`],
+      },
+      {
+        ...mugenTokenContract,
+        functionName: "refferalRecipeCreatorPoints",
+        args: [address as `0x${string}`],
+      },
+    ],
+  });
 
   return (
     <div className="w-[400px] border-l border-gray-400">
@@ -43,6 +83,14 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
                 150,000 points
               </p>
               <div className="mt-4">
+                {results.isSuccess && (
+                  <>
+                    <div>{results.data[0].result?.toString()}</div>
+                    <div>{results.data[1].result?.toString()}</div>
+                    <div>{results.data[2].result?.toString()}</div>
+                    <div>{results.data[3].result?.toString()}</div>
+                  </>
+                )}
                 <div>20 Object minted | 5,000</div>
                 <div>5 Recipe Created | 10,000</div>
                 <div>200 Your recipe minted | 20,000</div>

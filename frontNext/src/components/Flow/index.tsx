@@ -27,7 +27,7 @@ import {
   defaultRecipeMap,
 } from "utils/defaultObject";
 import { useWriteContract } from "wagmi";
-import { MugenRecipeAbi } from "constants/abis";
+import { MugenRecipeAbi } from "constants/MugenRecipeAbi";
 import { addresses } from "constants/addresses";
 import { toast } from "sonner";
 
