@@ -23,7 +23,7 @@ interface FooterMintProps {
 
 const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
   const { address, isConnected } = useAccount();
-  const { data: hash, isPending,  writeContract } = useWriteContract();
+  const { data: hash, isPending, writeContract } = useWriteContract();
   const [remainSum, setRemainSum] = useState(1);
   const [mintable, setMintable] = useState(false);
   const [minted, setMinted] = useState(false);
