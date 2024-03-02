@@ -12,7 +12,7 @@ import {
   useWaitForTransactionReceipt,
 } from "wagmi";
 import { ConnectWallet } from "components/Button/ConnectWallet";
-import { MugenTokenAbi } from "constants/abis";
+import { MugenTokenAbi } from "constants/MugenTokenAbi";
 import { addresses } from "constants/addresses";
 const MAX_SUPPLY = 69;
 interface FooterMintProps {
@@ -48,16 +48,17 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
   });
   useEffect(() => {
     if (results.isSuccess) {
-
       const resultBalance = results.data[0].result;
-      setMinted(resultBalance != null && parseInt(resultBalance.toString()) > 0);
+      setMinted(
+        resultBalance != null && parseInt(resultBalance.toString()) > 0
+      );
 
       const resultTotalSupply = results.data[1].result;
-      const sum = resultTotalSupply != null ? parseInt(resultTotalSupply.toString()) : 0;
+      const sum =
+        resultTotalSupply != null ? parseInt(resultTotalSupply.toString()) : 0;
       setRemainSum(MAX_SUPPLY - sum);
     }
   }, [results]);
-  
 
   const writeMint = async () => {
     writeContract({

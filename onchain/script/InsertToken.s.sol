@@ -15,7 +15,7 @@ struct MetadataTest {
 
 contract InsertTokenScript is BaseScript {
     function run() public broadcast {
-        MugenRecipe recipe = MugenRecipe(0x05421Fe1993581536da827f5D5C73Bb667b55dd5);
+        MugenRecipe recipe = MugenRecipe(0x719AF6d538BfBB496977d0393b7757E4ed2B52B0);
         MetadataTest[190] memory metadatas = [
             MetadataTest(401, "Hawai", "&#x1F5FF; Hawai"),
             MetadataTest(402, "Tokyo Tower", "&#x1F5FC; Tokyo Tower"),
