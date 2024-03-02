@@ -1,308 +1,19 @@
-export const MugenTokenAbi: any = [
-  {
-    type: "constructor",
-    inputs: [{ name: "_token", type: "address", internalType: "address" }],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "balanceOf",
-    inputs: [
-      { name: "account", type: "address", internalType: "address" },
-      { name: "id", type: "uint256", internalType: "uint256" },
-    ],
-    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "balanceOfBatch",
-    inputs: [
-      { name: "accounts", type: "address[]", internalType: "address[]" },
-      { name: "ids", type: "uint256[]", internalType: "uint256[]" },
-    ],
-    outputs: [{ name: "", type: "uint256[]", internalType: "uint256[]" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "exists",
-    inputs: [{ name: "id", type: "uint256", internalType: "uint256" }],
-    outputs: [{ name: "", type: "bool", internalType: "bool" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "isApprovedForAll",
-    inputs: [
-      { name: "account", type: "address", internalType: "address" },
-      { name: "operator", type: "address", internalType: "address" },
-    ],
-    outputs: [{ name: "", type: "bool", internalType: "bool" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "mint",
-    inputs: [
-      { name: "_to", type: "address", internalType: "address" },
-      { name: "_id", type: "uint256", internalType: "uint256" },
-      { name: "_idA", type: "uint256", internalType: "uint256" },
-      { name: "_idB", type: "uint256", internalType: "uint256" },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "owner",
-    inputs: [],
-    outputs: [{ name: "", type: "address", internalType: "address" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "renounceOwnership",
-    inputs: [],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "safeBatchTransferFrom",
-    inputs: [
-      { name: "from", type: "address", internalType: "address" },
-      { name: "to", type: "address", internalType: "address" },
-      { name: "ids", type: "uint256[]", internalType: "uint256[]" },
-      { name: "values", type: "uint256[]", internalType: "uint256[]" },
-      { name: "data", type: "bytes", internalType: "bytes" },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "safeTransferFrom",
-    inputs: [
-      { name: "from", type: "address", internalType: "address" },
-      { name: "to", type: "address", internalType: "address" },
-      { name: "id", type: "uint256", internalType: "uint256" },
-      { name: "value", type: "uint256", internalType: "uint256" },
-      { name: "data", type: "bytes", internalType: "bytes" },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "setApprovalForAll",
-    inputs: [
-      { name: "operator", type: "address", internalType: "address" },
-      { name: "approved", type: "bool", internalType: "bool" },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "supportsInterface",
-    inputs: [{ name: "interfaceId", type: "bytes4", internalType: "bytes4" }],
-    outputs: [{ name: "", type: "bool", internalType: "bool" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "token",
-    inputs: [],
-    outputs: [
-      { name: "", type: "address", internalType: "contract IERC721Mintable" },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "totalSupply",
-    inputs: [],
-    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "totalSupply",
-    inputs: [{ name: "id", type: "uint256", internalType: "uint256" }],
-    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "transferOwnership",
-    inputs: [{ name: "newOwner", type: "address", internalType: "address" }],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "uri",
-    inputs: [{ name: "_id", type: "uint256", internalType: "uint256" }],
-    outputs: [{ name: "", type: "string", internalType: "string" }],
-    stateMutability: "view",
-  },
-  {
-    type: "event",
-    name: "ApprovalForAll",
-    inputs: [
-      {
-        name: "account",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        name: "operator",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      { name: "approved", type: "bool", indexed: false, internalType: "bool" },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "event",
-    name: "OwnershipTransferred",
-    inputs: [
-      {
-        name: "previousOwner",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        name: "newOwner",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "event",
-    name: "TransferBatch",
-    inputs: [
-      {
-        name: "operator",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      { name: "from", type: "address", indexed: true, internalType: "address" },
-      { name: "to", type: "address", indexed: true, internalType: "address" },
-      {
-        name: "ids",
-        type: "uint256[]",
-        indexed: false,
-        internalType: "uint256[]",
-      },
-      {
-        name: "values",
-        type: "uint256[]",
-        indexed: false,
-        internalType: "uint256[]",
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "event",
-    name: "TransferSingle",
-    inputs: [
-      {
-        name: "operator",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      { name: "from", type: "address", indexed: true, internalType: "address" },
-      { name: "to", type: "address", indexed: true, internalType: "address" },
-      { name: "id", type: "uint256", indexed: false, internalType: "uint256" },
-      {
-        name: "value",
-        type: "uint256",
-        indexed: false,
-        internalType: "uint256",
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "event",
-    name: "URI",
-    inputs: [
-      { name: "value", type: "string", indexed: false, internalType: "string" },
-      { name: "id", type: "uint256", indexed: true, internalType: "uint256" },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "error",
-    name: "ERC1155InsufficientBalance",
-    inputs: [
-      { name: "sender", type: "address", internalType: "address" },
-      { name: "balance", type: "uint256", internalType: "uint256" },
-      { name: "needed", type: "uint256", internalType: "uint256" },
-      { name: "tokenId", type: "uint256", internalType: "uint256" },
-    ],
-  },
-  {
-    type: "error",
-    name: "ERC1155InvalidApprover",
-    inputs: [{ name: "approver", type: "address", internalType: "address" }],
-  },
-  {
-    type: "error",
-    name: "ERC1155InvalidArrayLength",
-    inputs: [
-      { name: "idsLength", type: "uint256", internalType: "uint256" },
-      { name: "valuesLength", type: "uint256", internalType: "uint256" },
-    ],
-  },
-  {
-    type: "error",
-    name: "ERC1155InvalidOperator",
-    inputs: [{ name: "operator", type: "address", internalType: "address" }],
-  },
-  {
-    type: "error",
-    name: "ERC1155InvalidReceiver",
-    inputs: [{ name: "receiver", type: "address", internalType: "address" }],
-  },
-  {
-    type: "error",
-    name: "ERC1155InvalidSender",
-    inputs: [{ name: "sender", type: "address", internalType: "address" }],
-  },
-  {
-    type: "error",
-    name: "ERC1155MissingApprovalForAll",
-    inputs: [
-      { name: "operator", type: "address", internalType: "address" },
-      { name: "owner", type: "address", internalType: "address" },
-    ],
-  },
-  {
-    type: "error",
-    name: "OwnableInvalidOwner",
-    inputs: [{ name: "owner", type: "address", internalType: "address" }],
-  },
-  {
-    type: "error",
-    name: "OwnableUnauthorizedAccount",
-    inputs: [{ name: "account", type: "address", internalType: "address" }],
-  },
-];
 export const MugenRecipeAbi: any = [
   { type: "constructor", inputs: [], stateMutability: "nonpayable" },
+  {
+    type: "function",
+    name: "BLAST",
+    inputs: [],
+    outputs: [{ name: "", type: "address", internalType: "contract IBlast" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "RECIPE_CREATE_POINT",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+    stateMutability: "view",
+  },
   {
     type: "function",
     name: "approve",
@@ -322,10 +33,20 @@ export const MugenRecipeAbi: any = [
   },
   {
     type: "function",
+    name: "claimMyContractsGas",
+    inputs: [],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     name: "generateImage",
-    inputs: [{ name: "_id", type: "uint256", internalType: "uint256" }],
+    inputs: [
+      { name: "_imageText", type: "string", internalType: "string" },
+      { name: "_creator", type: "address", internalType: "address" },
+    ],
     outputs: [{ name: "", type: "string", internalType: "string" }],
-    stateMutability: "view",
+    stateMutability: "pure",
   },
   {
     type: "function",
@@ -358,6 +79,7 @@ export const MugenRecipeAbi: any = [
     outputs: [
       { name: "name", type: "string", internalType: "string" },
       { name: "imageText", type: "string", internalType: "string" },
+      { name: "creator", type: "address", internalType: "address" },
     ],
     stateMutability: "view",
   },
@@ -387,6 +109,13 @@ export const MugenRecipeAbi: any = [
     name: "paused",
     inputs: [],
     outputs: [{ name: "", type: "bool", internalType: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "recipePoints",
+    inputs: [{ name: "", type: "address", internalType: "address" }],
+    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
     stateMutability: "view",
   },
   {
@@ -452,11 +181,22 @@ export const MugenRecipeAbi: any = [
   },
   {
     type: "function",
+    name: "setDefaultMetadatas",
+    inputs: [
+      { name: "_id", type: "uint256[]", internalType: "uint256[]" },
+      { name: "_name", type: "string[]", internalType: "string[]" },
+      { name: "_imageText", type: "string[]", internalType: "string[]" },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     name: "setDefaultRecipe",
     inputs: [
       { name: "_id", type: "uint256", internalType: "uint256" },
-      { name: "_name", type: "string", internalType: "string" },
-      { name: "_imageText", type: "string", internalType: "string" },
+      { name: "_idA", type: "uint256", internalType: "uint256" },
+      { name: "_idB", type: "uint256", internalType: "uint256" },
     ],
     outputs: [],
     stateMutability: "nonpayable",
@@ -599,6 +339,20 @@ export const MugenRecipeAbi: any = [
   },
   {
     type: "event",
+    name: "RecipePoint",
+    inputs: [
+      { name: "_to", type: "address", indexed: true, internalType: "address" },
+      {
+        name: "_point",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
     name: "Transfer",
     inputs: [
       { name: "from", type: "address", indexed: true, internalType: "address" },
@@ -684,48 +438,12 @@ export const MugenRecipeAbi: any = [
     name: "OwnableUnauthorizedAccount",
     inputs: [{ name: "account", type: "address", internalType: "address" }],
   },
-];
-export const MugenTokenForTestAbi: any = [
   {
+    type: "error",
+    name: "StringsInsufficientHexLength",
     inputs: [
-      {
-        internalType: "uint256",
-        name: "_id",
-        type: "uint256",
-      },
-      {
-        internalType: "string",
-        name: "_name",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "_imageText",
-        type: "string",
-      },
+      { name: "value", type: "uint256", internalType: "uint256" },
+      { name: "length", type: "uint256", internalType: "uint256" },
     ],
-    name: "setMetadataAndMint",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "uri",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
   },
 ];
