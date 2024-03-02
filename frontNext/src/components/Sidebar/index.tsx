@@ -65,6 +65,12 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
     ],
   });
 
+  // Calculate total points
+  const totalPoints = results.isSuccess ? results.data.reduce((total, current) => {
+    const points = Number(current.result?.toString()) || 0;
+    return total + points;
+  }, 0) : 0;
+
   return (
     <div className="w-[400px] border-l border-gray-400">
       <div className="shadow-custom px-2 flex flex-col justify-between min-h-screen">
@@ -76,28 +82,37 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
             Points
           </button>
           {showDetails && (
-            <div className="absolute top-full w-full p-4 rounded-lg shadow-lg border border-gray-200 z-50 bg-gray-50">
-              <span className="text-md">Your points</span>
-              {/* TODO: Change numbers dynamically */}
-              <p className="text-xl font-bold pb-4 border-b border-gray-200">
-                150,000 points
+            <div className="absolute top-full w-full p-6 rounded-lg shadow-lg border border-gray-200 z-50 bg-white">
+              <span className="text-lg font-semibold text-gray-800">Your points</span>
+              <p className="text-2xl font-bold text-gray-900 py-4 border-b border-gray-200">
+                {totalPoints.toLocaleString()} points
               </p>
-              <div className="mt-4">
+              <div className="mt-6 space-y-2">
                 {results.isSuccess && (
                   <>
-                    <div>{results.data[0].result?.toString()}</div>
-                    <div>{results.data[1].result?.toString()}</div>
-                    <div>{results.data[2].result?.toString()}</div>
-                    <div>{results.data[3].result?.toString()}</div>
+                    <div className="flex items-center text-gray-700">
+                      <span className="inline-block w-4 h-4 mr-2 rounded-full bg-green-500"></span>
+                      Object minted {results.data[0].result?.toString()}
+                    </div>
+                    <div className="flex items-center text-gray-700">
+                      <span className="inline-block w-4 h-4 mr-2 rounded-full bg-blue-500"></span>
+                      Recipe Created {results.data[1].result?.toString()}
+                    </div>
+                    <div className="flex items-center text-gray-700">
+                      <span className="inline-block w-4 h-4 mr-2 rounded-full bg-purple-500"></span>
+                      Your recipe minted {results.data[2].result?.toString()}
+                    </div>
+                    <div className="flex items-center text-gray-700">
+                      <span className="inline-block w-4 h-4 mr-2 rounded-full bg-red-500"></span>
+                      Your recipe assist {results.data[3].result?.toString()}
+                    </div>
                   </>
+                
                 )}
-                <div>20 Object minted | 5,000</div>
-                <div>5 Recipe Created | 10,000</div>
-                <div>200 Your recipe minted | 20,000</div>
-                <div>400 Your recipe assist | 4,000</div>
               </div>
             </div>
           )}
+
           <ConnectWallet />
         </div>
         <div className="mt-4 flex-grow overflow-y-auto">
