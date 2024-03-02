@@ -6,7 +6,7 @@ import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
 import { useAccount } from "wagmi";
 import { ConnectWallet } from "components/Button/ConnectWallet";
-
+import LoadingIndicator from "components/LoadingIndicator";
 interface FooterDefineProps {
   nodeA: Node | undefined;
   nodeB: Node | undefined;
@@ -15,6 +15,7 @@ interface FooterDefineProps {
     React.SetStateAction<{ label: string; emoji: string }>
   >;
   updateNodeFromFooter: () => void;
+  isLoading: boolean;
 }
 
 const FooterDefine: React.FC<FooterDefineProps> = ({
@@ -23,6 +24,7 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
   footerInput,
   setFooterInput,
   updateNodeFromFooter,
+  isLoading,
 }) => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -177,7 +179,9 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
                 : "bg-orange hover:bg-orangeHover"
             } text-white font-bold py-2 px-4 rounded m-1`}
           >
-            Define
+            {isLoading ? (
+              <LoadingIndicator />
+            ) : "Define"}
           </button>
         ) : (
           <ConnectWallet />

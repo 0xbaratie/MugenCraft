@@ -12,7 +12,7 @@ import { useToast } from "@/components/ui/use-toast"
 
 export function Toaster() {
   const { toasts } = useToast()
-
+  // TODO: Production exploer URL
   return (
     <ToastProvider>
       {toasts.map(function ({ id, title, description, action, ...props }) {
@@ -21,7 +21,21 @@ export function Toaster() {
             <div className="grid gap-1">
               {title && <ToastTitle>{title}</ToastTitle>}
               {description && (
-                <ToastDescription>{description}</ToastDescription>
+                <ToastDescription>
+                  {typeof description === 'string' &&
+                  description.startsWith('0x') ? (
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 underline break-all"
+                      href={`https://testnet.blastscan.io/tx/${description}`}
+                    >
+                      {description}
+                    </a>
+                  ) : (
+                    <span className="break-all">{description}</span>
+                  )}
+                </ToastDescription>
               )}
             </div>
             {action}
