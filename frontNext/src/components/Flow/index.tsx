@@ -56,12 +56,18 @@ const Flow: React.FC = () => {
   const [sideNodes, setSideNodes] = useState<Node[]>(defaultSideNodes);
   const { data, writeContract } = useWriteContract();
 
-  const addSideNode = (node: Node) => {
-    //if already exists, don't add
-    if (sideNodes.find((n) => n.data.craft_id === node.data.craft_id)) {
-      return;
+  const addSideNode = (node: Node): boolean => {
+    // Check if the node already exists
+    const nodeExists = sideNodes.some((n) => n.data.craft_id === node.data.craft_id);
+  
+    // If it already exists, do not add and return false
+    if (nodeExists) {
+      return false;
     }
-    setSideNodes((currentNodes) => currentNodes.concat(node));
+  
+    // If it doesn't exist, add it to the side nodes and return true
+    setSideNodes((currentNodes) => [...currentNodes, node]);
+    return true;
   };
 
   const getMaxCraftId = async (): Promise<number> => {
@@ -155,6 +161,20 @@ const Flow: React.FC = () => {
           recipeMap[`${craft_idA}_${craft_idB}`] = new_craft_id; //add recipeMap
           postRecipeApi(`${craft_idA}_${craft_idB}`, new_craft_id);
 
+          const newSideNodeAdded = addSideNode({
+            id: "",
+            type: "custom",
+            data: {
+              craft_id: new_craft_id,
+              emoji: footerInput.emoji,
+              label: footerInput.label,
+            },
+            position: { x: 0, y: 0 },
+          });
+        
+          // Only calculate highlightEndTime if the node was newly added
+          const highlightEndTime = newSideNodeAdded ? new Date().getTime() + 3000 : undefined;
+
           const newNode: Node = {
             id: `${flow_id++}`,
             type: "custom",
@@ -162,6 +182,7 @@ const Flow: React.FC = () => {
               craft_id: new_craft_id,
               emoji: footerInput.emoji,
               label: footerInput.label,
+              ...(newSideNodeAdded && { highlightEndTime }),
             },
             position: position,
           };
@@ -173,7 +194,7 @@ const Flow: React.FC = () => {
               .concat(newNode)
           );
 
-          addSideNode({
+          const newSideNode = addSideNode({
             ...newNode,
             id: "",
             position: { x: 0, y: 0 },
@@ -317,7 +338,14 @@ const Flow: React.FC = () => {
           // message.warning("Node type not found!"); //TODO
           return;
         }
+        const newSideNode = addSideNode({
+          ..._newNode,
+          id: "",
+          position: { x: 0, y: 0 },
+        });
 
+        const highlightDuration = 3000;
+        const highlightEndTime = newSideNode ? new Date().getTime() + highlightDuration : null;
         const newNode: Node = {
           ..._newNode,
           id: `${flow_id++}`,
@@ -325,6 +353,10 @@ const Flow: React.FC = () => {
             x: (node.position.x + overlappingNode.position.x) / 2,
             y: (node.position.y + overlappingNode.position.y) / 2,
           },
+          data: {
+            ..._newNode.data,
+            highlightEndTime
+          }
         };
 
         // Remove the original nodes and add the new node
@@ -334,11 +366,7 @@ const Flow: React.FC = () => {
             .concat(newNode)
         );
 
-        addSideNode({
-          ..._newNode,
-          id: "",
-          position: { x: 0, y: 0 },
-        });
+        
 
         setIsFooterDefineVisible(false);
         setIsFooterMintVisible(true);
