@@ -26,7 +26,7 @@ import {
   defaultNodeMap,
   defaultRecipeMap,
 } from "utils/defaultObject";
-import { useWriteContract } from "wagmi";
+import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { MugenRecipeAbi } from "constants/MugenRecipeAbi";
 import { addresses } from "constants/addresses";
 import { toast } from "sonner";
@@ -54,7 +54,11 @@ const Flow: React.FC = () => {
   const [footerNodeB, setFooterNodeB] = useState<Node | undefined>();
   const [footerInput, setFooterInput] = useState({ emoji: "", label: "" });
   const [sideNodes, setSideNodes] = useState<Node[]>(defaultSideNodes);
-  const { data, writeContract } = useWriteContract();
+  const { data: hash, isPending,  writeContract } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = 
+    useWaitForTransactionReceipt({ 
+      hash, 
+    }) 
 
   const addSideNode = (node: Node) => {
     //if already exists, don't add
@@ -401,6 +405,7 @@ const Flow: React.FC = () => {
             footerInput={footerInput}
             setFooterInput={setFooterInput}
             updateNodeFromFooter={updateNodeFromFooter}
+            isLoading={isPending || isConfirming}
           />
         )}
         {isFooterMintVisible && (
