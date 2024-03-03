@@ -24,13 +24,13 @@ const StyledButton = styled.button`
   }
 `;
 
-export const ConnectWallet = () => {
+export const ConnectWallet = ({ buttonText = "Connect Wallet" }) => {
   return (
     <ConnectKitButton.Custom>
       {({ isConnected, show, truncatedAddress, ensName }) => {
         return (
           <StyledButton onClick={show}>
-            {isConnected ? ensName ?? truncatedAddress : "Connect Wallet"}
+            {isConnected ? ensName ?? truncatedAddress : buttonText}
           </StyledButton>
         );
       }}

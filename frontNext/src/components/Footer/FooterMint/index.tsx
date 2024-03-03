@@ -128,7 +128,7 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
           ) : minted ? "Already minted" : "Mint"}
           </button>
         ) : (
-          <ConnectWallet />
+          <ConnectWallet buttonText="Connect for mint recipe" />
         )}
         {/* for test <div>Uri: {uri?.toString()}</div> */}
       </div>
