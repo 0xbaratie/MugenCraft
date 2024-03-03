@@ -92,19 +92,19 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
                   <>
                     <div className="flex items-center text-gray-700">
                       <span className="inline-block w-4 h-4 mr-2 rounded-full bg-green-500"></span>
-                      Object minted {results.data[0].result?.toString()}
+                      Object minted {results.data[0].result?.toString() || 0}
                     </div>
                     <div className="flex items-center text-gray-700">
                       <span className="inline-block w-4 h-4 mr-2 rounded-full bg-blue-500"></span>
-                      Recipe Created {results.data[1].result?.toString()}
+                      Recipe Created {results.data[1].result?.toString() || 0}
                     </div>
                     <div className="flex items-center text-gray-700">
                       <span className="inline-block w-4 h-4 mr-2 rounded-full bg-purple-500"></span>
-                      Your recipe minted {results.data[2].result?.toString()}
+                      Your recipe minted {results.data[2].result?.toString() || 0}
                     </div>
                     <div className="flex items-center text-gray-700">
                       <span className="inline-block w-4 h-4 mr-2 rounded-full bg-red-500"></span>
-                      Your recipe assist {results.data[3].result?.toString()}
+                      Your recipe assist {results.data[3].result?.toString() || 0}
                     </div>
                   </>
                 
