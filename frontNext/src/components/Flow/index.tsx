@@ -1,4 +1,4 @@
-import { useCallback, useState, useRef } from "react";
+import { useCallback, useState, useRef, useEffect } from "react";
 import ReactFlow, {
   Node,
   useNodesState,
@@ -53,7 +53,7 @@ const Flow: React.FC = () => {
   const [footerNodeA, setFooterNodeA] = useState<Node | undefined>();
   const [footerNodeB, setFooterNodeB] = useState<Node | undefined>();
   const [footerInput, setFooterInput] = useState({ emoji: "", label: "" });
-  const [sideNodes, setSideNodes] = useState<Node[]>(defaultSideNodes);
+  const [sideNodes, setSideNodes] = useState<Node[]>([]);
   const { data: hash, isPending,  writeContract } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } = 
     useWaitForTransactionReceipt({ 
@@ -373,6 +373,26 @@ const Flow: React.FC = () => {
     animated: true,
     type: "smoothstep",
   };
+
+  useEffect(() => {
+    const storedSideNodes = localStorage.getItem('sideNodes');
+    if (storedSideNodes !== null) {
+      const parsedSideNodes = JSON.parse(storedSideNodes);
+      // Verify that parsedSideNodes is an array and its length is greater than zero
+      if (Array.isArray(parsedSideNodes) && parsedSideNodes.length > 0) {
+        setSideNodes(parsedSideNodes);
+      }
+    } else {
+      // If no sideNodes exist in localStorage.
+      setSideNodes(defaultSideNodes);
+    }
+  }, []);
+  
+
+  useEffect(() => {
+    // Save to localStorage when sideNodes are updated.
+    localStorage.setItem('sideNodes', JSON.stringify(sideNodes));
+  }, [sideNodes]);
 
   return (
     <div className="flex flex-row flex-grow">
