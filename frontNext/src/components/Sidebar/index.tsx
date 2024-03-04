@@ -130,10 +130,6 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
             ))}
           </div>
         </div>
-        <div className="p-4 text-center border-t border-gray-200 flex items-center justify-center h-16">
-          {/* TODO: Change numbers dynamically */}
-          <div className="text-gray-500">You earned 0.1 ETH ⛽️</div>
-        </div>
       </div>
     </div>
   );
