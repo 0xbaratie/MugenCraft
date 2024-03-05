@@ -53,6 +53,8 @@ module.exports = {
         },
         orange: '#FF720C',
         orangeHover: '#E06207',
+        blue: '#1652F0',
+        blueHover: '#6289F1',
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -74,7 +76,7 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       backgroundImage: {
-        'gradient-to-b': 'linear-gradient(to bottom, #ffffff, #FFDEC7)',
+        'gradient-to-b': 'linear-gradient(to bottom, #ffffff, #CADBFD)',
       }
     },
   },

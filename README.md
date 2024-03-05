@@ -31,7 +31,7 @@ bun dev
 
 ## Tech stack
 - Vercel KV (https://vercel.com/docs/storage/vercel-kv )
-- Blast L2 (https://blast.io/ )
+- Base (https://base.org/ )
 - React flow (https://reactflow.dev/ )
 
 ## Great reference
