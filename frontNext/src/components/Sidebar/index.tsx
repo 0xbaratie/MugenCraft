@@ -76,7 +76,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
       <div className="shadow-custom px-2 flex flex-col justify-between min-h-screen">
         <div className="relative flex items-center justify-between p-2 border-b border-gray-200">
           <button
-            className="px-4 py-2 bg-white text-orange border border-orange rounded-xl mr-4"
+            className="px-4 py-2 bg-white text-blue border border-blue rounded-xl mr-4 hover:bg-blue hover:text-white"
             onClick={() => setShowDetails(!showDetails)}
           >
             Points
@@ -95,7 +95,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
                       Object minted {results.data[0].result?.toString() || 0}
                     </div>
                     <div className="flex items-center text-gray-700">
-                      <span className="inline-block w-4 h-4 mr-2 rounded-full bg-blue-500"></span>
+                      <span className="inline-block w-4 h-4 mr-2 rounded-full bg-yellow-500"></span>
                       Recipe Created {results.data[1].result?.toString() || 0}
                     </div>
                     <div className="flex items-center text-gray-700">

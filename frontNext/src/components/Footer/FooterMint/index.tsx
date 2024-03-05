@@ -118,7 +118,7 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
             disabled={!mintable || isPending || isConfirming}
             className={`${
               mintable
-                ? "bg-orange hover:bg-orangeHover"
+                ? "bg-blue hover:bg-blueHover"
                 : "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
             } mx-2 text-white font-bold py-2 px-4 rounded m-1`}
             onClick={writeMint}
