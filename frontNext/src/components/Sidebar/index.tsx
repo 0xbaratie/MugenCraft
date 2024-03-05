@@ -76,7 +76,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
       <div className="shadow-custom px-2 flex flex-col justify-between min-h-screen">
         <div className="relative flex items-center justify-between p-2 border-b border-gray-200">
           <button
-            className="px-4 py-2 bg-white text-blue border border-blue rounded-xl mr-4 hover:bg-blueHover hover:text-white"
+            className="px-4 py-2 bg-white text-blue border border-blue rounded-xl mr-4 hover:bg-blue hover:text-white"
             onClick={() => setShowDetails(!showDetails)}
           >
             Points
