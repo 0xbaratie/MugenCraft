@@ -7,8 +7,7 @@ import { ERC1155Supply, ERC1155 } from "@openzeppelin/contracts/token/ERC1155/ex
 import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 import { Base64 } from "solady/utils/Base64.sol";
 import { NFTDescriptor } from "./utils/NFTDescriptor.sol";
-import { IBlast } from "./interfaces/IBlast.sol";
-// import { console2 } from "forge-std/console2.sol";
+import { console2 } from "forge-std/console2.sol";
 
 interface IMugenRecipe is IERC721 {
     function tokenURI(uint256 tokenId) external view returns (string memory);
@@ -28,7 +27,6 @@ contract MugenToken is ERC1155Supply, Ownable {
     /*//////////////////////////////////////////////////////////////
                                 STORAGE
     //////////////////////////////////////////////////////////////*/
-    IBlast public constant BLAST = IBlast(0x4300000000000000000000000000000000000002);
     string constant NAME = "MugenToken #";
     string constant DESCRIPTION = "MugenCraft is onchain, infinte craftable NFTs, where you can craft your own NFTs.";
     uint256 public constant MINT_POINT = 420;
@@ -41,19 +39,27 @@ contract MugenToken is ERC1155Supply, Ownable {
     mapping(address => uint256) public mintPoints;
     mapping(address => uint256) public recipeCreatorPoints;
     mapping(address => uint256) public refferalRecipeCreatorPoints;
+    uint256 fee = 0.000025 ether; //0.000025ETH
 
     /*//////////////////////////////////////////////////////////////
                               CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
     constructor(address _recipe) ERC1155("") Ownable(msg.sender) {
-        BLAST.configureClaimableGas();
         recipe = IMugenRecipe(_recipe);
     }
 
     /*//////////////////////////////////////////////////////////////
                             EXTERNAL UPDATE
     //////////////////////////////////////////////////////////////*/
-    function mint(address _to, uint256 _id, uint256 _idA, uint256 _idB) external {
+    function setFee(uint256 _fee) external onlyOwner {
+        fee = _fee;
+    }
+
+    function mint(address _to, uint256 _id, uint256 _idA, uint256 _idB) external payable{
+        //fee 0.000025ETH
+        console2.log(msg.value);
+        require(msg.value >= fee, "MugenToken: fee not enough");
+
         // if already minted, revert
         if (balanceOf(_to, _id) > 0) {
             revert("MugenToken: already minted");
@@ -130,13 +136,5 @@ contract MugenToken is ERC1155Supply, Ownable {
     /*//////////////////////////////////////////////////////////////
                             INTERNAL UPDATE
     //////////////////////////////////////////////////////////////*/
-
-    /*//////////////////////////////////////////////////////////////
-                            Blast
-    //////////////////////////////////////////////////////////////*/
-
-    function claimMyContractsGas() external onlyOwner{
-        BLAST.claimAllGas(address(this), msg.sender);
-    }
 
 }

@@ -62,30 +62,30 @@ contract MugenRecipeTest is PRBTest, StdCheats {
 
     function test_mint_Success() external {
         recipe.setDefaultMetadata(1, "Dog", "Dog &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
-        token.mint(msg.sender, 1, 987, 987);
+        token.mint{ value: 0.000025 ether }(msg.sender, 1, 987, 987);
         assertEq(token.balanceOf(msg.sender, 1), 1);
     }
 
     function test_mint_Fail1() external {
         vm.expectRevert("MugenToken: metadata not exists");
-        token.mint(msg.sender, 1, 987, 987);
+        token.mint{ value: 0.000025 ether }(msg.sender, 1, 987, 987);
     }
 
     function test_mint_Fail2() external {
         recipe.setDefaultMetadata(1, "Dog", "Dog &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
-        token.mint(msg.sender, 1, 987, 987);
+        token.mint{ value: 0.000025 ether }(msg.sender, 1, 987, 987);
         vm.expectRevert("MugenToken: already minted");
-        token.mint(msg.sender, 1, 987, 987);
+        token.mint{ value: 0.000025 ether }(msg.sender, 1, 987, 987);
     }
 
     function test_mint_Fail3() external {
         recipe.setDefaultMetadata(1, "Dog", "Dog &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
         for (uint8 i = 0; i < 69; i++) {
             // each 69 address can mint 1 token
-            token.mint(address(uint160(uint256(keccak256(abi.encodePacked(i))))), 1, 987, 987);
+            token.mint{ value: 0.000025 ether }(address(uint160(uint256(keccak256(abi.encodePacked(i))))), 1, 987, 987);
         }
         vm.expectRevert("MugenToken: max supply reached");
-        token.mint(msg.sender, 1, 987, 987);
+        token.mint{ value: 0.000025 ether }(msg.sender, 1, 987, 987);
     }
 
     struct MetadataTest {
@@ -127,8 +127,10 @@ contract MugenRecipeTest is PRBTest, StdCheats {
         vm.prank(bob);
         recipe.setRecipe(5, "Sheep5", "Sheep &#x1f34b;", 1, 4);
 
+        //send eth to charlie
+        deal(charlie, 0.000025 ether);
         vm.prank(charlie);
-        token.mint(charlie, 5, 3, 4);
+        token.mint{ value: 0.000025 ether }(charlie, 5, 3, 4);
         assertEq(token.mintPoints(charlie), token.MINT_POINT());
         assertEq(token.recipeCreatorPoints(bob), token.RECIPE_CREATOR_POINT());
         assertEq(token.refferalRecipeCreatorPoints(address(this)), token.REFFERAL_RECIPE_CREATOR_POINT());

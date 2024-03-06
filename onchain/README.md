@@ -62,13 +62,13 @@ $ forge test -vv --fork-url https://sepolia.blast.io --fork-block-number 2203024
 Deploy to Anvil:
 
 ```sh
-$ forge script script/MugenToken.s.sol --broadcast --fork-url https://sepolia.blast.io --etherscan-api-key verifyContract  --verify --verifier-url 'https://api.routescan.io/v2/network/testnet/evm/168587773/etherscan'
+$ forge script script/MugenToken.s.sol --broadcast --fork-url https://sepolia.base.org --etherscan-api-key verifyContract  --verify --etherscan-api-key API_KEY
 ```
 
 ### Insert data
 
 ```sh
-$ forge script script/InsertToken.s.sol --broadcast --fork-url https://sepolia.blast.io
+$ forge script script/InsertToken.s.sol --broadcast --fork-url https://sepolia.base.org
 ```
 
 ### Lint
