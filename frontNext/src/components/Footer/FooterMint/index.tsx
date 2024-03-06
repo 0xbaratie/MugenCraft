@@ -16,7 +16,6 @@ import { ConnectWallet } from "components/Button/ConnectWallet";
 import { MugenTokenAbi } from "constants/MugenTokenAbi";
 import { addresses } from "constants/addresses";
 
-const MAX_SUPPLY = 69;
 const FEE = "0.000025";
 interface FooterMintProps {
   node: Node | undefined;
@@ -27,7 +26,7 @@ interface FooterMintProps {
 const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
   const { address, isConnected } = useAccount();
   const { data: hash, isPending, error, writeContract } = useWriteContract();
-  const [remainSum, setRemainSum] = useState(1);
+  const [sum, setSum] = useState(1);
   const [mintable, setMintable] = useState(false);
   const [minted, setMinted] = useState(false);
   const { toast } = useToast();
@@ -65,7 +64,7 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
       const resultTotalSupply = results.data[1].result;
       const sum =
         resultTotalSupply != null ? parseInt(resultTotalSupply.toString()) : 0;
-      setRemainSum(MAX_SUPPLY - sum);
+      setSum(sum);
     }
   }, [results, hash]);
 
@@ -81,8 +80,8 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
   }, [isConfirmed, hash, toast]);
 
   useEffect(() => {
-    setMintable(!minted && remainSum > 0 && !isPending && !isConfirming);
-  }, [minted, remainSum, isPending, isConfirming]);
+    setMintable(!minted && sum > 0 && !isPending && !isConfirming);
+  }, [minted, sum, isPending, isConfirming]);
 
   const writeMint = async () => {
     writeContract({
@@ -105,7 +104,7 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
     <>
       <div className="left-12 inset-x-0 bottom-0 bg-white p-4 flex items-center justify-center z-10 mx-auto">
         <p className="mx-2 font-bold">
-          {remainSum > 0 ? `${remainSum} / ${MAX_SUPPLY} Left` : ""}
+          {`${sum} minted`}
         </p>
         <div className="mx-2 items-center border border-gray-100 bg-gray-100 rounded-md">
           {node.data.label ? (
