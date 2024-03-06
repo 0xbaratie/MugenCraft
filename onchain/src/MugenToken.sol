@@ -3,11 +3,11 @@ pragma solidity 0.8.23;
 
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import { IERC721 } from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-import { ERC1155 } from "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import { ERC1155Supply, ERC1155 } from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 import { Base64 } from "solady/utils/Base64.sol";
 import { NFTDescriptor } from "./utils/NFTDescriptor.sol";
-import { console2 } from "forge-std/console2.sol";
+// import { console2 } from "forge-std/console2.sol";
 
 interface IMugenRecipe is IERC721 {
     function tokenURI(uint256 tokenId) external view returns (string memory);
@@ -24,7 +24,7 @@ event RecipeCreatorPoint(address indexed _to, uint256 _point);
 event RefferalRecipeCreatorPoint(address indexed _to, uint256 _point);
 event Minted(address indexed _to, uint256 indexed _id, uint256 _idA, uint256 _idB);
 
-contract MugenToken is ERC1155, Ownable {
+contract MugenToken is ERC1155Supply, Ownable {
     /*//////////////////////////////////////////////////////////////
                                 STORAGE
     //////////////////////////////////////////////////////////////*/
@@ -59,8 +59,7 @@ contract MugenToken is ERC1155, Ownable {
     }
 
     function mint(address _to, uint256 _id, uint256 _idA, uint256 _idB) external payable{
-        //fee 0.000025ETH
-        console2.log(msg.value);
+        //fee check
         require(msg.value >= fee, "MugenToken: fee not enough");
 
         // if already minted, revert
