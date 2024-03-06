@@ -55,6 +55,10 @@ contract MugenToken is ERC1155Supply, Ownable {
         fee = _fee;
     }
 
+    function withdrawFee() external onlyOwner {
+        payable(owner()).transfer(address(this).balance);
+    }
+
     function mint(address _to, uint256 _id, uint256 _idA, uint256 _idB) external payable{
         //fee 0.000025ETH
         console2.log(msg.value);

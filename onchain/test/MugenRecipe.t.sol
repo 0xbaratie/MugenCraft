@@ -136,4 +136,20 @@ contract MugenRecipeTest is PRBTest, StdCheats {
         assertEq(token.refferalRecipeCreatorPoints(address(this)), token.REFFERAL_RECIPE_CREATOR_POINT());
         assertEq(token.refferalRecipeCreatorPoints(alice), token.REFFERAL_RECIPE_CREATOR_POINT());
     }
+
+    function test_withdrawFee_Success() external {
+        recipe.setDefaultMetadata(1, "Dog", "Dog &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
+
+        deal(alice, 0.000025 ether);
+        vm.prank(alice);
+        token.mint{ value: 0.000025 ether }(msg.sender, 1, 987, 987);
+
+        console2.log("this balance", address(this).balance);
+        token.withdrawFee();
+        console2.log("this balance", address(this).balance);
+    }
+
+    fallback() external payable {}
+
+    receive() external payable {}
 }
