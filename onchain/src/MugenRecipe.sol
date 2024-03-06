@@ -7,7 +7,6 @@ import { Pausable } from "@openzeppelin/contracts/utils/Pausable.sol";
 import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 import { Base64 } from "solady/utils/Base64.sol";
 import { NFTDescriptor } from "./utils/NFTDescriptor.sol";
-import { IBlast } from "./interfaces/IBlast.sol";
 // import { console2 } from "forge-std/console2.sol";
 
 struct Metadata {
@@ -17,13 +16,13 @@ struct Metadata {
 }
 
 event RecipePoint(address indexed _to, uint256 _point);
+event RecipeCreated(address indexed _creator, uint256 indexed _id, string _name, string _imageText, uint256 _idA, uint256 _idB);
 
 contract MugenRecipe is ERC721, Ownable, Pausable {
     /*//////////////////////////////////////////////////////////////
                                 STORAGE
     //////////////////////////////////////////////////////////////*/
-    IBlast public constant BLAST = IBlast(0x4300000000000000000000000000000000000002);
-    uint256 public constant RECIPE_CREATE_POINT = 1000;
+    uint256 public constant RECIPE_CREATE_POINT = 200;
 
     string constant NAME = "MugenCraft #";
     string constant DESCRIPTION = "MugenCraft is onchain, infinte craftable NFTs, where you can craft your own NFTs.";
@@ -36,9 +35,7 @@ contract MugenRecipe is ERC721, Ownable, Pausable {
     /*//////////////////////////////////////////////////////////////
                               CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
-    constructor() ERC721("MugenRecipe", "MugenRecipe") Ownable(msg.sender) {
-        BLAST.configureClaimableGas();
-    }
+    constructor() ERC721("MugenRecipe", "MugenRecipe") Ownable(msg.sender) {}
 
     /*//////////////////////////////////////////////////////////////
                             EXTERNAL UPDATE
@@ -76,6 +73,7 @@ contract MugenRecipe is ERC721, Ownable, Pausable {
         _setMetaData(_id, _name, _imageText, msg.sender);
         recipePoints[msg.sender] += RECIPE_CREATE_POINT;
         emit RecipePoint(msg.sender, RECIPE_CREATE_POINT);
+        emit RecipeCreated(msg.sender, _id, _name, _imageText, _idA, _idB);
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -152,13 +150,5 @@ contract MugenRecipe is ERC721, Ownable, Pausable {
         }
 
         metadatas[_id] = Metadata(_name, _imageText, _creator);
-    }
-    /*//////////////////////////////////////////////////////////////
-                            Blast
-    //////////////////////////////////////////////////////////////*/
-
-
-    function claimMyContractsGas() external onlyOwner{
-        BLAST.claimAllGas(address(this), msg.sender);
     }
 }

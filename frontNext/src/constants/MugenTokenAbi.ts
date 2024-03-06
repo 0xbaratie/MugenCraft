@@ -100,7 +100,7 @@ export const MugenTokenAbi: any = [
       { name: "_idB", type: "uint256", internalType: "uint256" },
     ],
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
   },
   {
     type: "function",
