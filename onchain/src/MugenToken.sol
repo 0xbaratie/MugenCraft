@@ -3,7 +3,7 @@ pragma solidity 0.8.23;
 
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import { IERC721 } from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-import { ERC1155Supply, ERC1155 } from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
+import { ERC1155 } from "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 import { Base64 } from "solady/utils/Base64.sol";
 import { NFTDescriptor } from "./utils/NFTDescriptor.sol";
@@ -23,7 +23,7 @@ event MintPoint(address indexed _to, uint256 _point);
 event RecipeCreatorPoint(address indexed _to, uint256 _point);
 event RefferalRecipeCreatorPoint(address indexed _to, uint256 _point);
 
-contract MugenToken is ERC1155Supply, Ownable {
+contract MugenToken is ERC1155, Ownable {
     /*//////////////////////////////////////////////////////////////
                                 STORAGE
     //////////////////////////////////////////////////////////////*/
@@ -32,8 +32,6 @@ contract MugenToken is ERC1155Supply, Ownable {
     uint256 public constant MINT_POINT = 420;
     uint256 public constant RECIPE_CREATOR_POINT = 100;
     uint256 public constant REFFERAL_RECIPE_CREATOR_POINT = 50;
-
-    uint256 public constant CAP = 69;
 
     IMugenRecipe public recipe;
     mapping(address => uint256) public mintPoints;
@@ -73,8 +71,6 @@ contract MugenToken is ERC1155Supply, Ownable {
             revert("MugenToken: metadata not exists");
         }
 
-        // check total supply is under 69
-        require(totalSupply(_id) < CAP, "MugenToken: max supply reached");
         _mint(_to, _id, 1, "");
 
         // points

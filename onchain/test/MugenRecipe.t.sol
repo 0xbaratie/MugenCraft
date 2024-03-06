@@ -78,15 +78,15 @@ contract MugenRecipeTest is PRBTest, StdCheats {
         token.mint{ value: 0.000025 ether }(msg.sender, 1, 987, 987);
     }
 
-    function test_mint_Fail3() external {
-        recipe.setDefaultMetadata(1, "Dog", "Dog &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
-        for (uint8 i = 0; i < 69; i++) {
-            // each 69 address can mint 1 token
-            token.mint{ value: 0.000025 ether }(address(uint160(uint256(keccak256(abi.encodePacked(i))))), 1, 987, 987);
-        }
-        vm.expectRevert("MugenToken: max supply reached");
-        token.mint{ value: 0.000025 ether }(msg.sender, 1, 987, 987);
-    }
+    // function test_mint_Fail3() external {
+    //     recipe.setDefaultMetadata(1, "Dog", "Dog &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
+    //     for (uint8 i = 0; i < 69; i++) {
+    //         // each 69 address can mint 1 token
+    //         token.mint{ value: 0.000025 ether }(address(uint160(uint256(keccak256(abi.encodePacked(i))))), 1, 987, 987);
+    //     }
+    //     vm.expectRevert("MugenToken: max supply reached");
+    //     token.mint{ value: 0.000025 ether }(msg.sender, 1, 987, 987);
+    // }
 
     struct MetadataTest {
         uint256 id;
