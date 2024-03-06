@@ -22,6 +22,7 @@ interface IMugenRecipe is IERC721 {
 event MintPoint(address indexed _to, uint256 _point);
 event RecipeCreatorPoint(address indexed _to, uint256 _point);
 event RefferalRecipeCreatorPoint(address indexed _to, uint256 _point);
+event Minted(address indexed _to, uint256 indexed _id, uint256 _idA, uint256 _idB);
 
 contract MugenToken is ERC1155, Ownable {
     /*//////////////////////////////////////////////////////////////
@@ -93,6 +94,7 @@ contract MugenToken is ERC1155, Ownable {
             refferalRecipeCreatorPoints[_refferalB] += REFFERAL_RECIPE_CREATOR_POINT;
             emit RefferalRecipeCreatorPoint(_refferalB, REFFERAL_RECIPE_CREATOR_POINT);
         }
+        emit Minted(_to, _id, _idA, _idB);
     }
 
     /*//////////////////////////////////////////////////////////////
