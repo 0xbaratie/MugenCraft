@@ -29,7 +29,7 @@ contract MugenToken is ERC1155, Ownable {
     //////////////////////////////////////////////////////////////*/
     string constant NAME = "MugenToken #";
     string constant DESCRIPTION = "MugenCraft is onchain, infinte craftable NFTs, where you can craft your own NFTs.";
-    uint256 public constant MINT_POINT = 420;
+    uint256 public constant MINT_POINT = 400;
     uint256 public constant RECIPE_CREATOR_POINT = 100;
     uint256 public constant REFFERAL_RECIPE_CREATOR_POINT = 50;
 

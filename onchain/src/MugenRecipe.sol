@@ -21,7 +21,7 @@ contract MugenRecipe is ERC721, Ownable, Pausable {
     /*//////////////////////////////////////////////////////////////
                                 STORAGE
     //////////////////////////////////////////////////////////////*/
-    uint256 public constant RECIPE_CREATE_POINT = 1000;
+    uint256 public constant RECIPE_CREATE_POINT = 200;
 
     string constant NAME = "MugenCraft #";
     string constant DESCRIPTION = "MugenCraft is onchain, infinte craftable NFTs, where you can craft your own NFTs.";
