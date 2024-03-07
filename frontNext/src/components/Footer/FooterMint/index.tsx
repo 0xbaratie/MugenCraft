@@ -80,7 +80,7 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
   }, [isConfirmed, hash, toast]);
 
   useEffect(() => {
-    setMintable(!minted && sum > 0 && !isPending && !isConfirming);
+    setMintable(!minted && !isPending && !isConfirming);
   }, [minted, sum, isPending, isConfirming]);
 
   const writeMint = async () => {
