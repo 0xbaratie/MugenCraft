@@ -176,7 +176,7 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
             className={`${
               isButtonDisabled
                 ? "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
-                : "bg-orange hover:bg-blueHover"
+                : "bg-blue hover:bg-blueHover"
             } text-white font-bold py-2 px-4 rounded m-1`}
           >
             {isLoading ? (
