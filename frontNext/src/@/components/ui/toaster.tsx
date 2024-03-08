@@ -28,7 +28,7 @@ export function Toaster() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-600 hover:text-blue-800 underline break-all"
-                      href={`https://testnet.blastscan.io/tx/${description}`}
+                      href={`https://sepolia.basescan.org/tx/${description}`}
                     >
                       {description}
                     </a>
