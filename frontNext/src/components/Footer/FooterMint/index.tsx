@@ -27,7 +27,6 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
   const { address, isConnected } = useAccount();
   const { data: hash, isPending, error, writeContract } = useWriteContract();
   const [sum, setSum] = useState(0);
-  const [mintable, setMintable] = useState(false);
   const [minted, setMinted] = useState(false);
   const { toast } = useToast();
 
@@ -75,13 +74,8 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
         description: hash,
       });
       setMinted(true);
-      setMintable(false);
     }
   }, [isConfirmed, hash, toast]);
-
-  useEffect(() => {
-    setMintable(!minted && !isPending && !isConfirming);
-  }, [minted, sum, isPending, isConfirming]);
 
   const writeMint = async () => {
     writeContract({
@@ -116,9 +110,9 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
         <p className="mx-2">{" -> "}</p>
         {isConnected ? (
           <button
-            disabled={!mintable || isPending || isConfirming}
+            disabled={minted || isPending || isConfirming}
             className={`${
-              mintable
+              !minted
                 ? "bg-blue hover:bg-blueHover"
                 : "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
             } mx-2 text-white font-bold py-2 px-4 rounded m-1`}
