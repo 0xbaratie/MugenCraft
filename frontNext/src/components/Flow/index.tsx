@@ -188,9 +188,9 @@ const Flow: React.FC = () => {
               label: "Share on X",
               onClick: () => {
                 const shareText = encodeURIComponent(
-                  `I defined a new recipe for Mugen Craft.\nThe recipe count reached ${new_craft_id}. @0xBaratie @nealagarwal @PacmanBlur\nhttps://mugencraft.vercel.app/`
+                  `I defined a new recipe for Mugen Craft.\nThe recipe count reached ${new_craft_id}. @0xBaratie @nealagarwal\nhttps://mugencraft.vercel.app/`
                 );
-                const hashtags = encodeURIComponent("mugencraft,blast");
+                const hashtags = encodeURIComponent("mugencraft,buildonbase");
                 const related = encodeURIComponent("twitterapi,twitter");
                 const url = `https://twitter.com/intent/tweet?text=${shareText}&hashtags=${hashtags}&related=${related}`;
                 const newWindow = window.open(url, "_blank");
@@ -240,7 +240,10 @@ const Flow: React.FC = () => {
         y: event.clientY - reactFlowBounds.top,
       });
 
-      const baseNode = getNodeMap(id);
+      let baseNode = getNodeMap(id);
+      if (!baseNode) {
+        baseNode = await getNodeMapByApi(id);
+      }
       if (!baseNode) {
         // message.warning("Node type not found!"); //TODO
         return;
