@@ -32,6 +32,7 @@ contract MugenRecipeTest is PRBTest, StdCheats {
         recipe.setDefaultMetadata(1, "Dog", "Dog &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
         recipe.setDefaultMetadata(2, "Cat", "Cat &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;");
         recipe.setRecipe(3, "Sheep", "Sheep &#x1f34b;&#x1f34c;&#x1f363;&#x1F607;&#x1f408;", 1, 2);
+        assertEq(recipe.ownerOf(3), address(this));
         console2.log(recipe.tokenURI(3));
     }
 
