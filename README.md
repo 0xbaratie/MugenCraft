@@ -1,7 +1,7 @@
 # Mugen Craft
 ![ogp_5](https://github.com/0xbaratie/MugenCraft/assets/8872443/d48e34da-804c-4507-9099-aff823b74f76)
 
-Mugen Craft is a UGC fully onchain game. Combine recipes with recipes and endless combinations of recipes!
+Mugen Craft is an endless crafting onchain game that allows players to create, craft, and mint recipes. Join the game now at https://mugencraft.vercel.app/.
 
 ## Specifications
 
