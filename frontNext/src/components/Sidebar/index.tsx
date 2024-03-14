@@ -130,6 +130,28 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
             ))}
           </div>
         </div>
+        <div className="p-4 text-center border-t border-gray-200 flex items-center justify-center h-12">
+          <ul className="flex flex-wrap items-center mt-3 text-sm  text-gray-400 sm:mt-0">
+            <li>
+              <a
+                target="_blank"
+                href="https://twitter.com/0xbaratie"
+                className="hover:underline me-4 md:me-6"
+              >
+                X
+              </a>
+            </li>
+            <li>
+              <a
+                target="_blank"
+                href="https://github.com/0xbaratie/MugenCraft"
+                className="hover:underline me-4 md:me-6"
+              >
+                Github
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );
