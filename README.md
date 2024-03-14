@@ -3,6 +3,7 @@
 
 Mugen Craft is an endless crafting onchain game that allows players to create, craft, and mint recipes. Join the game now at https://mugencraft.vercel.app/.
 
+
 ## Specifications
 
 ### Main system
