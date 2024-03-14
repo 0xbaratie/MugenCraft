@@ -7,6 +7,9 @@ import Image from "next/image";
 import { useAccount } from "wagmi";
 import { ConnectWallet } from "components/Button/ConnectWallet";
 import LoadingIndicator from "components/LoadingIndicator";
+import {
+  InformationCircleIcon,
+} from '@heroicons/react/20/solid'
 interface FooterDefineProps {
   nodeA: Node | undefined;
   nodeB: Node | undefined;
@@ -31,6 +34,7 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
   const [validationMessage, setValidationMessage] = useState("");
   const { toast } = useToast();
   const { isConnected } = useAccount();
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     // Disable buttons by default
@@ -66,9 +70,29 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
 
   return (
     <>
-      <p className="ml-4 font-bold text-gray-400">
-        Point chance! Let's define a new recipe to earn 1000 points!
-      </p>
+      <div className="flex items-left">
+        <p className="ml-4 font-bold text-gray-400">
+          Good recipe creator will be rewarded!
+        </p>
+        <div
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          className="relative"
+        >
+          <InformationCircleIcon className="h-auto w-6 text-gray-400 ml-2" />
+          {isHovered && (
+            <div className="absolute z-30 left-full -top-48 p-4 bg-white shadow-lg rounded-lg text-sm w-[720px]">
+              <p className="font-bold mb-2">Here's how you can earn points through recipe creation:</p>
+              <ul className="list-disc list-inside">
+                <li>Creating a Recipe: You'll earn <strong className="text-blue">200 points</strong> when you define a new recipe.</li>
+                <li>Recipe Minting: Each time someone mints your recipe, you'll receive <strong className="text-blue">100 points</strong>, with no limit on the number of mints.</li>
+                <li>Recipe Assistance: If your recipe is used in the creation of another recipe, and that recipe gets minted, you'll earn <strong className="text-blue">50 points</strong>.</li>
+              </ul>
+              <p className="mt-2">This system encourages the creation of practical and valuable recipes. Points will not be awarded for random or nonsensical recipes.</p>
+            </div>
+          )}
+        </div>
+      </div>
       <div className="left-12 bottom-0 bg-white shadow-md p-4 flex justify-between items-center z-10">
         <div className="relative flex items-center justify-center space-x-4">
           <div className="flex items-center border border-gray-100 bg-gray-100 rounded-md">
@@ -176,7 +200,7 @@ const FooterDefine: React.FC<FooterDefineProps> = ({
             className={`${
               isButtonDisabled
                 ? "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
-                : "bg-orange hover:bg-orangeHover"
+                : "bg-blue hover:bg-blueHover"
             } text-white font-bold py-2 px-4 rounded m-1`}
           >
             {isLoading ? (

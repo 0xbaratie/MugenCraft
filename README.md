@@ -1,7 +1,8 @@
 # Mugen Craft
-![ogp](https://github.com/0xbaratie/MugenCraft/assets/8872443/cdb55a82-5ae2-43fc-8b3b-84f58786f5ce)
+![ogp_5](https://github.com/0xbaratie/MugenCraft/assets/8872443/d48e34da-804c-4507-9099-aff823b74f76)
 
-Mugen Craft is a UGC fully onchain game. Combine recipes with recipes and endless combinations of recipes!
+Mugen Craft is an endless crafting onchain game that allows players to create, craft, and mint recipes. Join the game now at https://mugencraft.vercel.app/.
+
 
 ## Specifications
 
@@ -11,11 +12,11 @@ Mugen Craft is a UGC fully onchain game. Combine recipes with recipes and endles
 3. If it is a new combination, you can define the recipe
 4. Each recipe can be minted up to 69
 
-### Point system [TBD]
-Earn points based on your actions!
-- Mint a recipe (only once per person, up to 69 people)
-- Create a recipe
-- Create recipes to be used by others
+### Point system
+Earn points based on your actions! 
+- Creating a Recipe: You'll earn 200 points when you define a new recipe.
+- Recipe Minting: Each time someone mints your recipe, you'll receive 100 points, with no limit on the number of mints.
+- Recipe Assistance: If your recipe is used in the creation of another recipe, and that recipe gets minted, you'll earn 50 points.
 
 ## Get Started
 
@@ -31,7 +32,7 @@ bun dev
 
 ## Tech stack
 - Vercel KV (https://vercel.com/docs/storage/vercel-kv )
-- Blast L2 (https://blast.io/ )
+- Base (https://base.org/ )
 - React flow (https://reactflow.dev/ )
 
 ## Great reference

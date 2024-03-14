@@ -76,7 +76,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
       <div className="shadow-custom px-2 flex flex-col justify-between min-h-screen">
         <div className="relative flex items-center justify-between p-2 border-b border-gray-200">
           <button
-            className="px-4 py-2 bg-white text-orange border border-orange rounded-xl mr-4"
+            className="px-4 py-2 bg-white text-blue border border-blue rounded-xl mr-4 hover:bg-blue hover:text-white"
             onClick={() => setShowDetails(!showDetails)}
           >
             Points
@@ -92,19 +92,19 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
                   <>
                     <div className="flex items-center text-gray-700">
                       <span className="inline-block w-4 h-4 mr-2 rounded-full bg-green-500"></span>
-                      Object minted {results.data[0].result?.toString()}
+                      Object minted {results.data[0].result?.toString() || 0}
                     </div>
                     <div className="flex items-center text-gray-700">
-                      <span className="inline-block w-4 h-4 mr-2 rounded-full bg-blue-500"></span>
-                      Recipe Created {results.data[1].result?.toString()}
+                      <span className="inline-block w-4 h-4 mr-2 rounded-full bg-yellow-500"></span>
+                      Recipe Created {results.data[1].result?.toString() || 0}
                     </div>
                     <div className="flex items-center text-gray-700">
                       <span className="inline-block w-4 h-4 mr-2 rounded-full bg-purple-500"></span>
-                      Your recipe minted {results.data[2].result?.toString()}
+                      Your recipe minted {results.data[2].result?.toString() || 0}
                     </div>
                     <div className="flex items-center text-gray-700">
                       <span className="inline-block w-4 h-4 mr-2 rounded-full bg-red-500"></span>
-                      Your recipe assist {results.data[3].result?.toString()}
+                      Your recipe assist {results.data[3].result?.toString() || 0}
                     </div>
                   </>
                 
@@ -130,9 +130,27 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
             ))}
           </div>
         </div>
-        <div className="p-4 text-center border-t border-gray-200 flex items-center justify-center h-16">
-          {/* TODO: Change numbers dynamically */}
-          <div className="text-gray-500">You earned 0.1 ETH ⛽️</div>
+        <div className="p-4 text-center border-t border-gray-200 flex items-center justify-center h-12">
+          <ul className="flex flex-wrap items-center mt-3 text-sm  text-gray-400 sm:mt-0">
+            <li>
+              <a
+                target="_blank"
+                href="https://twitter.com/0xbaratie"
+                className="hover:underline me-4 md:me-6"
+              >
+                X
+              </a>
+            </li>
+            <li>
+              <a
+                target="_blank"
+                href="https://github.com/0xbaratie/MugenCraft"
+                className="hover:underline me-4 md:me-6"
+              >
+                Github
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
     </div>

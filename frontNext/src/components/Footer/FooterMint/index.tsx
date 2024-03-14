@@ -16,7 +16,6 @@ import { ConnectWallet } from "components/Button/ConnectWallet";
 import { MugenTokenAbi } from "constants/MugenTokenAbi";
 import { addresses } from "constants/addresses";
 
-const MAX_SUPPLY = 69;
 const FEE = "0.000025";
 interface FooterMintProps {
   node: Node | undefined;
@@ -27,8 +26,7 @@ interface FooterMintProps {
 const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
   const { address, isConnected } = useAccount();
   const { data: hash, isPending, error, writeContract } = useWriteContract();
-  const [remainSum, setRemainSum] = useState(1);
-  const [mintable, setMintable] = useState(false);
+  const [sum, setSum] = useState(0);
   const [minted, setMinted] = useState(false);
   const { toast } = useToast();
 
@@ -65,7 +63,7 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
       const resultTotalSupply = results.data[1].result;
       const sum =
         resultTotalSupply != null ? parseInt(resultTotalSupply.toString()) : 0;
-      setRemainSum(MAX_SUPPLY - sum);
+      setSum(sum);
     }
   }, [results, hash]);
 
@@ -76,13 +74,8 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
         description: hash,
       });
       setMinted(true);
-      setMintable(false);
     }
   }, [isConfirmed, hash, toast]);
-
-  useEffect(() => {
-    setMintable(!minted && remainSum > 0 && !isPending && !isConfirming);
-  }, [minted, remainSum, isPending, isConfirming]);
 
   const writeMint = async () => {
     writeContract({
@@ -105,7 +98,7 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
     <>
       <div className="left-12 inset-x-0 bottom-0 bg-white p-4 flex items-center justify-center z-10 mx-auto">
         <p className="mx-2 font-bold">
-          {remainSum > 0 ? `${remainSum} / ${MAX_SUPPLY} Left` : ""}
+          {`${sum} minted`}
         </p>
         <div className="mx-2 items-center border border-gray-100 bg-gray-100 rounded-md">
           {node.data.label ? (
@@ -117,10 +110,10 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
         <p className="mx-2">{" -> "}</p>
         {isConnected ? (
           <button
-            disabled={!mintable || isPending || isConfirming}
+            disabled={minted || isPending || isConfirming}
             className={`${
-              mintable
-                ? "bg-orange hover:bg-orangeHover"
+              !minted
+                ? "bg-blue hover:bg-blueHover"
                 : "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
             } mx-2 text-white font-bold py-2 px-4 rounded m-1`}
             onClick={writeMint}
@@ -134,7 +127,7 @@ const FooterMint: React.FC<FooterMintProps> = ({ node, nodeA, nodeB }) => {
             )}
           </button>
         ) : (
-          <ConnectWallet />
+          <ConnectWallet buttonText="Connect for mint recipe" />
         )}
         {/* for test <div>Uri: {uri?.toString()}</div> */}
       </div>
