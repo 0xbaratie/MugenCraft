@@ -28,8 +28,8 @@ contract MugenToken is ERC1155Supply, Ownable {
     /*//////////////////////////////////////////////////////////////
                                 STORAGE
     //////////////////////////////////////////////////////////////*/
-    string constant NAME = "MugenToken #";
-    string constant DESCRIPTION = "MugenCraft is onchain, infinte craftable NFTs, where you can craft your own NFTs.";
+    string constant NAME = "MugenCraft Object #";
+    string constant DESCRIPTION = "This NFT(ERC1155) is issued to MugenCraft players when the object is crafted and minted. \\nMugen Craft is an endless crafting onchain game that allows players to create, craft, and mint recipes. Join the game now at https://mugencraft.vercel.app/";
     uint256 public constant MINT_POINT = 400;
     uint256 public constant RECIPE_CREATOR_POINT = 100;
     uint256 public constant REFFERAL_RECIPE_CREATOR_POINT = 50;
