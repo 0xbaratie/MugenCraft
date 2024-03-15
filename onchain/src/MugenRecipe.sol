@@ -24,8 +24,8 @@ contract MugenRecipe is ERC721, Ownable, Pausable {
     //////////////////////////////////////////////////////////////*/
     uint256 public constant RECIPE_CREATE_POINT = 200;
 
-    string constant NAME = "MugenCraft #";
-    string constant DESCRIPTION = "MugenCraft is onchain, infinte craftable NFTs, where you can craft your own NFTs.";
+    string constant NAME = "MugenCraft Recipe #";
+    string constant DESCRIPTION = "This NFT is issued to the recipe creator when a recipe is defined on MugenCraft. \\nMugen Craft is an endless crafting onchain game that allows players to create, craft, and mint recipes. Join the game now at https://mugencraft.vercel.app/";
 
     mapping(uint256 => Metadata) public metadatas;
     // A,B,Hash of C
