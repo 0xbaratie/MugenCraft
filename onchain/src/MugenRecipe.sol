@@ -71,6 +71,7 @@ contract MugenRecipe is ERC721, Ownable, Pausable {
     ) external whenNotPaused {
         _setRecipe(_id, _idA, _idB);
         _setMetaData(_id, _name, _imageText, msg.sender);
+        _mint(msg.sender, _id);
         recipePoints[msg.sender] += RECIPE_CREATE_POINT;
         emit RecipePoint(msg.sender, RECIPE_CREATE_POINT);
         emit RecipeCreated(msg.sender, _id, _name, _imageText, _idA, _idB);
