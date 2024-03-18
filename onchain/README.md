@@ -54,7 +54,7 @@ $ forge clean
 ### Test
 
 ```sh
-$ forge test -vv --fork-url https://sepolia.blast.io --fork-block-number 2203024
+$ forge test -vv
 ```
 
 ### Deploy

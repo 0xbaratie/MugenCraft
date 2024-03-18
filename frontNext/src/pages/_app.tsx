@@ -2,17 +2,17 @@ import type { AppProps } from "next/app";
 import "../styles/globals.css";
 import "reactflow/dist/style.css";
 import { WagmiProvider, createConfig, http } from "wagmi";
-import { baseSepolia } from "wagmi/chains";
+import { baseSepolia, base } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
-import { GoogleAnalytics } from '@next/third-parties/google'
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const config = createConfig(
   getDefaultConfig({
     // Your dApps chains
-    chains: [baseSepolia],
+    chains: [base],
     transports: {
-      [baseSepolia.id]: http(baseSepolia.rpcUrls.default.http[0]),
+      [base.id]: http(base.rpcUrls.default.http[0]),
     },
     // Required API Keys
     walletConnectProjectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!,
@@ -36,7 +36,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <ConnectKitProvider>
           <Component {...pageProps} />
-          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ''} />
+          <GoogleAnalytics
+            gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ""}
+          />
         </ConnectKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
