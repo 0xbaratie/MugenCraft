@@ -71,6 +71,8 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
     return total + points;
   }, 0) : 0;
 
+  const maxHeight = 'calc(100vh - 160px)';
+
   return (
     <div className="w-[400px] border-l border-gray-400">
       <div className="shadow-custom px-2 flex flex-col justify-between min-h-screen">
@@ -115,7 +117,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sideNodes: sideNodes }) => {
 
           <ConnectWallet />
         </div>
-        <div className="mt-4 flex-grow overflow-y-auto">
+        <div className="mt-4 flex-grow" style={{ overflowY: 'auto', maxHeight: maxHeight }}>
           <div className="flex flex-wrap">
             {sideNodes.map((node, i) => (
               <div
