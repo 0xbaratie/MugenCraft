@@ -64,7 +64,7 @@ const Home: NextPage = () => {
           )}
           <Toaster />
         </ReactFlowProvider>
-        <ToasterSonner />
+        <ToasterSonner position="top-center" />
       </div>
     </div>
   );
